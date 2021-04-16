@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -12,7 +10,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import axios from 'axios';
+import Alert from '@material-ui/lab/Alert';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 
 function Copyright() {
@@ -52,6 +51,7 @@ export default function SignUp() {
   const classes = useStyles();
   const [image, setImage] = useState({});
   const [userInfo,setUserInfo] = useState({email:'',first_name:'',last_name:'',password:'',password2:'',phone_number:''})
+  const [errorMessage,setErrorMessage] = useState('');
 
   const handleChange = (e) => {
       const name = e.target.name;
@@ -68,7 +68,10 @@ export default function SignUp() {
       console.log(userInfo);
       console.log(image);
       //Check if passwords match
-
+      if (userInfo.password != userInfo.password2){
+        setErrorMessage("Passwords do not match");
+        return;
+      }
       let form_data = new FormData();
       form_data.append('email',userInfo.email);
       form_data.append('firstName',userInfo.first_name);
@@ -86,7 +89,13 @@ export default function SignUp() {
         }
       )
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => {
+        if(result.error){
+          setErrorMessage(result.error);
+        }else{
+          //Send user to login page or welcome page
+        }
+      })
   };
 
   return (
@@ -99,6 +108,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+        {errorMessage && <Alert onClose={() => setErrorMessage("")} severity="error">{errorMessage}</Alert>}
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -177,11 +187,16 @@ export default function SignUp() {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-            <p>Upload an image
-            <input type="file"
-                   id="image"
-                    onChange={handleImageChange} required/>
-            </p>
+            <Button
+                    variant="contained"
+                    className={classes.button}
+                    color="default"
+                    component="label"
+                    startIcon={<CloudUploadIcon />}
+                  >Upload an image
+                <input type="file" id="image" name="image" hidden onChange={handleImageChange} />
+                </Button>
+                <p>{image.name}</p>
             </Grid>
           </Grid>
           <Button

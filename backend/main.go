@@ -9,8 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var dbclient DBClient
+
 func main() {
-	dbConnect() //Start a connection to the database
+	dbclient.initialize()
 	router := gin.Default()
 
 	//Session middleware
