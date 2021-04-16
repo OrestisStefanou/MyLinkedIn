@@ -1,0 +1,22 @@
+-Admin User:
+
+
+-Professional User:
+	-Onoma
+	-Epitheto
+	-Email
+	-Password
+	-Tilefono
+	-Fotografia
+	
+-Skills:
+	-Professional id(Foreign Key)
+	-Perigrafi skill
+	-Public
+	
+-Experience:
+	-Professional id(Foreign Key)
+	-Perigrafi Empirias
+	-Imerominia enarkis
+	-Imerominia liksis
+	-Public
