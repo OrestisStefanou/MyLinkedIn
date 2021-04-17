@@ -1,3 +1,2 @@
-1.Check signup procedure again
-2.Login endpoint
 3.Check if session works
+4.If user is authenticated redirect signin and signup to home page

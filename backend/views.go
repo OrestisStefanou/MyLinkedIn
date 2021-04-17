@@ -71,16 +71,35 @@ func signin(c *gin.Context) {
 				//Get md5 hash of password
 				md5pass := getMD5Hash(userLoginInfo.Password)
 				if md5pass == professional.Password {
-					c.JSON(http.StatusOK, gin.H{"message": "Login successfull"})
-				} else {
 					session := sessions.Default(c)
 					session.Set("userEmail", userLoginInfo.Email)
 					session.Save()
+					c.JSON(http.StatusOK, gin.H{"message": "Login successfull"})
+				} else {
 					c.JSON(http.StatusNotFound, gin.H{"error": "Wrong email or password"})
 				}
 			}
 		}
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are necessary"})
+	}
+}
+
+//GET /v1/LinkedIn/logout
+func logout(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Clear()
+	session.Save()
+	c.JSON(http.StatusOK, gin.H{"status": "Log out successfull"})
+}
+
+// GET /v1/LinkedIn/authenticated
+func authenticated(c *gin.Context) {
+	session := sessions.Default(c)
+	email := session.Get("userEmail")
+	if email != nil {
+		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "email": email.(string)})
+	} else {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	}
 }
