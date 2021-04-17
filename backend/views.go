@@ -7,12 +7,14 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
+//POST /v1/LinkedIn/signup
 func signup(c *gin.Context) {
 	var user Professional
-	file, _ := c.FormFile("photo")
+	file, filerError := c.FormFile("photo")
 	user.Email = c.PostForm("email")
 	user.FirstName = c.PostForm("firstName")
 	user.LastName = c.PostForm("lastName")
@@ -30,18 +32,55 @@ func signup(c *gin.Context) {
 		c.JSON(http.StatusNotAcceptable, gin.H{"error": "A user with this email already exists"})
 		return
 	}
-	//Check if file is an image
-	extension := filepath.Ext(file.Filename)
-	if !validImgExtension(extension) {
-		fmt.Println("Not a valid file")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "File is not an image"})
-		return
-	}
 	//Create a directory for the user's media
 	os.MkdirAll(filepath.Join(mediaDir, user.Email, "profilePhoto"), 0755)
-	photoPath := filepath.Join(mediaDir, user.Email, "profilePhoto", file.Filename)
-	c.SaveUploadedFile(file, photoPath)
+	var photoPath string
+	if filerError == nil { //If image given
+		//Check if file is an image
+		extension := filepath.Ext(file.Filename)
+		if !validImgExtension(extension) {
+			fmt.Println("Not a valid file")
+			c.JSON(http.StatusBadRequest, gin.H{"error": "File is not an image"})
+			return
+		}
+		photoPath = filepath.Join(mediaDir, user.Email, "profilePhoto", file.Filename)
+		c.SaveUploadedFile(file, photoPath)
+	} else {
+		photoPath = ""
+	}
 	user.Photo = photoPath
 	user.save() //Save the new user in the database
 	c.JSON(http.StatusCreated, gin.H{"message": "Signed up successfully"})
+}
+
+//POST /v1/LinkedIn/signin
+func signin(c *gin.Context) {
+	type loginInfo struct {
+		Email    string `json:"email" binding:"required"`
+		Password string `json:"password" binding:"required"`
+	}
+	var userLoginInfo loginInfo
+	if err := c.ShouldBindJSON(&userLoginInfo); err == nil {
+		professional, err := dbclient.getProfessional(userLoginInfo.Email)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+		} else {
+			if professional.ID == 0 { //A user with this email does not exist
+				c.JSON(http.StatusNotFound, gin.H{"error": "Wrong email or password"})
+			} else {
+				//Get md5 hash of password
+				md5pass := getMD5Hash(userLoginInfo.Password)
+				if md5pass == professional.Password {
+					c.JSON(http.StatusOK, gin.H{"message": "Login successfull"})
+				} else {
+					session := sessions.Default(c)
+					session.Set("userEmail", userLoginInfo.Email)
+					session.Save()
+					c.JSON(http.StatusNotFound, gin.H{"error": "Wrong email or password"})
+				}
+			}
+		}
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are necessary"})
+	}
 }

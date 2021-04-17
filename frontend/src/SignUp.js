@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +19,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        LinkedIn
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -50,7 +50,8 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles();
   const [image, setImage] = useState({});
-  const [userInfo,setUserInfo] = useState({email:'',first_name:'',last_name:'',password:'',password2:'',phone_number:''})
+  const [photoPicked,setPhotoPicked] = useState(false);
+  const [userInfo,setUserInfo] = useState({email:'',first_name:'',last_name:'',password:'',password2:'',phone_number:''});
   const [errorMessage,setErrorMessage] = useState('');
 
   const handleChange = (e) => {
@@ -61,16 +62,23 @@ export default function SignUp() {
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
+    setPhotoPicked(true);
   };
 
   const handleSubmit = (e) => {
       e.preventDefault();
       console.log(userInfo);
       console.log(image);
+
       //Check if passwords match
-      if (userInfo.password != userInfo.password2){
+      if (userInfo.password !== userInfo.password2){
         setErrorMessage("Passwords do not match");
         return;
+      }
+      //Check if password is at least 8 characters
+      if(userInfo.password.length < 8){
+        setErrorMessage("Passwords must have at least 8 characters");
+        return;  
       }
       let form_data = new FormData();
       form_data.append('email',userInfo.email);
@@ -78,7 +86,9 @@ export default function SignUp() {
       form_data.append('lastName',userInfo.last_name);
       form_data.append('password',userInfo.password);
       form_data.append('phoneNumber',userInfo.phone_number);
-      form_data.append('photo',image,image.name);
+      if (photoPicked){
+        form_data.append('photo',image,image.name);
+      }
       fetch(
         'http://127.0.0.1:8080/v1/LinkedIn/signup',
         {
