@@ -12,7 +12,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Alert from '@material-ui/lab/Alert';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 function Copyright() {
   return (
@@ -109,6 +110,15 @@ export default function SignUp() {
   };
 
   return (
+    <React.Fragment>
+      <CssBaseline />
+      <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
+        <Toolbar className={classes.toolbar}>
+          <Typography variant="h4" color="inherit" noWrap className={classes.toolbarTitle}>
+          <Link color="inherit" href="/">LinkedIn</Link>
+          </Typography>
+        </Toolbar>
+      </AppBar>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -221,7 +231,7 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signin" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -232,5 +242,6 @@ export default function SignUp() {
         <Copyright />
       </Box>
     </Container>
+    </React.Fragment>
   );
 }

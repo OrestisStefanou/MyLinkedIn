@@ -130,15 +130,15 @@ export default function WelcomePage() {
       <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography variant="h4" color="inherit" noWrap className={classes.toolbarTitle}>
-            LinkedIn
+          <Link color="inherit" href="/">LinkedIn</Link>
           </Typography>
           <nav>
           </nav>
           <Button href="#" color="default" variant="outlined" className={classes.link}>
-            Signup
+            <Link color="inherit" href="/signup">Sign Up</Link>
           </Button>
           <Button href="#" color="primary" variant="outlined" className={classes.link}>
-            Login
+            <Link color="inherit" href="/signin">Login</Link>
           </Button>
         </Toolbar>
       </AppBar>

@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Alert from '@material-ui/lab/Alert';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 
 function Copyright() {
@@ -82,6 +84,15 @@ export default function SignIn() {
   }
 
   return (
+    <React.Fragment>
+      <CssBaseline />
+        <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
+        <Toolbar className={classes.toolbar}>
+          <Typography variant="h4" color="inherit" noWrap className={classes.toolbarTitle}>
+          <Link color="inherit" href="/">LinkedIn</Link>
+          </Typography>
+        </Toolbar>
+      </AppBar>    
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -138,7 +149,7 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -149,5 +160,6 @@ export default function SignIn() {
         <Copyright />
       </Box>
     </Container>
+    </React.Fragment>
   );
 }
