@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +14,8 @@ import Alert from '@material-ui/lab/Alert';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import { useHistory } from 'react-router-dom';
+
 
 function Copyright() {
   return (
@@ -66,6 +68,8 @@ export default function SignUp() {
   const [userInfo,setUserInfo] = useState({email:'',first_name:'',last_name:'',password:'',password2:'',phone_number:''});
   const [errorMessage,setErrorMessage] = useState('');
 
+  let history = useHistory();
+
   const handleChange = (e) => {
       const name = e.target.name;
       const value = e.target.value;
@@ -102,7 +106,7 @@ export default function SignUp() {
         form_data.append('photo',image,image.name);
       }
       fetch(
-        'http://127.0.0.1:8080/v1/LinkedIn/signup',
+        'http://localhost:8080/v1/LinkedIn/signup',
         {
           method: 'POST',
           mode:"cors",
@@ -115,10 +119,27 @@ export default function SignUp() {
         if(result.error){
           setErrorMessage(result.error);
         }else{
-          //Send user to login page or welcome page
+          history.push(`/signin`)
         }
       })
   };
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const response = await fetch('http://localhost:8080/v1/LinkedIn/authenticated',{
+        method: "GET",
+        mode:"cors",
+        credentials:"include",
+        headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+        });
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+      if (response.status === 202) {
+        history.push(`/home`);
+      }
+    };
+    checkSession();
+  },[history]);
 
   return (
     <React.Fragment>

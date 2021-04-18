@@ -74,7 +74,7 @@ func signin(c *gin.Context) {
 					session := sessions.Default(c)
 					session.Set("userEmail", userLoginInfo.Email)
 					session.Save()
-					c.JSON(http.StatusOK, gin.H{"message": "Login successfull"})
+					c.JSON(http.StatusAccepted, gin.H{"message": "Login successfull"})
 				} else {
 					c.JSON(http.StatusNotFound, gin.H{"error": "Wrong email or password"})
 				}

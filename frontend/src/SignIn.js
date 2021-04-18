@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import Alert from '@material-ui/lab/Alert';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import { useHistory } from 'react-router-dom';
 
 
 function Copyright() {
@@ -66,6 +67,8 @@ export default function SignIn() {
   const [userLoginInfo,setUserLoginInfo] = useState({email:'',password:''});
   const [errorMessage,setErrorMessage] = useState('');
 
+  let history = useHistory();
+
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -75,7 +78,7 @@ export default function SignIn() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(userLoginInfo);
-    fetch('http://127.0.0.1:8080/v1/LinkedIn/signin', {
+    fetch('http://localhost:8080/v1/LinkedIn/signin', {
       method: "POST",
       mode:"cors",
       credentials:"include",
@@ -88,11 +91,27 @@ export default function SignIn() {
       if(json.error){
         setErrorMessage(json.error);
       }else{
-          //Sent user to home page
-        //history.push(`files/home`)
+        history.push(`/home`)
       }
     });
   }
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const response = await fetch('http://localhost:8080/v1/LinkedIn/authenticated',{
+        method: "GET",
+        mode:"cors",
+        credentials:"include",
+        headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+        });
+      const jsonResponse = await response.json()
+      console.log(jsonResponse)
+      if (response.status === 202) {
+        history.push(`/home`);
+      }
+    };
+    checkSession();
+  },[history]);
 
   return (
     <React.Fragment>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -14,6 +14,8 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
+import { useHistory } from 'react-router-dom';
+
 
 function Copyright() {
   return (
@@ -130,6 +132,28 @@ const footers = [
 export default function WelcomePage() {
   const classes = useStyles();
 
+  let history = useHistory();
+
+
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const response = await fetch('http://localhost:8080/v1/LinkedIn/authenticated',{
+        method: "GET",
+        mode:"cors",
+        credentials:"include",
+        headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+        });
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+      if (response.status === 202) {
+  
+        history.push(`/home`);
+      }
+    };
+    checkSession();
+  },[history]);
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -140,11 +164,11 @@ export default function WelcomePage() {
           </Typography>
           <nav>
           </nav>
-          <Button href="#" color="default" variant="outlined" className={classes.link}>
-            <Link color="inherit" href="/signup">Sign Up</Link>
+          <Button href="/signup" color="default" variant="outlined" className={classes.link}>
+            Sign Up
           </Button>
-          <Button href="#" color="default" variant="outlined" className={classes.link}>
-            <Link color="inherit" href="/signin">Login</Link>
+          <Button href="/signin" color="default" variant="outlined" className={classes.link}>
+            Login
           </Button>
         </Toolbar>
       </AppBar>

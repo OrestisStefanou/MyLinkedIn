@@ -23,6 +23,9 @@ import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
 import Button from '@material-ui/core/Button';
+import { useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
+
 
 function Copyright() {
   return (
@@ -129,6 +132,38 @@ export default function Homepage() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  let history = useHistory();
+
+  const handleLogout = () => {
+    fetch('http://localhost:8080/v1/LinkedIn/logout',{
+    method: "GET",
+    mode:"cors",
+    credentials:"include",
+    headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+    })
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(err => console.log('Request Failed',err))
+    history.push("/");
+  }
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const response = await fetch('http://localhost:8080/v1/LinkedIn/authenticated',{
+        method: "GET",
+        mode:"cors",
+        credentials:"include",
+        headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+        });
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+      if (response.status !== 202) {
+        history.push(`/`);
+      }
+    };
+    checkSession();
+  },[history]);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -151,7 +186,7 @@ export default function Homepage() {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" onClick={handleLogout}>
             Logout
           </Button>
         </Toolbar>
