@@ -1,3 +1,4 @@
 1.Check if session works
 2.If user is authenticated redirect signin and signup to home page
 3.Create a home page(after login)
+4.Break Profile component(to education kai experience forms se diaforetika component)

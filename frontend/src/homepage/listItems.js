@@ -9,7 +9,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 export const mainListItems = (
   <div>
-    <ListItem>
+    <ListItem button>
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
