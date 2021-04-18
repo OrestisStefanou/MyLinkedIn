@@ -46,6 +46,17 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  appBar: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    background : '#3f51b5',
+    color: "#FFFFFF",
+  },
+  toolbar: {
+    flexWrap: 'wrap',
+  },
+  toolbarTitle: {
+    flexGrow: 1,
+  },
 }));
 
 export default function SignUp() {

@@ -1,3 +1,3 @@
 1.Check if session works
 2.If user is authenticated redirect signin and signup to home page
-3.Add a way to go back to homepage from login and sign up components
+3.Create a home page(after login)

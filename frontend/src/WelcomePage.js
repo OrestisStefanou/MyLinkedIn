@@ -38,6 +38,8 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
+    background : '#3f51b5',
+    color: "#FFFFFF",
   },
   toolbar: {
     flexWrap: 'wrap',
@@ -47,13 +49,17 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     margin: theme.spacing(1, 1.5),
+    background : '#3f51b5',
+    color: "#FFFFFF",
   },
   heroContent: {
     padding: theme.spacing(8, 0, 6),
   },
   cardHeader: {
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
+    //backgroundColor:
+      //theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
+      background : '#3f51b5',
+      color: "#FFFFFF",
   },
   cardPricing: {
     display: 'flex',
@@ -137,7 +143,7 @@ export default function WelcomePage() {
           <Button href="#" color="default" variant="outlined" className={classes.link}>
             <Link color="inherit" href="/signup">Sign Up</Link>
           </Button>
-          <Button href="#" color="primary" variant="outlined" className={classes.link}>
+          <Button href="#" color="default" variant="outlined" className={classes.link}>
             <Link color="inherit" href="/signin">Login</Link>
           </Button>
         </Toolbar>
