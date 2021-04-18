@@ -18,13 +18,14 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+import { mainListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
+import ChatIcon from '@material-ui/icons/Chat';
 
 
 function Copyright() {
@@ -183,6 +184,11 @@ export default function Homepage() {
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={0} color="secondary" >
+              <ChatIcon />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit">
+            <Badge badgeContent={0} color="secondary" >
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -206,7 +212,6 @@ export default function Homepage() {
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

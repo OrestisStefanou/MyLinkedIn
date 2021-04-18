@@ -164,7 +164,7 @@ export default function WelcomePage() {
           </Typography>
           <nav>
           </nav>
-          <Button href="/signup" color="default" variant="outlined" className={classes.link}>
+          <Button href="/signup" color="primary" variant="outlined" className={classes.link}>
             Sign Up
           </Button>
           <Button href="/signin" color="default" variant="outlined" className={classes.link}>
