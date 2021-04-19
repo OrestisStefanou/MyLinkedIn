@@ -8,3 +8,15 @@ CREATE TABLE Professionals (
 	Photo varchar(255) NOT NULL,
 	PRIMARY KEY(ProfessionalID)
 );
+
+CREATE TABLE Education (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       Degree_Name varchar(255) NOT NULL,
+       School_Name varchar(255) NOT NULL,
+       Start_Date varchar(100) NOT NULL,
+       Finish_Date varchar(100),
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
+);
+

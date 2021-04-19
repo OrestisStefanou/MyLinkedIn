@@ -11,8 +11,24 @@ type Professional struct {
 	Photo       string `json:"photo"`
 }
 
-//Create a save method for Professional
+//Save method for Professional
 func (prof *Professional) save() error {
 	err := dbclient.createProfessional(prof)
+	return err
+}
+
+//Education json struct
+type Education struct {
+	ID             int    `json:"id"`
+	ProfessionalID int    `json:"professionalId"`
+	DegreeName     string `json:"degreeName" binding:"required"`
+	SchoolName     string `json:"schoolName" binding:"required"`
+	StartDate      string `json:"startDate" binding:"required"`
+	FinishDate     string `json:"finishDate"`
+}
+
+//Save method for Education
+func (education *Education) save() error {
+	err := dbclient.createEducation(education)
 	return err
 }

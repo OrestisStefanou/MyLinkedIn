@@ -57,6 +57,24 @@ func (driver *DBClient) getProfessional(email string) (Professional, error) {
 	return prof, nil
 }
 
+func (driver *DBClient) createEducation(education *Education) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Education SET 
+		ProfessionalID=?,
+		Degree_Name=?,
+		School_Name =?,
+		Start_Date=?,
+		Finish_Date =?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(education.ProfessionalID, education.DegreeName, education.SchoolName, education.StartDate, education.FinishDate)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

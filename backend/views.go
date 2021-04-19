@@ -72,7 +72,8 @@ func signin(c *gin.Context) {
 				md5pass := getMD5Hash(userLoginInfo.Password)
 				if md5pass == professional.Password {
 					session := sessions.Default(c)
-					session.Set("userEmail", userLoginInfo.Email)
+					session.Set("userEmail", professional.Email)
+					session.Set("userID", professional.ID)
 					session.Save()
 					c.JSON(http.StatusAccepted, gin.H{"message": "Login successfull"})
 				} else {
@@ -82,6 +83,24 @@ func signin(c *gin.Context) {
 		}
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are necessary"})
+	}
+}
+
+//POST /v1/LinkedIn/addEducation
+func addEducation(c *gin.Context) {
+	session := sessions.Default(c)
+	professionalID := session.Get("userID")
+	if professionalID == nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var educationInfo Education
+		if err := c.ShouldBindJSON(&educationInfo); err == nil {
+			educationInfo.ProfessionalID = professionalID.(int)
+			educationInfo.save()
+			c.JSON(http.StatusCreated, gin.H{"educationInfo": educationInfo})
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Necessary fields not given"})
+		}
 	}
 }
 
@@ -97,8 +116,9 @@ func logout(c *gin.Context) {
 func authenticated(c *gin.Context) {
 	session := sessions.Default(c)
 	email := session.Get("userEmail")
+	professionalID := session.Get("userID")
 	if email != nil {
-		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "email": email.(string)})
+		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "email": email.(string), "id": professionalID.(int)})
 	} else {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	}
