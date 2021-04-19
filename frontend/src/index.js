@@ -5,7 +5,7 @@ import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import WeclomePage from "./WelcomePage";
 import Homepage from './homepage/Homepage';
-import Profile from "./Profile"
+import Profile from "./profile/Profile"
 
 const App = () => {
     return(

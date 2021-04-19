@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -38,6 +39,7 @@ func main() {
 		v1.POST("/signin", signin)
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)
+		v1.StaticFS("/media", http.Dir("./media"))
 	}
 	router.Run()
 }
