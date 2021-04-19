@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +9,6 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker,
 } from '@material-ui/pickers';
 import { Container } from '@material-ui/core';
 
@@ -26,17 +25,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Education(){
   const classes = useStyles();
+  const [educationInfo,setEducationInfo] = useState({degreeName:'',schoolName:'',startDate:'',finishDate:''});
 
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setEducationInfo({ ...educationInfo, [name]: value });
+  }; 
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(educationInfo);
+  }
 
   return(
     <Container maxWidth="xs">
         <Typography component="h1" variant="h5">
-        Add your education and experience
+        Add your education
         </Typography>
         <form className={classes.form} noValidate>
             <Grid container spacing={2}>
@@ -49,6 +54,7 @@ export default function Education(){
                 fullWidth
                 id="degreeName"
                 label="Degree Name"
+                onChange={handleChange}
                 autoFocus
                 />
             </Grid>
@@ -60,35 +66,34 @@ export default function Education(){
                 id="schoolName"
                 label="School Name"
                 name="schoolName"
+                onChange={handleChange}
                 autoComplete="lname"
                 />
             </Grid>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid item xs={12} sm={6}>
-            <KeyboardDatePicker
-            disableToolbar
-            variant="inline"
-            format="MM/dd/yyyy"
-            margin="normal"
-            id="Entry Date"
-            label="Date picker inline"
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-                'aria-label': 'change date',
+            <TextField
+            id="date"
+            label="Start Date"
+            type="date"
+            name="startDate"
+            onChange={handleChange}
+            className={classes.textField}
+            InputLabelProps={{
+            shrink: true,
             }}
             />
             </Grid>
             <Grid item xs={12} sm={6}>
-            <KeyboardDatePicker
-            margin="normal"
-            id="date-picker-dialog"
-            label="Exit Date"
-            format="MM/dd/yyyy"
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-                'aria-label': 'change date',
+            <TextField
+            id="date"
+            label="Finish Date"
+            type="date"
+            name="finishDate"
+            onChange={handleChange}
+            className={classes.textField}
+            InputLabelProps={{
+            shrink: true,
             }}
             />
             </Grid>
@@ -100,6 +105,7 @@ export default function Education(){
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
         >
         Add
         </Button>

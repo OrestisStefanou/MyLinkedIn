@@ -8,8 +8,9 @@ import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import 'date-fns';
+import ProfileForm from "./ProfileForm";
 import Education from "./Education";
-import ProfileForm from "./ProfileForm"
+import Experience from "./Experience";
 
 function Copyright() {
   return (
@@ -75,6 +76,9 @@ export default function Profile() {
       </div>
       <div className={classes.paper}>
         <Education/>
+      </div>
+      <div className={classes.paper}>
+        <Experience/>
       </div>
       <Box mt={5}>
         <Copyright />
