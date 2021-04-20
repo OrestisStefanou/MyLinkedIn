@@ -36,6 +36,24 @@ export default function Education(){
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(educationInfo);
+    fetch('http://localhost:8080/v1/LinkedIn/addEducation', {
+      method: "POST",
+      mode:"cors",
+      credentials:"include",
+      body: JSON.stringify(educationInfo),
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+    })
+    .then(response => response.json())
+    .then((json) => {
+      console.log(json);
+      if(json.error){
+        //Show error message
+        console.log("SOMETHING WENT WRONG");
+      }else{
+        //Add the education info on the screen
+        console.log("ALL GOOD");
+      }
+    });
   }
 
   return(

@@ -6,10 +6,15 @@ import PeopleIcon from '@material-ui/icons/People';
 import PersonIcon from '@material-ui/icons/Person';
 import DescriptionIcon from '@material-ui/icons/Description';
 import SettingsIcon from '@material-ui/icons/Settings';
+import List from '@material-ui/core/List';
+import { useHistory } from 'react-router-dom';
 
-export const mainListItems = (
+export default function ListItems() {
+  let history = useHistory();
+  return(
+  <List>
   <div>
-    <ListItem button>
+    <ListItem button onClick={()=>history.push(`/profile`)}>
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
@@ -34,4 +39,6 @@ export const mainListItems = (
       <ListItemText primary="Settings" />
     </ListItem>
   </div>
-);
+  </List>
+  )
+};

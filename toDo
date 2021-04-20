@@ -1,5 +1,5 @@
 1.Stin vasi na filao to url tis foto enos xristi anti to path
 2.Na filao to ProfessionalID sto session
 3.Break Profile component(to education kai experience forms se diaforetika component)
-4.Add a link from homepage to profile
 5.Create an endpoint to get the education info of a professional
+6.Na kamo to request pou dimiourgo education info
