@@ -75,6 +75,23 @@ func (driver *DBClient) createEducation(education *Education) error {
 	return nil
 }
 
+func (driver *DBClient) getProfessionalEducation(professionalID int) ([]Education, error) {
+	educationInfo := Education{}
+	rows, err := driver.db.Query("SELECT * FROM Education WHERE ProfessionalID=?", professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var educationArray []Education
+	for rows.Next() {
+		err = rows.Scan(&educationInfo.ID, &educationInfo.ProfessionalID, &educationInfo.DegreeName, &educationInfo.SchoolName, &educationInfo.StartDate, &educationInfo.FinishDate)
+		if err != nil {
+			return educationArray, err
+		}
+		educationArray = append(educationArray, educationInfo)
+	}
+	return educationArray, nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

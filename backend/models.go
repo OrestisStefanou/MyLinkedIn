@@ -17,6 +17,12 @@ func (prof *Professional) save() error {
 	return err
 }
 
+//Get profile photo url
+func (prof *Professional) getPhotoURL() string {
+	photoURL := mediaURL + prof.Photo
+	return photoURL
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`

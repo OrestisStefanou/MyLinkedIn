@@ -43,8 +43,11 @@ func signup(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "File is not an image"})
 			return
 		}
+		//Upload the photo
 		photoPath = filepath.Join(mediaDir, user.Email, "profilePhoto", file.Filename)
 		c.SaveUploadedFile(file, photoPath)
+		//Path to save in the database
+		photoPath = filepath.Join(user.Email, "profilePhoto", file.Filename)
 	} else {
 		photoPath = ""
 	}
@@ -74,6 +77,7 @@ func signin(c *gin.Context) {
 					session := sessions.Default(c)
 					session.Set("userEmail", professional.Email)
 					session.Set("userID", professional.ID)
+					session.Set("userPhoto", professional.Photo)
 					session.Save()
 					c.JSON(http.StatusAccepted, gin.H{"message": "Login successfull"})
 				} else {
@@ -117,8 +121,9 @@ func authenticated(c *gin.Context) {
 	session := sessions.Default(c)
 	email := session.Get("userEmail")
 	professionalID := session.Get("userID")
+	photo := session.Get("userPhoto")
 	if email != nil {
-		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "email": email.(string), "id": professionalID.(int)})
+		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "email": email.(string), "id": professionalID.(int), "photo": photo.(string)})
 	} else {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	}

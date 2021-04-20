@@ -1,5 +1,7 @@
-1.Stin vasi na filao to url tis foto enos xristi anti to path
-2.Na filao to ProfessionalID sto session
-3.Break Profile component(to education kai experience forms se diaforetika component)
+1.Stin vasi na filao to url tis foto enos xristi anti to path DONE
+2.Na filao to ProfessionalID sto session DONE
+3.Break Profile component(to education kai experience forms se diaforetika component) DONE
 5.Create an endpoint to get the education info of a professional
 6.Na kamo to request pou dimiourgo education info
+7.Na valo to createEducation function san method tou Professional
+8.Check getProfessionalEducation function
