@@ -99,11 +99,36 @@ func addEducation(c *gin.Context) {
 	} else {
 		var educationInfo Education
 		if err := c.ShouldBindJSON(&educationInfo); err == nil {
-			educationInfo.ProfessionalID = professionalID.(int)
-			educationInfo.save()
-			c.JSON(http.StatusCreated, gin.H{"educationInfo": educationInfo})
+			//Create professional object
+			professional := Professional{}
+			professional.ID = professionalID.(int)
+			err = professional.addEducation(educationInfo)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusCreated, gin.H{"educationInfo": educationInfo})
+			}
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Necessary fields not given"})
+		}
+	}
+}
+
+//GET /v1/LinkedIn/getEducation
+func getEducation(c *gin.Context) {
+	session := sessions.Default(c)
+	professionalID := session.Get("userID")
+	if professionalID == nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		//Create professional object
+		professional := Professional{}
+		professional.ID = professionalID.(int)
+		education, err := professional.getEducation()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusAccepted, gin.H{"education": education})
 		}
 	}
 }

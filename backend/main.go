@@ -38,6 +38,7 @@ func main() {
 		v1.POST("/signup", signup)
 		v1.POST("/signin", signin)
 		v1.POST("/addEducation", addEducation)
+		v1.GET("/getEducation", getEducation)
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)
 		v1.StaticFS("/media", http.Dir("./media"))

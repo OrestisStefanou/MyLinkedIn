@@ -23,6 +23,19 @@ func (prof *Professional) getPhotoURL() string {
 	return photoURL
 }
 
+//Add education info to a professional
+func (prof *Professional) addEducation(educationInfo Education) error {
+	educationInfo.ProfessionalID = prof.ID
+	err := dbclient.createEducation(&educationInfo)
+	return err
+}
+
+//Get the education of a professional
+func (prof *Professional) getEducation() ([]Education, error) {
+	education, err := dbclient.getProfessionalEducation(prof.ID)
+	return education, err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
