@@ -36,6 +36,13 @@ func (prof *Professional) getEducation() ([]Education, error) {
 	return education, err
 }
 
+//Remove education of a professional
+func (prof *Professional) removeEducation(educationInfo Education) error {
+	educationInfo.ProfessionalID = prof.ID
+	err := dbclient.deleteProfessionalEducation(educationInfo)
+	return err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`

@@ -57,17 +57,40 @@ export default function Education(){
     })
     .then(response => response.json())
     .then((json) => {
-      console.log(json);
       if(json.error){
         //Show error message
-        console.log("SOMETHING WENT WRONG");
+        console.log(json.error);
       }else{
         //Add the education info on the screen
         setEducationArray([...educationArray,educationInfo]);
-        console.log("ALL GOOD");
+        console.log(json.educationInfo);
       }
     });
   }
+
+  const removeEducation = (educationInfo) => {
+    console.log("DELETETING ",educationInfo);
+    fetch('http://localhost:8080/v1/LinkedIn/removeEducation', {
+      method: "POST",
+      mode:"cors",
+      credentials:"include",
+      body: JSON.stringify(educationInfo),
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+    })
+    .then(response => response.json())
+    .then((json) => {
+      if(json.error){
+        //Show error message
+        console.log(json.error);
+      }else{
+        //Add the education info on the screen
+        setEducationArray([...educationArray,educationInfo]);
+        console.log(json.message);
+        let newEducationArray = educationArray.filter((education) => education.degreeName !== educationInfo.degreeName);
+        setEducationArray(newEducationArray);
+      }
+    });
+  };
 
   useEffect(() => {
     fetch('http://localhost:8080/v1/LinkedIn/getEducation', {
@@ -104,7 +127,7 @@ export default function Education(){
                     primary={education.degreeName + "  at  " + education.schoolName + "  From:  " + education.startDate + "  Until:  " + education.finishDate}
                   />
                   <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton edge="end" aria-label="delete" onClick={() => removeEducation(education)}>
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>

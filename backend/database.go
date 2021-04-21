@@ -75,6 +75,18 @@ func (driver *DBClient) createEducation(education *Education) error {
 	return nil
 }
 
+func (driver *DBClient) deleteProfessionalEducation(education Education) error {
+	stmt, err := driver.db.Prepare("DELETE FROM Education WHERE ProfessionalID=? AND Degree_Name=? AND School_Name=? AND Start_Date=? AND Finish_Date=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(education.ProfessionalID, education.DegreeName, education.SchoolName, education.StartDate, education.FinishDate)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (driver *DBClient) getProfessionalEducation(professionalID int) ([]Education, error) {
 	educationInfo := Education{}
 	rows, err := driver.db.Query("SELECT * FROM Education WHERE ProfessionalID=?", professionalID)

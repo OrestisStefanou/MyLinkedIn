@@ -114,6 +114,31 @@ func addEducation(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/removeEducation
+func removeEducation(c *gin.Context) {
+	session := sessions.Default(c)
+	professionalID := session.Get("userID")
+	if professionalID == nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var educationInfo Education
+		if err := c.ShouldBindJSON(&educationInfo); err == nil {
+			//Create professional object
+			professional := Professional{}
+			professional.ID = professionalID.(int)
+			err = professional.removeEducation(educationInfo)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Deleted"})
+			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Necessary fields not given"})
+		}
+	}
+}
+
 //GET /v1/LinkedIn/getEducation
 func getEducation(c *gin.Context) {
 	session := sessions.Default(c)

@@ -1,5 +1,3 @@
-5.Create an endpoint to get the education info of a professional
-6.Na kamo to request pou dimiourgo education info
-7.Na valo to createEducation function san method tou Professional
-8.Check getProfessionalEducation function
-8.An to finish date ine keno na to metatrepo se currently
+-An to finish date ine keno na to metatrepo se currently
+-DB.close()?
+-Na checkaro ti litourgia tou education ksana
