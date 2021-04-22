@@ -9,4 +9,7 @@ const databaseUser = "orestis"
 const userPassword = "Ore$tis1997"
 const databaseName = "LinkedIn"
 
+//Variable to communicate with database
+var dbclient DBClient
+
 var validImageExtensions = [...]string{".jpeg", ".jpg", ".png", ".gif"}

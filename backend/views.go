@@ -158,6 +158,74 @@ func getEducation(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/addExperience
+func addExperience(c *gin.Context) {
+	session := sessions.Default(c)
+	professionalID := session.Get("userID")
+	if professionalID == nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var experienceInfo Experience
+		if err := c.ShouldBindJSON(&experienceInfo); err == nil {
+			//Create professional object
+			professional := Professional{}
+			professional.ID = professionalID.(int)
+			err = professional.addExperience(experienceInfo)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusCreated, gin.H{"experienceInfo": experienceInfo})
+			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Necessary fields not given"})
+		}
+	}
+}
+
+//POST /v1/LinkedIn/removeExperience
+func removeExperience(c *gin.Context) {
+	session := sessions.Default(c)
+	professionalID := session.Get("userID")
+	if professionalID == nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var experienceInfo Experience
+		if err := c.ShouldBindJSON(&experienceInfo); err == nil {
+			//Create professional object
+			professional := Professional{}
+			professional.ID = professionalID.(int)
+			err = professional.removeExperience(experienceInfo)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Deleted"})
+			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Necessary fields not given"})
+		}
+	}
+}
+
+//GET /v1/LinkedIn/getExperience
+func getExperience(c *gin.Context) {
+	session := sessions.Default(c)
+	professionalID := session.Get("userID")
+	if professionalID == nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		//Create professional object
+		professional := Professional{}
+		professional.ID = professionalID.(int)
+		experience, err := professional.getExperience()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusAccepted, gin.H{"experience": experience})
+		}
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

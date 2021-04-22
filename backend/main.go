@@ -10,8 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var dbclient DBClient
-
 func main() {
 	dbclient.initialize()
 	router := gin.Default()
@@ -35,13 +33,21 @@ func main() {
 
 	v1 := router.Group("/v1/LinkedIn")
 	{
+		//Registration endpoints
 		v1.POST("/signup", signup)
 		v1.POST("/signin", signin)
+		//Education endpoints
 		v1.POST("/addEducation", addEducation)
 		v1.GET("/getEducation", getEducation)
 		v1.POST("/removeEducation", removeEducation)
+		//Experience endpoints
+		v1.POST("/addExperience", addExperience)
+		v1.POST("/removeExperience", removeExperience)
+		v1.GET("/getExperience", getExperience)
+		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)
+		//Media endpoint
 		v1.StaticFS("/media", http.Dir("./media"))
 	}
 	router.Run()

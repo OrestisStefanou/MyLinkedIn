@@ -20,3 +20,14 @@ CREATE TABLE Education (
        FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
 );
 
+CREATE TABLE Experience (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       Employer_Name varchar(255) NOT NULL,
+       Job_Title varchar(255) NOT NULL,
+       Start_Date varchar(100) NOT NULL,
+       Finish_Date varchar(100),
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
+);
+

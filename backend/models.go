@@ -43,6 +43,26 @@ func (prof *Professional) removeEducation(educationInfo Education) error {
 	return err
 }
 
+//Add experience info to a professional
+func (prof *Professional) addExperience(experienceInfo Experience) error {
+	experienceInfo.ProfessionalID = prof.ID
+	err := dbclient.createExperience(&experienceInfo)
+	return err
+}
+
+//Get the experience of a Professional
+func (prof *Professional) getExperience() ([]Experience, error) {
+	experience, err := dbclient.getProfessionalExperience(prof.ID)
+	return experience, err
+}
+
+//Remove experience of a Professional
+func (prof *Professional) removeExperience(experienceInfo Experience) error {
+	experienceInfo.ID = prof.ID
+	err := dbclient.deleteProfessionalExperience(experienceInfo)
+	return err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
@@ -56,5 +76,21 @@ type Education struct {
 //Save method for Education
 func (education *Education) save() error {
 	err := dbclient.createEducation(education)
+	return err
+}
+
+//Experience json struct
+type Experience struct {
+	ID             int    `json:"id"`
+	ProfessionalID int    `json:"professionalId"`
+	EmployerName   string `json:"employerName" binding:"required"`
+	JobTitle       string `json:"jobTitle" binding:"required"`
+	StartDate      string `json:"startDate" binding:"required"`
+	FinishDate     string `json:"finishDate"`
+}
+
+//Save method for experience
+func (experience *Experience) save() error {
+	err := dbclient.createExperience(experience)
 	return err
 }

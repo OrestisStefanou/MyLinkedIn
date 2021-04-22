@@ -104,6 +104,53 @@ func (driver *DBClient) getProfessionalEducation(professionalID int) ([]Educatio
 	return educationArray, nil
 }
 
+func (driver *DBClient) createExperience(experience *Experience) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Experience SET 
+		ProfessionalID=?,
+		Employer_Name=?,
+		Job_Title =?,
+		Start_Date=?,
+		Finish_Date =?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(experience.ProfessionalID, experience.EmployerName, experience.JobTitle, experience.StartDate, experience.FinishDate)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) getProfessionalExperience(professionalID int) ([]Experience, error) {
+	experienceInfo := Experience{}
+	rows, err := driver.db.Query("SELECT * FROM Experience WHERE ProfessionalID=?", professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var experienceArray []Experience
+	for rows.Next() {
+		err = rows.Scan(&experienceInfo.ID, &experienceInfo.ProfessionalID, &experienceInfo.EmployerName, &experienceInfo.JobTitle, &experienceInfo.StartDate, &experienceInfo.FinishDate)
+		if err != nil {
+			return experienceArray, err
+		}
+		experienceArray = append(experienceArray, experienceInfo)
+	}
+	return experienceArray, nil
+}
+
+func (driver *DBClient) deleteProfessionalExperience(experience Experience) error {
+	stmt, err := driver.db.Prepare("DELETE FROM Experience WHERE ProfessionalID=? AND Employer_Name=? AND Job_Titile=? AND Start_Date=? AND Finish_Date=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(experience.ProfessionalID, experience.EmployerName, experience.JobTitle, experience.StartDate, experience.FinishDate)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

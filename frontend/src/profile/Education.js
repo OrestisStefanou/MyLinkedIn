@@ -107,7 +107,9 @@ export default function Education(){
       }else{
         //Add the education info on the screen
         console.log(json.education);
-        setEducationArray(json.education);
+        if (json.education!==null){
+          setEducationArray(json.education);
+        }
       }
     });    
   },[]);
@@ -115,9 +117,9 @@ export default function Education(){
   return(
     <Container maxWidth="xs">
                 <List dense={false}>
-                  {educationArray.map((education) =>{
+                  {educationArray && educationArray.map((education,index) =>{
                     return(
-                  <ListItem key={education.degreeName}>
+                  <ListItem key={index}>
                   <ListItemAvatar>
                     <Avatar>
                       <SchoolIcon />

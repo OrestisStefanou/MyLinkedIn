@@ -36,12 +36,12 @@ export default function Experience(){
             <Grid item xs={12} sm={6}>
                 <TextField
                 autoComplete="fname"
-                name="employeeName"
+                name="employerName"
                 variant="outlined"
                 required
                 fullWidth
-                id="employeeName"
-                label="Employee Name"
+                id="employerName"
+                label="Employer Name"
                 autoFocus
                 />
             </Grid>
