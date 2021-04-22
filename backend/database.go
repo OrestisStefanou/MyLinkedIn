@@ -140,7 +140,7 @@ func (driver *DBClient) getProfessionalExperience(professionalID int) ([]Experie
 }
 
 func (driver *DBClient) deleteProfessionalExperience(experience Experience) error {
-	stmt, err := driver.db.Prepare("DELETE FROM Experience WHERE ProfessionalID=? AND Employer_Name=? AND Job_Titile=? AND Start_Date=? AND Finish_Date=?")
+	stmt, err := driver.db.Prepare("DELETE FROM Experience WHERE ProfessionalID=? AND Employer_Name=? AND Job_Title=? AND Start_Date=? AND Finish_Date=?")
 	if err != nil {
 		return err
 	}

@@ -83,8 +83,6 @@ export default function Education(){
         //Show error message
         console.log(json.error);
       }else{
-        //Add the education info on the screen
-        setEducationArray([...educationArray,educationInfo]);
         console.log(json.message);
         let newEducationArray = educationArray.filter((education) => education.degreeName !== educationInfo.degreeName);
         setEducationArray(newEducationArray);
