@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -37,6 +37,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RecipeReviewCard() {
   const classes = useStyles();
+  const [profileInfo,setProfileInfo] = useState({});
+
+  useEffect(() => {
+    fetch('http://localhost:8080/v1/LinkedIn/authenticated', {
+      method: "GET",
+      mode:"cors",
+      credentials:"include",
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+    })
+    .then(response => response.json())
+    .then((json) => {
+      if(json.error){
+        //Show error message
+        console.log(json.error);
+      }else{
+        //Set profile Info
+        console.log(json.professional);
+        setProfileInfo(json.professional);
+      }
+    });    
+  },[]);
 
   return (
     <Card className={classes.root}>
@@ -50,7 +71,7 @@ export default function RecipeReviewCard() {
       />
       <CardMedia
         className={classes.media}
-        image="http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/profilePhoto/python.jpg"
+        image={profileInfo.photo}
         title="Paella dish"
       />
       <CardContent>
@@ -58,13 +79,14 @@ export default function RecipeReviewCard() {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="fname"
                 name="firstName"
                 variant="outlined"
                 required
                 fullWidth
                 id="firstName"
                 label="First Name"
+                defaultValue={profileInfo.firstName}
+                placeholder={profileInfo.firstName}
                 autoFocus
               />
             </Grid>
@@ -75,6 +97,8 @@ export default function RecipeReviewCard() {
                 fullWidth
                 id="lastName"
                 label="Last Name"
+                defaultValue={profileInfo.lastName}
+                placeholder={profileInfo.lastName}
                 name="lastName"
                 autoComplete="lname"
               />
@@ -85,7 +109,9 @@ export default function RecipeReviewCard() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Email"
+                defaultValue={profileInfo.email}
+                placeholder={profileInfo.email}
                 name="email"
                 autoComplete="email"
               />
@@ -120,7 +146,9 @@ export default function RecipeReviewCard() {
                 required
                 fullWidth
                 id="lastName"
-                label="Phone number"
+                label="Phone Number"
+                defaultValue={profileInfo.phoneNumber}
+                placeholder={profileInfo.phoneNumber}
                 name="phone_number"
                 autoComplete="phone number"
               />
@@ -144,7 +172,7 @@ export default function RecipeReviewCard() {
             color="primary"
             className={classes.submit}
           >
-            Save Changes
+            Update Profile
           </Button>
         </form>
       </CardContent>

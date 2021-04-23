@@ -75,6 +75,21 @@ func (driver *DBClient) createEducation(education *Education) error {
 	return nil
 }
 
+func (driver *DBClient) getEducationID() (int, error) {
+	var id int
+	rows, err := driver.db.Query("SELECT MAX(id) FROM Education")
+	if err != nil {
+		return -1, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&id)
+		if err != nil {
+			return -1, err
+		}
+	}
+	return id, nil
+}
+
 func (driver *DBClient) deleteProfessionalEducation(education Education) error {
 	stmt, err := driver.db.Prepare("DELETE FROM Education WHERE ProfessionalID=? AND Degree_Name=? AND School_Name=? AND Start_Date=? AND Finish_Date=?")
 	if err != nil {
@@ -120,6 +135,21 @@ func (driver *DBClient) createExperience(experience *Experience) error {
 		return err
 	}
 	return nil
+}
+
+func (driver *DBClient) getExperienceID() (int, error) {
+	var id int
+	rows, err := driver.db.Query("SELECT MAX(id) FROM Experience")
+	if err != nil {
+		return -1, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&id)
+		if err != nil {
+			return -1, err
+		}
+	}
+	return id, nil
 }
 
 func (driver *DBClient) getProfessionalExperience(professionalID int) ([]Experience, error) {

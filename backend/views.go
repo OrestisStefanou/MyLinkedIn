@@ -75,8 +75,11 @@ func signin(c *gin.Context) {
 				md5pass := getMD5Hash(userLoginInfo.Password)
 				if md5pass == professional.Password {
 					session := sessions.Default(c)
-					session.Set("userEmail", professional.Email)
 					session.Set("userID", professional.ID)
+					session.Set("firstName", professional.FirstName)
+					session.Set("lastName", professional.LastName)
+					session.Set("userEmail", professional.Email)
+					session.Set("userPhone", professional.PhoneNumber)
 					session.Set("userPhoto", professional.Photo)
 					session.Save()
 					c.JSON(http.StatusAccepted, gin.H{"message": "Login successfull"})
@@ -102,6 +105,7 @@ func addEducation(c *gin.Context) {
 			//Create professional object
 			professional := Professional{}
 			professional.ID = professionalID.(int)
+			educationInfo.setID()
 			err = professional.addEducation(educationInfo)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
@@ -170,6 +174,7 @@ func addExperience(c *gin.Context) {
 			//Create professional object
 			professional := Professional{}
 			professional.ID = professionalID.(int)
+			experienceInfo.setID()
 			err = professional.addExperience(experienceInfo)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
@@ -237,11 +242,23 @@ func logout(c *gin.Context) {
 // GET /v1/LinkedIn/authenticated
 func authenticated(c *gin.Context) {
 	session := sessions.Default(c)
-	email := session.Get("userEmail")
 	professionalID := session.Get("userID")
+	firstName := session.Get("firstName")
+	lastName := session.Get("lastName")
+	email := session.Get("userEmail")
+	phoneNumber := session.Get("userPhone")
 	photo := session.Get("userPhoto")
+	//Create professional object
+	professional := Professional{}
+	professional.ID = professionalID.(int)
+	professional.FirstName = firstName.(string)
+	professional.LastName = lastName.(string)
+	professional.Email = email.(string)
+	professional.PhoneNumber = phoneNumber.(string)
+	professional.Photo = photo.(string)
+	professional.setPhotoURL() //Change photo to a url
 	if email != nil {
-		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "email": email.(string), "id": professionalID.(int), "photo": photo.(string)})
+		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "professional": professional})
 	} else {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	}

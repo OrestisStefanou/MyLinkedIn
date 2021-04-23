@@ -62,7 +62,7 @@ export default function Education(){
         console.log(json.error);
       }else{
         //Add the education info on the screen
-        setEducationArray([...educationArray,educationInfo]);
+        setEducationArray([...educationArray,json.educationInfo]);
         console.log(json.educationInfo);
       }
     });
@@ -84,7 +84,7 @@ export default function Education(){
         console.log(json.error);
       }else{
         console.log(json.message);
-        let newEducationArray = educationArray.filter((education) => education.degreeName !== educationInfo.degreeName);
+        let newEducationArray = educationArray.filter((education) => education.id !== educationInfo.id);
         setEducationArray(newEducationArray);
       }
     });

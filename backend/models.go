@@ -18,9 +18,9 @@ func (prof *Professional) save() error {
 }
 
 //Get profile photo url
-func (prof *Professional) getPhotoURL() string {
+func (prof *Professional) setPhotoURL() {
 	photoURL := mediaURL + prof.Photo
-	return photoURL
+	prof.Photo = photoURL
 }
 
 //Add education info to a professional
@@ -58,7 +58,7 @@ func (prof *Professional) getExperience() ([]Experience, error) {
 
 //Remove experience of a Professional
 func (prof *Professional) removeExperience(experienceInfo Experience) error {
-	experienceInfo.ID = prof.ID
+	experienceInfo.ProfessionalID = prof.ID
 	err := dbclient.deleteProfessionalExperience(experienceInfo)
 	return err
 }
@@ -79,6 +79,13 @@ func (education *Education) save() error {
 	return err
 }
 
+//Method to set id of Education object
+func (education *Education) setID() error {
+	id, err := dbclient.getEducationID()
+	education.ID = id + 1
+	return err
+}
+
 //Experience json struct
 type Experience struct {
 	ID             int    `json:"id"`
@@ -92,5 +99,12 @@ type Experience struct {
 //Save method for experience
 func (experience *Experience) save() error {
 	err := dbclient.createExperience(experience)
+	return err
+}
+
+//Method to set id of Experience object
+func (experience *Experience) setID() error {
+	id, err := dbclient.getExperienceID()
+	experience.ID = id + 1
 	return err
 }

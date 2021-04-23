@@ -61,7 +61,7 @@ export default function Experience(){
         console.log(json.error);
       }else{
         //Add the education info on the screen
-        setExperienceArray([...experienceArray,experienceInfo]);
+        setExperienceArray([...experienceArray,json.experienceInfo]);
         console.log(json.experienceInfo);
       }
     });
@@ -83,7 +83,7 @@ export default function Experience(){
         console.log(json.error);
       }else{
         console.log(json.message);
-        let newExperienceArray = experienceArray.filter((experience) => experience.employerName !== experienceInfo.employerName );
+        let newExperienceArray = experienceArray.filter((experience) => experience.id !== experienceInfo.id );
         setExperienceArray(newExperienceArray);
       }
     });
