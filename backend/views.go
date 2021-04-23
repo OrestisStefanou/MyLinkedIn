@@ -93,6 +93,65 @@ func signin(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/updateProfessional
+func updateProfessional(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		file, filerError := c.FormFile("photo")
+		newEmail := c.PostForm("email")
+		newFirstName := c.PostForm("firstName")
+		newLastName := c.PostForm("lastName")
+		newPassword := c.PostForm("password")
+		newPhoneNumber := c.PostForm("phoneNumber")
+		fmt.Println(file, newEmail, newFirstName, newLastName, newPassword, newPhoneNumber)
+		c.JSON(http.StatusOK, gin.H{"message": "Profile updated"})
+		return
+		if newEmail != professional.Email {
+			//Check if a user with this email already exists
+			checkUser, err := dbclient.getProfessional(newEmail)
+			if err != nil {
+				log.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"Error": "Internal server error"})
+				return
+			}
+			if checkUser.ID > 0 { //A user with this email already exists
+				fmt.Println("User already exists")
+				c.JSON(http.StatusNotAcceptable, gin.H{"error": "A user with this email already exists"})
+				return
+			}
+			professional.Email = newEmail
+		}
+		professional.FirstName = newFirstName
+		professional.LastName = newLastName
+		if newPassword != "" {
+			professional.Password = getMD5Hash(newPassword)
+		}
+		professional.PhoneNumber = newPhoneNumber
+		var photoPath string
+		if filerError == nil { //If image given
+			//Check if file is an image
+			extension := filepath.Ext(file.Filename)
+			if !validImgExtension(extension) {
+				fmt.Println("Not a valid file")
+				c.JSON(http.StatusBadRequest, gin.H{"error": "File is not an image"})
+				return
+			}
+			//Upload the photo
+			photoPath = filepath.Join(mediaDir, professional.Email, "profilePhoto", file.Filename)
+			c.SaveUploadedFile(file, photoPath)
+			//Path to save in the database
+			photoPath = filepath.Join(professional.Email, "profilePhoto", file.Filename)
+		} else {
+			photoPath = ""
+		}
+		professional.Photo = photoPath
+		professional.update() //Update user in the database
+		c.JSON(http.StatusOK, gin.H{"message": "Profile updated"})
+	}
+}
+
 //POST /v1/LinkedIn/addEducation
 func addEducation(c *gin.Context) {
 	session := sessions.Default(c)
@@ -241,25 +300,12 @@ func logout(c *gin.Context) {
 
 // GET /v1/LinkedIn/authenticated
 func authenticated(c *gin.Context) {
-	session := sessions.Default(c)
-	professionalID := session.Get("userID")
-	firstName := session.Get("firstName")
-	lastName := session.Get("lastName")
-	email := session.Get("userEmail")
-	phoneNumber := session.Get("userPhone")
-	photo := session.Get("userPhoto")
-	//Create professional object
-	professional := Professional{}
-	professional.ID = professionalID.(int)
-	professional.FirstName = firstName.(string)
-	professional.LastName = lastName.(string)
-	professional.Email = email.(string)
-	professional.PhoneNumber = phoneNumber.(string)
-	professional.Photo = photo.(string)
-	professional.setPhotoURL() //Change photo to a url
-	if email != nil {
-		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "professional": professional})
-	} else {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		fmt.Println(professional)
+		professional.setPhotoURL() //Create photo url
+		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "professional": professional})
 	}
 }

@@ -11,6 +11,8 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Alert from '@material-ui/lab/Alert';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +39,67 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RecipeReviewCard() {
   const classes = useStyles();
-  const [profileInfo,setProfileInfo] = useState({});
+  const [profileInfo,setProfileInfo] = useState({email:'',first_name:'',last_name:'',password:'',password2:'',phone_number:''});
+  const [image, setImage] = useState({});
+  const [photoPicked,setPhotoPicked] = useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setProfileInfo({ ...profileInfo, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+    setPhotoPicked(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(profileInfo);
+    console.log(image);
+    //If new password given
+    if(profileInfo.password.length !== 0){
+      //Check if passwords match
+      if (profileInfo.password !== profileInfo.password2){
+        setErrorMessage("Passwords do not match");
+        return;
+      }
+      //Check if password is at least 8 characters
+      if(profileInfo.password.length < 8){
+        setErrorMessage("Passwords must have at least 8 characters");
+        return;  
+      }
+    }
+    let form_data = new FormData();
+    form_data.append('email',profileInfo.email);
+    form_data.append('firstName',profileInfo.first_name);
+    form_data.append('lastName',profileInfo.last_name);
+    form_data.append('password',profileInfo.password);
+    form_data.append('phoneNumber',profileInfo.phone_number);
+    if (photoPicked){
+      form_data.append('photo',image,image.name);
+    }
+    fetch(
+      'http://localhost:8080/v1/LinkedIn/updateProfessional',
+      {
+        method: 'POST',
+        mode:"cors",
+        credentials:"include",
+        body: form_data,
+      }
+    )
+    .then((response) => response.json())
+    .then((result) => {
+      if(result.error){
+        setErrorMessage(result.error);
+      }else{
+        //Show success message
+        //history.push(`/signin`)
+      }
+    })
+  };
 
   useEffect(() => {
     fetch('http://localhost:8080/v1/LinkedIn/authenticated', {
@@ -71,10 +133,11 @@ export default function RecipeReviewCard() {
       />
       <CardMedia
         className={classes.media}
-        image={profileInfo.photo}
+        image={profileInfo.photo ? profileInfo.photo : 'www.exaple.com'}
         title="Paella dish"
       />
       <CardContent>
+      {errorMessage && <Alert onClose={() => setErrorMessage("")} severity="error">{errorMessage}</Alert>}
       <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -87,6 +150,7 @@ export default function RecipeReviewCard() {
                 label="First Name"
                 defaultValue={profileInfo.firstName}
                 placeholder={profileInfo.firstName}
+                onChange={handleChange}
                 autoFocus
               />
             </Grid>
@@ -99,6 +163,7 @@ export default function RecipeReviewCard() {
                 label="Last Name"
                 defaultValue={profileInfo.lastName}
                 placeholder={profileInfo.lastName}
+                onChange={handleChange}
                 name="lastName"
                 autoComplete="lname"
               />
@@ -112,6 +177,7 @@ export default function RecipeReviewCard() {
                 label="Email"
                 defaultValue={profileInfo.email}
                 placeholder={profileInfo.email}
+                onChange={handleChange}
                 name="email"
                 autoComplete="email"
               />
@@ -125,6 +191,7 @@ export default function RecipeReviewCard() {
                 label="New Password"
                 type="password"
                 id="password"
+                onChange={handleChange}
                 autoComplete="current-password"
               />
             </Grid>
@@ -137,6 +204,7 @@ export default function RecipeReviewCard() {
                 label="Confirm Password"
                 type="password"
                 id="password"
+                onChange={handleChange}
                 autoComplete="current-password"
               />
             </Grid>
@@ -149,6 +217,7 @@ export default function RecipeReviewCard() {
                 label="Phone Number"
                 defaultValue={profileInfo.phoneNumber}
                 placeholder={profileInfo.phoneNumber}
+                onChange={handleChange}
                 name="phone_number"
                 autoComplete="phone number"
               />
@@ -161,8 +230,9 @@ export default function RecipeReviewCard() {
                     component="label"
                     startIcon={<CloudUploadIcon />}
                   >Change Profile Picture
-                <input type="file" id="image" name="image" hidden  />
+                <input type="file" id="image" name="image" hidden onChange={handleImageChange} />
                 </Button>
+                <p>{image.name}</p>
             </Grid>
           </Grid>
           <Button
@@ -171,6 +241,7 @@ export default function RecipeReviewCard() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Update Profile
           </Button>

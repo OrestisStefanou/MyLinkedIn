@@ -17,6 +17,12 @@ func (prof *Professional) save() error {
 	return err
 }
 
+//Update method for Professional
+func (prof *Professional) update() error {
+	err := dbclient.updateProfessional(prof)
+	return err
+}
+
 //Get profile photo url
 func (prof *Professional) setPhotoURL() {
 	photoURL := mediaURL + prof.Photo
