@@ -49,12 +49,12 @@ func (driver *DBClient) updateProfessional(prof *Professional) error {
 		Email=?,
 		Password=?,
 		Phone_Number=?,
-		Photo=?`,
+		Photo=? WHERE ProfessionalID=?`,
 	)
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(prof.FirstName, prof.LastName, prof.Email, prof.Password, prof.PhoneNumber, prof.Photo)
+	_, err = stmt.Exec(prof.FirstName, prof.LastName, prof.Email, prof.Password, prof.PhoneNumber, prof.Photo, prof.ID)
 	if err != nil {
 		return err
 	}

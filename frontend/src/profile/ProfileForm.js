@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RecipeReviewCard() {
   const classes = useStyles();
-  const [profileInfo,setProfileInfo] = useState({email:'',first_name:'',last_name:'',password:'',password2:'',phone_number:''});
+  const [profileInfo,setProfileInfo] = useState({email:'',firstName:'',lastName:'',password:'',password2:'',phoneNumber:''});
   const [image, setImage] = useState({});
   const [photoPicked,setPhotoPicked] = useState(false);
   const [errorMessage,setErrorMessage] = useState('');
@@ -72,12 +72,21 @@ export default function RecipeReviewCard() {
         return;  
       }
     }
+    if(profileInfo.firstName.length === 0){
+      setErrorMessage("First Name can not be empty");
+    }
+    if(profileInfo.lastName.length === 0){
+      setErrorMessage("Last Name can not be empty");
+    }
+    if(profileInfo.email.length === 0){
+      setErrorMessage("Email can not be empty");
+    }
     let form_data = new FormData();
     form_data.append('email',profileInfo.email);
-    form_data.append('firstName',profileInfo.first_name);
-    form_data.append('lastName',profileInfo.last_name);
+    form_data.append('firstName',profileInfo.firstName);
+    form_data.append('lastName',profileInfo.lastName);
     form_data.append('password',profileInfo.password);
-    form_data.append('phoneNumber',profileInfo.phone_number);
+    form_data.append('phoneNumber',profileInfo.phoneNumber);
     if (photoPicked){
       form_data.append('photo',image,image.name);
     }
@@ -92,6 +101,7 @@ export default function RecipeReviewCard() {
     )
     .then((response) => response.json())
     .then((result) => {
+      console.log(result);
       if(result.error){
         setErrorMessage(result.error);
       }else{
@@ -218,7 +228,7 @@ export default function RecipeReviewCard() {
                 defaultValue={profileInfo.phoneNumber}
                 placeholder={profileInfo.phoneNumber}
                 onChange={handleChange}
-                name="phone_number"
+                name="phoneNumber"
                 autoComplete="phone number"
               />
             </Grid>

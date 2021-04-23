@@ -105,10 +105,14 @@ func updateProfessional(c *gin.Context) {
 		newLastName := c.PostForm("lastName")
 		newPassword := c.PostForm("password")
 		newPhoneNumber := c.PostForm("phoneNumber")
-		fmt.Println(file, newEmail, newFirstName, newLastName, newPassword, newPhoneNumber)
-		c.JSON(http.StatusOK, gin.H{"message": "Profile updated"})
-		return
+		fmt.Println("NEW EMAIL", newEmail)
+		fmt.Println("NEW FIRST NAME", newFirstName)
+		fmt.Println("NEW LAST NAME", newLastName)
+		fmt.Println("NEW PHOTO", file)
+		fmt.Println("NEW PASSWORD", newPassword)
+		fmt.Println("NEW PHONE NUMBER", newPhoneNumber)
 		if newEmail != professional.Email {
+			fmt.Println("TRYING TO CHANGE EMAIL")
 			//Check if a user with this email already exists
 			checkUser, err := dbclient.getProfessional(newEmail)
 			if err != nil {
@@ -126,11 +130,13 @@ func updateProfessional(c *gin.Context) {
 		professional.FirstName = newFirstName
 		professional.LastName = newLastName
 		if newPassword != "" {
+			fmt.Println("TRYING TO CHANGE PASSWORD")
 			professional.Password = getMD5Hash(newPassword)
 		}
 		professional.PhoneNumber = newPhoneNumber
 		var photoPath string
 		if filerError == nil { //If image given
+			fmt.Println("TRYING TO UPDATE PROFILE PICTURE")
 			//Check if file is an image
 			extension := filepath.Ext(file.Filename)
 			if !validImgExtension(extension) {
@@ -143,11 +149,11 @@ func updateProfessional(c *gin.Context) {
 			c.SaveUploadedFile(file, photoPath)
 			//Path to save in the database
 			photoPath = filepath.Join(professional.Email, "profilePhoto", file.Filename)
-		} else {
-			photoPath = ""
+			professional.Photo = photoPath
 		}
-		professional.Photo = photoPath
 		professional.update() //Update user in the database
+		fmt.Println("GOT HERE")
+		//UPDATE THE SESSION
 		c.JSON(http.StatusOK, gin.H{"message": "Profile updated"})
 	}
 }
