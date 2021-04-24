@@ -74,14 +74,7 @@ func signin(c *gin.Context) {
 				//Get md5 hash of password
 				md5pass := getMD5Hash(userLoginInfo.Password)
 				if md5pass == professional.Password {
-					session := sessions.Default(c)
-					session.Set("userID", professional.ID)
-					session.Set("firstName", professional.FirstName)
-					session.Set("lastName", professional.LastName)
-					session.Set("userEmail", professional.Email)
-					session.Set("userPhone", professional.PhoneNumber)
-					session.Set("userPhoto", professional.Photo)
-					session.Save()
+					setProfessionalSession(c, professional)
 					c.JSON(http.StatusAccepted, gin.H{"message": "Login successfull"})
 				} else {
 					c.JSON(http.StatusNotFound, gin.H{"error": "Wrong email or password"})
@@ -105,14 +98,7 @@ func updateProfessional(c *gin.Context) {
 		newLastName := c.PostForm("lastName")
 		newPassword := c.PostForm("password")
 		newPhoneNumber := c.PostForm("phoneNumber")
-		fmt.Println("NEW EMAIL", newEmail)
-		fmt.Println("NEW FIRST NAME", newFirstName)
-		fmt.Println("NEW LAST NAME", newLastName)
-		fmt.Println("NEW PHOTO", file)
-		fmt.Println("NEW PASSWORD", newPassword)
-		fmt.Println("NEW PHONE NUMBER", newPhoneNumber)
 		if newEmail != professional.Email {
-			fmt.Println("TRYING TO CHANGE EMAIL")
 			//Check if a user with this email already exists
 			checkUser, err := dbclient.getProfessional(newEmail)
 			if err != nil {
@@ -129,14 +115,12 @@ func updateProfessional(c *gin.Context) {
 		}
 		professional.FirstName = newFirstName
 		professional.LastName = newLastName
-		if newPassword != "" {
-			fmt.Println("TRYING TO CHANGE PASSWORD")
+		if len(newPassword) != 0 {
 			professional.Password = getMD5Hash(newPassword)
 		}
 		professional.PhoneNumber = newPhoneNumber
 		var photoPath string
 		if filerError == nil { //If image given
-			fmt.Println("TRYING TO UPDATE PROFILE PICTURE")
 			//Check if file is an image
 			extension := filepath.Ext(file.Filename)
 			if !validImgExtension(extension) {
@@ -152,24 +136,21 @@ func updateProfessional(c *gin.Context) {
 			professional.Photo = photoPath
 		}
 		professional.update() //Update user in the database
-		fmt.Println("GOT HERE")
 		//UPDATE THE SESSION
-		c.JSON(http.StatusOK, gin.H{"message": "Profile updated"})
+		setProfessionalSession(c, professional)
+		professional.setPhotoURL() //Change the path to a url
+		c.JSON(http.StatusOK, gin.H{"profile": professional})
 	}
 }
 
 //POST /v1/LinkedIn/addEducation
 func addEducation(c *gin.Context) {
-	session := sessions.Default(c)
-	professionalID := session.Get("userID")
-	if professionalID == nil {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
 		var educationInfo Education
 		if err := c.ShouldBindJSON(&educationInfo); err == nil {
-			//Create professional object
-			professional := Professional{}
-			professional.ID = professionalID.(int)
 			educationInfo.setID()
 			err = professional.addEducation(educationInfo)
 			if err != nil {
@@ -185,16 +166,12 @@ func addEducation(c *gin.Context) {
 
 //POST /v1/LinkedIn/removeEducation
 func removeEducation(c *gin.Context) {
-	session := sessions.Default(c)
-	professionalID := session.Get("userID")
-	if professionalID == nil {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
 		var educationInfo Education
 		if err := c.ShouldBindJSON(&educationInfo); err == nil {
-			//Create professional object
-			professional := Professional{}
-			professional.ID = professionalID.(int)
 			err = professional.removeEducation(educationInfo)
 			if err != nil {
 				fmt.Println(err)
@@ -210,14 +187,10 @@ func removeEducation(c *gin.Context) {
 
 //GET /v1/LinkedIn/getEducation
 func getEducation(c *gin.Context) {
-	session := sessions.Default(c)
-	professionalID := session.Get("userID")
-	if professionalID == nil {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
-		//Create professional object
-		professional := Professional{}
-		professional.ID = professionalID.(int)
 		education, err := professional.getEducation()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
@@ -229,16 +202,12 @@ func getEducation(c *gin.Context) {
 
 //POST /v1/LinkedIn/addExperience
 func addExperience(c *gin.Context) {
-	session := sessions.Default(c)
-	professionalID := session.Get("userID")
-	if professionalID == nil {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
 		var experienceInfo Experience
 		if err := c.ShouldBindJSON(&experienceInfo); err == nil {
-			//Create professional object
-			professional := Professional{}
-			professional.ID = professionalID.(int)
 			experienceInfo.setID()
 			err = professional.addExperience(experienceInfo)
 			if err != nil {
@@ -254,16 +223,12 @@ func addExperience(c *gin.Context) {
 
 //POST /v1/LinkedIn/removeExperience
 func removeExperience(c *gin.Context) {
-	session := sessions.Default(c)
-	professionalID := session.Get("userID")
-	if professionalID == nil {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
 		var experienceInfo Experience
 		if err := c.ShouldBindJSON(&experienceInfo); err == nil {
-			//Create professional object
-			professional := Professional{}
-			professional.ID = professionalID.(int)
 			err = professional.removeExperience(experienceInfo)
 			if err != nil {
 				fmt.Println(err)
@@ -279,14 +244,10 @@ func removeExperience(c *gin.Context) {
 
 //GET /v1/LinkedIn/getExperience
 func getExperience(c *gin.Context) {
-	session := sessions.Default(c)
-	professionalID := session.Get("userID")
-	if professionalID == nil {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
-		//Create professional object
-		professional := Professional{}
-		professional.ID = professionalID.(int)
 		experience, err := professional.getExperience()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
@@ -310,7 +271,7 @@ func authenticated(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
-		fmt.Println(professional)
+		//fmt.Println(professional)
 		professional.setPhotoURL() //Create photo url
 		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "professional": professional})
 	}

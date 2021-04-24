@@ -43,22 +43,40 @@ func (driver *DBClient) createProfessional(prof *Professional) error {
 }
 
 func (driver *DBClient) updateProfessional(prof *Professional) error {
-	stmt, err := driver.db.Prepare(`UPDATE Professionals SET
+	if len(prof.Password) != 0 {
+		stmt, err := driver.db.Prepare(`UPDATE Professionals SET
 		First_Name=?,
 		Last_Name=?,
 		Email=?,
 		Password=?,
 		Phone_Number=?,
 		Photo=? WHERE ProfessionalID=?`,
+		)
+		if err != nil {
+			return err
+		}
+		_, err = stmt.Exec(prof.FirstName, prof.LastName, prof.Email, prof.Password, prof.PhoneNumber, prof.Photo, prof.ID)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	stmt, err := driver.db.Prepare(`UPDATE Professionals SET
+		First_Name=?,
+		Last_Name=?,
+		Email=?,
+		Phone_Number=?,
+		Photo=? WHERE ProfessionalID=?`,
 	)
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(prof.FirstName, prof.LastName, prof.Email, prof.Password, prof.PhoneNumber, prof.Photo, prof.ID)
+	_, err = stmt.Exec(prof.FirstName, prof.LastName, prof.Email, prof.PhoneNumber, prof.Photo, prof.ID)
 	if err != nil {
 		return err
 	}
 	return nil
+
 }
 
 func (driver *DBClient) getProfessional(email string) (Professional, error) {

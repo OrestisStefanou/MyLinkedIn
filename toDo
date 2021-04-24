@@ -1,7 +1,4 @@
 -DB.close()?
 -Create log files
--Create a function to get a professional from the session info
--Na kitakso se pia alla views na kamo xrisi tis getProfessionalFromSession
 -Otan kamno delete user na kamno delete je to media directory tou
--Fix update endpoint(Keno password issue)
--Sto profileForm component na dixno ta stixia pano pou ti forma
+-Otan o xristis allazi foto profil na diagrafo tin proigumeni pou ixe?

@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Alert from '@material-ui/lab/Alert';
+import Typography from '@material-ui/core/Typography';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,6 +44,7 @@ export default function RecipeReviewCard() {
   const [image, setImage] = useState({});
   const [photoPicked,setPhotoPicked] = useState(false);
   const [errorMessage,setErrorMessage] = useState('');
+  const [successMessage,setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -106,7 +108,8 @@ export default function RecipeReviewCard() {
         setErrorMessage(result.error);
       }else{
         //Show success message
-        //history.push(`/signin`)
+        setSuccessMessage("Profile updated");
+        setProfileInfo(result.profile);
       }
     })
   };
@@ -147,7 +150,20 @@ export default function RecipeReviewCard() {
         title="Paella dish"
       />
       <CardContent>
+      <Typography variant="subtitle1" gutterBottom>
+        First Name:{profileInfo.firstName}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Last Name:{profileInfo.lastName}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Email:{profileInfo.email}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Phone Number:{profileInfo.phoneNumber}
+      </Typography>
       {errorMessage && <Alert onClose={() => setErrorMessage("")} severity="error">{errorMessage}</Alert>}
+      {successMessage && <Alert onClose={() => setSuccessMessage("")} severity="success">{successMessage}</Alert>}
       <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

@@ -45,3 +45,15 @@ func getProfessionalFromSession(c *gin.Context) (Professional, error) {
 	return professional, nil
 
 }
+
+//Create or update a professional's session
+func setProfessionalSession(c *gin.Context, prof Professional) {
+	session := sessions.Default(c)
+	session.Set("userID", prof.ID)
+	session.Set("firstName", prof.FirstName)
+	session.Set("lastName", prof.LastName)
+	session.Set("userEmail", prof.Email)
+	session.Set("userPhone", prof.PhoneNumber)
+	session.Set("userPhoto", prof.Photo)
+	session.Save()
+}
