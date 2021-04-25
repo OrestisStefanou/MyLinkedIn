@@ -257,6 +257,62 @@ func getExperience(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/addSkill
+func addSkill(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var skillInfo Skill
+		if err := c.ShouldBindJSON(&skillInfo); err == nil {
+			err = professional.addSkill(skillInfo)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusCreated, gin.H{"skillInfo": skillInfo})
+			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Necessary fields not given"})
+		}
+	}
+}
+
+//POST /v1/LinkedIn/removeSkill
+func removeSkill(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var skillInfo Skill
+		if err := c.ShouldBindJSON(&skillInfo); err == nil {
+			err = professional.removeSkill(skillInfo)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Deleted"})
+			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Necessary fields not given"})
+		}
+	}
+}
+
+//GET /v1/LinkedIn/getSkills
+func getSkills(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		skills, err := professional.getSkills()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusAccepted, gin.H{"skills": skills})
+		}
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

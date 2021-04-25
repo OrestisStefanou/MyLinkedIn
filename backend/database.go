@@ -218,6 +218,50 @@ func (driver *DBClient) deleteProfessionalExperience(experience Experience) erro
 	return nil
 }
 
+func (driver *DBClient) createSkill(skill *Skill) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Skills SET 
+		ProfessionalID=?,
+		Name=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(skill.ProfessionalID, skill.Name)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) getProfessionalSkills(professionalID int) ([]Skill, error) {
+	skillInfo := Skill{}
+	rows, err := driver.db.Query("SELECT * FROM Skills WHERE ProfessionalID=?", professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var skillsArray []Skill
+	for rows.Next() {
+		err = rows.Scan(&skillInfo.ID, &skillInfo.ProfessionalID, &skillInfo.Name)
+		if err != nil {
+			return skillsArray, err
+		}
+		skillsArray = append(skillsArray, skillInfo)
+	}
+	return skillsArray, nil
+}
+
+func (driver *DBClient) deleteProfessionalSkill(skill Skill) error {
+	stmt, err := driver.db.Prepare("DELETE FROM Skills WHERE ProfessionalID=? AND Name=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(skill.ProfessionalID, skill.Name)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

@@ -31,3 +31,10 @@ CREATE TABLE Experience (
        FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
 );
 
+CREATE TABLE Skills (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       Name varchar(255) NOT NULL,
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
+);

@@ -1,22 +1,12 @@
 -Admin User:
 
+-Skills component(Opos to experience kai to education)
 
--Professional User:
-	-Onoma
-	-Epitheto
-	-Email
-	-Password
-	-Tilefono
-	-Fotografia
-	
--Skills:
-	-Professional id(Foreign Key)
-	-Perigrafi skill
-	-Public
-	
--Experience:
-	-Professional id(Foreign Key)
-	-Perigrafi Empirias
-	-Imerominia enarkis
-	-Imerominia liksis
-	-Public
+-Arthro
+	-ID
+	-ProfessionalID(uploader)
+	-Periexomeno
+	-Episinaptomeno arxio
+
+-Comments
+-Likes
