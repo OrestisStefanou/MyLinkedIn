@@ -11,6 +11,7 @@ import 'date-fns';
 import ProfileForm from "./ProfileForm";
 import Education from "./Education";
 import Experience from "./Experience";
+import Skills from "./Skills";
 
 function Copyright() {
   return (
@@ -79,6 +80,9 @@ export default function Profile() {
       </div>
       <div className={classes.paper}>
         <Experience/>
+      </div>
+      <div className={classes.paper}>
+        <Skills/>
       </div>
       <Box mt={5}>
         <Copyright />

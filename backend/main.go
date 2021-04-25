@@ -44,6 +44,10 @@ func main() {
 		v1.POST("/addExperience", addExperience)
 		v1.POST("/removeExperience", removeExperience)
 		v1.GET("/getExperience", getExperience)
+		//Skills endpoints
+		v1.POST("/addSkill", addSkill)
+		v1.POST("/removeSkill", removeSkill)
+		v1.GET("/getSkills", getSkills)
 		//Professional endpoints
 		v1.POST("/updateProfessional", updateProfessional)
 		//Logout and session endpoints
