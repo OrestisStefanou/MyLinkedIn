@@ -13,3 +13,4 @@ const databaseName = "LinkedIn"
 var dbclient DBClient
 
 var validImageExtensions = [...]string{".jpeg", ".jpg", ".png", ".gif"}
+var validAttachedFileExtensions = [...]string{".jpeg", ".jpg", ".png", ".gif", ".mp4", ".mp3", ".pdf"}

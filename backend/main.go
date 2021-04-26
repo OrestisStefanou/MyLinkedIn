@@ -50,6 +50,8 @@ func main() {
 		v1.GET("/getSkills", getSkills)
 		//Professional endpoints
 		v1.POST("/updateProfessional", updateProfessional)
+		//Article endpoints
+		v1.POST("/addArticle", addArticle)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)

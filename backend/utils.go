@@ -23,6 +23,15 @@ func validImgExtension(extension string) bool {
 	return false
 }
 
+func validFileExtension(extension string) bool {
+	for _, ext := range validAttachedFileExtensions {
+		if extension == ext {
+			return true
+		}
+	}
+	return false
+}
+
 func getProfessionalFromSession(c *gin.Context) (Professional, error) {
 	professional := Professional{}
 	//Create professional object from session

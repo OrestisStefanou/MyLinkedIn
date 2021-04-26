@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -324,10 +325,27 @@ func addArticle(c *gin.Context) {
 		newArticle.Title = c.PostForm("title")
 		newArticle.Content = c.PostForm("content")
 		newArticle.UploaderID = professional.ID
-		fmt.Println(file, filerError)
-		//Check file extensions if file exists and upload it
+		var filePath string
+		if filerError == nil { //In case of attached file
+			//Check if is a valid file
+			extension := filepath.Ext(file.Filename)
+			if !validFileExtension(extension) {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file type"})
+				return
+			}
+			//Create a directory for the artcile
+			os.MkdirAll(filepath.Join(mediaDir, professional.Email, newArticle.Title), 0755)
+			//Upload the file
+			now := time.Now()
+			filePath = filepath.Join(mediaDir, professional.Email, newArticle.Title, now.Format("2006-02-01 15:04:05.000 MST"))
+			c.SaveUploadedFile(file, filePath)
+			//Path to save in the database
+			filePath = filepath.Join(professional.Email, newArticle.Title, now.Format("2006-02-01 15:04:05.000 MST"))
+		} else {
+			filePath = ""
+		}
+		newArticle.AttachedFile = filePath
 		newArticle.save()
-		//Create the url for the attached file if exists
 		c.JSON(http.StatusCreated, gin.H{"articleInfo": newArticle})
 	}
 }

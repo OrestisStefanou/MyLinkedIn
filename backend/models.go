@@ -23,7 +23,7 @@ func (prof *Professional) update() error {
 	return err
 }
 
-//Get profile photo url
+//Create profile photo url
 func (prof *Professional) setPhotoURL() {
 	photoURL := mediaURL + prof.Photo
 	prof.Photo = photoURL
@@ -161,4 +161,10 @@ type Article struct {
 func (article *Article) save() error {
 	err := dbclient.createArticle(article)
 	return err
+}
+
+//Create a url for the attached file of the article
+func (article *Article) setFileURL() {
+	fileURL := mediaURL + article.AttachedFile
+	article.AttachedFile = fileURL
 }
