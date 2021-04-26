@@ -38,3 +38,13 @@ CREATE TABLE Skills (
        PRIMARY KEY(id),
        FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
 );
+
+CREATE TABLE Articles (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       Title varchar(255) NOT NULL,
+       Content TEXT  NOT NULL,
+       Attached_File varchar(255),
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
+);

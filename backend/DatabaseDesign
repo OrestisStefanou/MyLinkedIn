@@ -1,12 +1,11 @@
 -Admin User:
 
--Skills component(Opos to experience kai to education)
-
--Arthro
+-Article
 	-ID
 	-ProfessionalID(uploader)
+	-Titlos
 	-Periexomeno
 	-Episinaptomeno arxio
 
--Comments
--Likes
+	-ArticleComments
+	-ArticleLikes

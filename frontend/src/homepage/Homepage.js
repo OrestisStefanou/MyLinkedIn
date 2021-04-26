@@ -18,7 +18,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItems  from './ListItems';
-import Chart from './Chart';
+import ArticleForm from './ArticleForm';
 import Deposits from './Deposits';
 import Orders from './Orders';
 import Button from '@material-ui/core/Button';
@@ -217,13 +217,13 @@ export default function Homepage() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
+            <Grid item xs={12} md={8} lg={10}>
               <Paper className={fixedHeightPaper}>
-                <Chart />
+                <ArticleForm />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
+            <Grid item xs={12} md={4} lg={2}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
               </Paper>
