@@ -147,3 +147,18 @@ func (skill *Skill) save() error {
 	err := dbclient.createSkill(skill)
 	return err
 }
+
+//Article json struct
+type Article struct {
+	ID           int    `json:"id"`
+	UploaderID   int    `json:"uploaderId"`
+	Title        string `json:"title" binding:"required"`
+	Content      string `json:"content" binding:"required"`
+	AttachedFile string `json:"file"`
+}
+
+//Save method for article
+func (article *Article) save() error {
+	err := dbclient.createArticle(article)
+	return err
+}

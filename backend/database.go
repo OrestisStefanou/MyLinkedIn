@@ -23,6 +23,7 @@ func (driver *DBClient) initialize() {
 	driver.db.SetMaxIdleConns(10)
 }
 
+//Professional model related functions
 func (driver *DBClient) createProfessional(prof *Professional) error {
 	stmt, err := driver.db.Prepare(`INSERT INTO Professionals SET 
 		First_Name=?,
@@ -94,6 +95,7 @@ func (driver *DBClient) getProfessional(email string) (Professional, error) {
 	return prof, nil
 }
 
+//Education model related functions
 func (driver *DBClient) createEducation(education *Education) error {
 	stmt, err := driver.db.Prepare(`INSERT INTO Education SET 
 		ProfessionalID=?,
@@ -156,6 +158,7 @@ func (driver *DBClient) getProfessionalEducation(professionalID int) ([]Educatio
 	return educationArray, nil
 }
 
+//Experience model related functions
 func (driver *DBClient) createExperience(experience *Experience) error {
 	stmt, err := driver.db.Prepare(`INSERT INTO Experience SET 
 		ProfessionalID=?,
@@ -218,6 +221,7 @@ func (driver *DBClient) deleteProfessionalExperience(experience Experience) erro
 	return nil
 }
 
+//Skill model related functions
 func (driver *DBClient) createSkill(skill *Skill) error {
 	stmt, err := driver.db.Prepare(`INSERT INTO Skills SET 
 		ProfessionalID=?,
@@ -256,6 +260,24 @@ func (driver *DBClient) deleteProfessionalSkill(skill Skill) error {
 		return err
 	}
 	_, err = stmt.Exec(skill.ProfessionalID, skill.Name)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//Article model related functions
+func (driver *DBClient) createArticle(article *Article) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Articles SET 
+		UploaderID=?,
+		Title=?,
+		Content=?,
+		Attached_File=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(article.UploaderID, article.Title, article.Content, article.AttachedFile)
 	if err != nil {
 		return err
 	}

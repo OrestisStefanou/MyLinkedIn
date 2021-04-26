@@ -313,6 +313,25 @@ func getSkills(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/addArticle
+func addArticle(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var newArticle Article
+		file, filerError := c.FormFile("file")
+		newArticle.Title = c.PostForm("title")
+		newArticle.Content = c.PostForm("content")
+		newArticle.UploaderID = professional.ID
+		fmt.Println(file, filerError)
+		//Check file extensions if file exists and upload it
+		newArticle.save()
+		//Create the url for the attached file if exists
+		c.JSON(http.StatusCreated, gin.H{"articleInfo": newArticle})
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)
