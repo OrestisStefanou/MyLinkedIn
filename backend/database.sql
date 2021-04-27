@@ -45,6 +45,7 @@ CREATE TABLE Articles (
        Title varchar(255) NOT NULL,
        Content TEXT  NOT NULL,
        Attached_File varchar(255),
+       Created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
        PRIMARY KEY(id),
        FOREIGN KEY(UploaderID) REFERENCES Professionals(ProfessionalID)
 );

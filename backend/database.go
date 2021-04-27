@@ -284,6 +284,26 @@ func (driver *DBClient) createArticle(article *Article) error {
 	return nil
 }
 
+//I SINARTISI DAME THA ALLAKSI JE THA PIANI ORISMA TO ID TOU
+//PROFESSIONAL POU THELOUME NA PIASOUME TA ARTHRA POU THA EMFANISTOUN
+//STO XRONOLOGIO TOU
+func (driver *DBClient) getArticles() ([]Article, error) {
+	articleInfo := Article{}
+	rows, err := driver.db.Query("SELECT * FROM Articles ORDER BY Created")
+	if err != nil {
+		return nil, err
+	}
+	var articlesArray []Article
+	for rows.Next() {
+		err = rows.Scan(&articleInfo.ID, &articleInfo.Title, &articleInfo.Content, &articleInfo.AttachedFile, &articleInfo.Created)
+		if err != nil {
+			return articlesArray, err
+		}
+		articlesArray = append(articlesArray, articleInfo)
+	}
+	return articlesArray, nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

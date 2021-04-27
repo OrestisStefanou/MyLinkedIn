@@ -1,5 +1,7 @@
 package main
 
+import "time"
+
 //Professional json struct
 type Professional struct {
 	ID          int    `json:"id"`
@@ -150,11 +152,12 @@ func (skill *Skill) save() error {
 
 //Article json struct
 type Article struct {
-	ID           int    `json:"id"`
-	UploaderID   int    `json:"uploaderId"`
-	Title        string `json:"title" binding:"required"`
-	Content      string `json:"content" binding:"required"`
-	AttachedFile string `json:"file"`
+	ID           int       `json:"id"`
+	UploaderID   int       `json:"uploaderId"`
+	Title        string    `json:"title" binding:"required"`
+	Content      string    `json:"content" binding:"required"`
+	AttachedFile string    `json:"file"`
+	Created      time.Time `json:"created"`
 }
 
 //Save method for article
@@ -168,3 +171,9 @@ func (article *Article) setFileURL() {
 	fileURL := mediaURL + article.AttachedFile
 	article.AttachedFile = fileURL
 }
+
+//Get the comments of an article
+
+//Get the likes of an article
+
+//Get the info of the professional who uploaded the video
