@@ -363,6 +363,23 @@ func (driver *DBClient) deleteArticleLike(like ArticleLike) error {
 	return nil
 }
 
+//ArticleComment related functins
+func (driver *DBClient) createArticleComment(comment *ArticleComment) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Article_Comments SET 
+		ProfessionalID=?,
+		ArticleID=?,
+		Comment=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(comment.ProfessionalID, comment.ArticleID, comment.Comment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

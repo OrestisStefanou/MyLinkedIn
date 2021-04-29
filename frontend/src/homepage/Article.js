@@ -56,9 +56,37 @@ export default function Article(props) {
   const [uploaderInfo,setUploaderInfo] = useState({firstName:"Orestis",lastName:"Stefanou"});
   const [hasImage,setHasImage] = useState(false);
   const [like,setLike] = useState(false);
+  const [comment,setComment] = useState({articleId:props.articleInfo.id,comment:""});
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setComment({ ...comment, [name]: value });
+  };
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    fetch('http://localhost:8080/v1/LinkedIn/article/addComment', {
+      method: "POST",
+      mode:"cors",
+      credentials:"include",
+      body: JSON.stringify(comment),
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+      })
+      .then(response => response.json())
+          .then((json) => {
+              if(json.error){
+                  //Show error message
+                  console.log(json.error);
+              }else{
+                  //Show the comment on the comment section
+                  console.log(json);
+              }
+        });       
   };
 
   const handleLike = () => {
@@ -76,7 +104,6 @@ export default function Article(props) {
                     //Show error message
                     console.log(json.error);
                 }else{
-                    //Add the education info on the screen
                     console.log(json);
                     setLike(true);
                 }
@@ -95,7 +122,6 @@ export default function Article(props) {
                     //Show error message
                     console.log(json.error);
                 }else{
-                    //Add the education info on the screen
                     console.log(json);
                     setLike(false);
                 }
@@ -117,7 +143,6 @@ export default function Article(props) {
                 //Show error message
                 console.log(json.error);
             }else{
-                //Add the education info on the screen
                 console.log(json);
                 setUploaderInfo(json.uploader);
                 setHasImage(json.hasImage);
@@ -185,6 +210,7 @@ export default function Article(props) {
                 label="Comment"
                 type="text"
                 id="content"
+                onChange={handleChange}
                 autoComplete="content"
               />
             </Grid>
@@ -195,6 +221,7 @@ export default function Article(props) {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                onClick={handleCommentSubmit}
               >
                 Comment
               </Button>

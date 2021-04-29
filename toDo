@@ -8,6 +8,7 @@
 
 -Na kamo ena component article pou tha kamni fetch ta likes,ta comment 
 je ta stixia tou xristi pou anevase to Article
+-Otan piano ta details enos article na piano an ekame idi like o xristis
 -An to attached file den ine image na ipaxi eikonidio pou anii to attached file
 -To recent Deposits sto homepage na dixni to profil tou xristi
 -I sinartisi getArticles sto database.go na allaksi

@@ -391,8 +391,8 @@ func getArticleDetails(c *gin.Context) {
 	}
 }
 
-//POST /v1/LinkedIn/addLike
-func addLike(c *gin.Context) {
+//POST /v1/LinkedIn/article/addLike
+func addArticleLike(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c) //Get professional object from session
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
@@ -415,8 +415,8 @@ func addLike(c *gin.Context) {
 	}
 }
 
-//POST /v1/LinkedIn/removeLike
-func removeLike(c *gin.Context) {
+//POST /v1/LinkedIn/article/removeLike
+func removeArticleLike(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c) //Get professional object from session
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
@@ -432,6 +432,31 @@ func removeLike(c *gin.Context) {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 			} else {
 				c.JSON(http.StatusOK, gin.H{"message": "Like removed"})
+			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		}
+	}
+}
+
+//POST /v1/LinkedIn/article/addComment
+func addArticleComment(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var comment ArticleComment
+		if err := c.ShouldBindJSON(&comment); err == nil {
+			//Create article Object
+			article := Article{}
+			article.ID = comment.ArticleID
+			comment.ProfessionalID = professional.ID //ID of the user who liked the article
+			err = article.addComment(comment)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Comment added"})
 			}
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})

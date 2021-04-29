@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"path/filepath"
 )
 
@@ -199,7 +198,6 @@ func (article *Article) fileIsImage() (bool, error) {
 		return false, err
 	}
 	extension := filepath.Ext(fileName)
-	fmt.Println("EXTENSION OF FILE IS", extension)
 	if validImgExtension(extension) {
 		return true, nil
 	}
@@ -217,6 +215,13 @@ func (article *Article) addLike(like ArticleLike) error {
 func (article *Article) removeLike(like ArticleLike) error {
 	like.ArticleID = article.ID
 	err := dbclient.deleteArticleLike(like)
+	return err
+}
+
+//Add a comment to the article
+func (article *Article) addComment(comment ArticleComment) error {
+	comment.ArticleID = article.ID
+	err := dbclient.createArticleComment(&comment)
 	return err
 }
 
@@ -242,3 +247,7 @@ type ArticleComment struct {
 }
 
 //ArticleComment save method
+func (comment *ArticleComment) save() error {
+	err := dbclient.createArticleComment(comment)
+	return err
+}
