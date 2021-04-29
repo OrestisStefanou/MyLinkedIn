@@ -295,13 +295,44 @@ func (driver *DBClient) getArticles() ([]Article, error) {
 	}
 	var articlesArray []Article
 	for rows.Next() {
-		err = rows.Scan(&articleInfo.ID, &articleInfo.Title, &articleInfo.Content, &articleInfo.AttachedFile, &articleInfo.Created)
+		err = rows.Scan(&articleInfo.ID, &articleInfo.UploaderID, &articleInfo.Title, &articleInfo.Content, &articleInfo.AttachedFile, &articleInfo.Created)
 		if err != nil {
 			return articlesArray, err
 		}
+		articleInfo.setFileURL() //Change the file directory to a url
 		articlesArray = append(articlesArray, articleInfo)
 	}
 	return articlesArray, nil
+}
+
+func (driver *DBClient) getArticleUploader(professionalID int) (Professional, error) {
+	professional := Professional{}
+	rows, err := driver.db.Query("SELECT * FROM Professionals WHERE ProfessionalID=?", professionalID)
+	if err != nil {
+		return professional, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&professional.ID, &professional.FirstName, &professional.LastName, &professional.Email, &professional.Password, &professional.PhoneNumber, &professional.Photo)
+		if err != nil {
+			return professional, err
+		}
+	}
+	return professional, nil
+}
+
+func (driver *DBClient) getArticleFilePath(articleID int) (string, error) {
+	var path string
+	rows, err := driver.db.Query("SELECT Attached_File FROM Articles WHERE id=?", articleID)
+	if err != nil {
+		return path, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&path)
+		if err != nil {
+			return path, err
+		}
+	}
+	return path, nil
 }
 
 func checkErr(err error) {

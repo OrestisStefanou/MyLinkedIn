@@ -334,19 +334,60 @@ func addArticle(c *gin.Context) {
 				return
 			}
 			//Create a directory for the artcile
-			os.MkdirAll(filepath.Join(mediaDir, professional.Email, newArticle.Title), 0755)
-			//Upload the file
 			now := time.Now()
-			filePath = filepath.Join(mediaDir, professional.Email, newArticle.Title, now.Format("2006-02-01 15:04:05.000 MST"))
+			os.MkdirAll(filepath.Join(mediaDir, professional.Email, newArticle.Title, now.Format("2006-02-01 15:04:05.000 MST")), 0755)
+			//Upload the file
+			filePath = filepath.Join(mediaDir, professional.Email, newArticle.Title, now.Format("2006-02-01 15:04:05.000 MST"), file.Filename)
 			c.SaveUploadedFile(file, filePath)
 			//Path to save in the database
-			filePath = filepath.Join(professional.Email, newArticle.Title, now.Format("2006-02-01 15:04:05.000 MST"))
+			filePath = filepath.Join(professional.Email, newArticle.Title, now.Format("2006-02-01 15:04:05.000 MST"), file.Filename)
 		} else {
 			filePath = ""
 		}
 		newArticle.AttachedFile = filePath
 		newArticle.save()
 		c.JSON(http.StatusCreated, gin.H{"articleInfo": newArticle})
+	}
+}
+
+//GET /v1/LinkedIn/getArticles
+func getArticles(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		feed, err := professional.getFeed()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusAccepted, gin.H{"articles": feed})
+		}
+	}
+}
+
+//POST /v1/LinkedIn/getArticleDetails
+func getArticleDetails(c *gin.Context) {
+	_, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var article Article
+		if err := c.ShouldBindJSON(&article); err == nil {
+			articleUploader, err := article.getUploader()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			hasImage, err := article.fileIsImage()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"uploader": articleUploader, "hasImage": hasImage})
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		}
 	}
 }
 

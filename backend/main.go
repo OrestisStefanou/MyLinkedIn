@@ -52,6 +52,8 @@ func main() {
 		v1.POST("/updateProfessional", updateProfessional)
 		//Article endpoints
 		v1.POST("/addArticle", addArticle)
+		v1.GET("/getArticles", getArticles)
+		v1.POST("/getArticleDetails", getArticleDetails)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)

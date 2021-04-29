@@ -239,7 +239,7 @@ export default function Homepage() {
             {/*TESTING */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Articles articleInfo={articleInfo}/>
+                <Articles/>
               </Paper>
             </Grid>
             {/*END OF TESTING */}

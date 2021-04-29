@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"path/filepath"
+)
 
 //Professional json struct
 type Professional struct {
@@ -91,6 +94,12 @@ func (prof *Professional) removeSkill(skillInfo Skill) error {
 	return err
 }
 
+//Get the feed of a professional
+func (prof *Professional) getFeed() ([]Article, error) {
+	feed, err := dbclient.getArticles()
+	return feed, err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
@@ -152,12 +161,12 @@ func (skill *Skill) save() error {
 
 //Article json struct
 type Article struct {
-	ID           int       `json:"id"`
-	UploaderID   int       `json:"uploaderId"`
-	Title        string    `json:"title" binding:"required"`
-	Content      string    `json:"content" binding:"required"`
-	AttachedFile string    `json:"file"`
-	Created      time.Time `json:"created"`
+	ID           int     `json:"id"`
+	UploaderID   int     `json:"uploaderId"`
+	Title        string  `json:"title" binding:"required"`
+	Content      string  `json:"content" binding:"required"`
+	AttachedFile string  `json:"file"`
+	Created      []uint8 `json:"created"`
 }
 
 //Save method for article
@@ -177,3 +186,21 @@ func (article *Article) setFileURL() {
 //Get the likes of an article
 
 //Get the info of the professional who uploaded the video
+func (article *Article) getUploader() (Professional, error) {
+	professional, err := dbclient.getArticleUploader(article.UploaderID)
+	professional.Password = ""
+	return professional, err
+}
+
+func (article *Article) fileIsImage() (bool, error) {
+	fileName, err := dbclient.getArticleFilePath(article.ID)
+	if err != nil {
+		return false, err
+	}
+	extension := filepath.Ext(fileName)
+	fmt.Println("EXTENSION OF FILE IS", extension)
+	if validImgExtension(extension) {
+		return true, nil
+	}
+	return false, nil
+}
