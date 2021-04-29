@@ -5,9 +5,9 @@
 -Manage visibility of user's data
 -Check ArticleForm component
 
--Na kamo ena component articles pou tha kamni fetch ta articles gia to feed tou xristi
-Meta to fetch tha kamno map ta article je tha perno props to articleInfo
+
 -Na kamo ena component article pou tha kamni fetch ta likes,ta comment 
 je ta stixia tou xristi pou anevase to Article
+-An to attached file den ine image na ipaxi eikonidio pou anii to attached file
 -To recent Deposits sto homepage na dixni to profil tou xristi
 -I sinartisi getArticles sto database.go na allaksi

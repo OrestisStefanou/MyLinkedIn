@@ -49,3 +49,22 @@ CREATE TABLE Articles (
        PRIMARY KEY(id),
        FOREIGN KEY(UploaderID) REFERENCES Professionals(ProfessionalID)
 );
+
+CREATE TABLE Article_Likes (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       ArticleID int NOT NULL,
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID),
+       FOREIGN KEY(ArticleID) REFERENCES Articles(id)
+);
+
+CREATE TABLE Article_Comments (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       ArticleID int NOT NULL,
+       Comment varchar(255),
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID),
+       FOREIGN KEY(ArticleID) REFERENCES Articles(id)
+);

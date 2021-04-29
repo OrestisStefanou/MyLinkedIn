@@ -93,7 +93,7 @@ export default function Article(props) {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            {props.articleInfo.uploaderId}
+            {uploaderInfo.firstName[0] + uploaderInfo.lastName[0]}
           </Avatar>
         }
         action={

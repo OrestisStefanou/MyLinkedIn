@@ -335,6 +335,22 @@ func (driver *DBClient) getArticleFilePath(articleID int) (string, error) {
 	return path, nil
 }
 
+//ArticleLike related functions
+func (driver *DBClient) createArticleLike(like *ArticleLike) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Article_Likes SET 
+		ProfessionalID=?,
+		ArticleID=?,`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(like.ProfessionalID, like.ArticleID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

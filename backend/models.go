@@ -192,6 +192,7 @@ func (article *Article) getUploader() (Professional, error) {
 	return professional, err
 }
 
+//Check if the attached file of the article is an image
 func (article *Article) fileIsImage() (bool, error) {
 	fileName, err := dbclient.getArticleFilePath(article.ID)
 	if err != nil {
@@ -204,3 +205,33 @@ func (article *Article) fileIsImage() (bool, error) {
 	}
 	return false, nil
 }
+
+//Add a like to the article
+func (article *Article) addLike(like ArticleLike) error {
+	like.ArticleID = article.ID
+	err := dbclient.createArticleLike(&like)
+	return err
+}
+
+//ArticleLike json struct
+type ArticleLike struct {
+	ID             int `json:"id"`
+	ProfessionalID int `json:"professionalId"`
+	ArticleID      int `json:"articleId" binding:"required"`
+}
+
+//ArticleLike save method
+func (like *ArticleLike) save() error {
+	err := dbclient.createArticleLike(like)
+	return err
+}
+
+//ArticleComment json struct
+type ArticleComment struct {
+	ID             int    `json:"id"`
+	ProfessionalID int    `json:"professionalId"`
+	ArticleID      int    `json:"articleId" binding:"required"`
+	Comment        string `json:"comment" binding:"required"`
+}
+
+//ArticleComment save method
