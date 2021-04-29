@@ -289,7 +289,7 @@ func (driver *DBClient) createArticle(article *Article) error {
 //STO XRONOLOGIO TOU
 func (driver *DBClient) getArticles() ([]Article, error) {
 	articleInfo := Article{}
-	rows, err := driver.db.Query("SELECT * FROM Articles ORDER BY Created")
+	rows, err := driver.db.Query("SELECT * FROM Articles ORDER BY Created DESC")
 	if err != nil {
 		return nil, err
 	}
@@ -339,8 +339,20 @@ func (driver *DBClient) getArticleFilePath(articleID int) (string, error) {
 func (driver *DBClient) createArticleLike(like *ArticleLike) error {
 	stmt, err := driver.db.Prepare(`INSERT INTO Article_Likes SET 
 		ProfessionalID=?,
-		ArticleID=?,`,
+		ArticleID=?`,
 	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(like.ProfessionalID, like.ArticleID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) deleteArticleLike(like ArticleLike) error {
+	stmt, err := driver.db.Prepare("DELETE FROM Article_Likes WHERE ProfessionalID=? AND ArticleID=?")
 	if err != nil {
 		return err
 	}

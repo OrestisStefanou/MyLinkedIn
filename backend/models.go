@@ -213,6 +213,13 @@ func (article *Article) addLike(like ArticleLike) error {
 	return err
 }
 
+//Remove a like from the article
+func (article *Article) removeLike(like ArticleLike) error {
+	like.ArticleID = article.ID
+	err := dbclient.deleteArticleLike(like)
+	return err
+}
+
 //ArticleLike json struct
 type ArticleLike struct {
 	ID             int `json:"id"`

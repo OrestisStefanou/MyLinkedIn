@@ -125,7 +125,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Homepage() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [articleInfo,setArticleInfo ] = React.useState({id:1,uploaderId:14,title:"Test Article",content:"Test Artcile content",file:"http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/profilePhoto/python.jpg"});
   const handleDrawerOpen = () => {
     setOpen(true);
   };
