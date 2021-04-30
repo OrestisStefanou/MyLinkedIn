@@ -20,7 +20,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItems  from './ListItems';
 import ArticleForm from './ArticleForm';
 import Deposits from './Deposits';
-import Orders from './Orders';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -229,19 +228,11 @@ export default function Homepage() {
                 <Deposits />
               </Paper>
             </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-            {/*TESTING */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Articles/>
               </Paper>
             </Grid>
-            {/*END OF TESTING */}
           </Grid>
           <Box pt={4}>
             <Copyright />

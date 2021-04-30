@@ -299,7 +299,9 @@ func (driver *DBClient) getArticles() ([]Article, error) {
 		if err != nil {
 			return articlesArray, err
 		}
-		articleInfo.setFileURL() //Change the file directory to a url
+		if len(articleInfo.AttachedFile) > 0 { //If there is an attached file
+			articleInfo.setFileURL() //Change the file directory to a url
+		}
 		articlesArray = append(articlesArray, articleInfo)
 	}
 	return articlesArray, nil

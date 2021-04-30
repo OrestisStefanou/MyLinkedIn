@@ -11,7 +11,6 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
 import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
@@ -19,10 +18,11 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    maxWidth: 700,
   },
   media: {
     height: 0,
@@ -197,16 +197,18 @@ export default function Article(props) {
           <ChatBubbleOutlineOutlinedIcon />
         </IconButton>
         {articleComments.length}
+        { !hasImage && props.articleInfo.file &&
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
           })}
-          onClick={handleExpandClick}
           aria-expanded={expanded}
-          aria-label="show more"
+          href={props.articleInfo.file}
+          aria-label="get file"
         >
-          <ExpandMoreIcon />
+          <AttachFileIcon />
         </IconButton>
+        }
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
