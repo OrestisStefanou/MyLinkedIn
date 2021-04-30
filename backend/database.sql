@@ -64,6 +64,7 @@ CREATE TABLE Article_Comments (
        ProfessionalID int NOT NULL,
        ArticleID int NOT NULL,
        Comment varchar(255),
+       Created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
        PRIMARY KEY(id),
        FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID),
        FOREIGN KEY(ArticleID) REFERENCES Articles(id)

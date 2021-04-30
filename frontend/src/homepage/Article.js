@@ -53,10 +53,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Article(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const [uploaderInfo,setUploaderInfo] = useState({firstName:"Orestis",lastName:"Stefanou"});
+  const [uploaderInfo,setUploaderInfo] = useState({firstName:"",lastName:""});
   const [hasImage,setHasImage] = useState(false);
   const [like,setLike] = useState(false);
   const [comment,setComment] = useState({articleId:props.articleInfo.id,comment:""});
+  const [articleComments,setArticleComments] = useState([]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -85,6 +86,7 @@ export default function Article(props) {
               }else{
                   //Show the comment on the comment section
                   console.log(json);
+                  setArticleComments([...articleComments,json.comment]);
               }
         });       
   };
@@ -146,6 +148,10 @@ export default function Article(props) {
                 console.log(json);
                 setUploaderInfo(json.uploader);
                 setHasImage(json.hasImage);
+                setLike(json.liked);
+                if (json.comments !== null){
+                  setArticleComments(json.comments);
+                }
             }
         });    
   },[props.articleInfo]);
@@ -229,6 +235,13 @@ export default function Article(props) {
           </Grid>
           </form>
           {/*Show the comments */}
+          {articleComments.map((articleComment) => {
+            return(
+              <Typography key={articleComment.id} variant="subtitle1" gutterBottom>
+                {articleComment.firstName + " " + articleComment.lastName + ":" + articleComment.comment}
+              </Typography>
+            )
+          })}
         </CardContent>
       </Collapse>
     </Card>

@@ -368,7 +368,7 @@ func getArticles(c *gin.Context) {
 
 //POST /v1/LinkedIn/getArticleDetails
 func getArticleDetails(c *gin.Context) {
-	_, err := getProfessionalFromSession(c) //Get professional object from session
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
@@ -384,7 +384,19 @@ func getArticleDetails(c *gin.Context) {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 				return
 			}
-			c.JSON(http.StatusOK, gin.H{"uploader": articleUploader, "hasImage": hasImage})
+			//Check if user liked this article
+			liked, err := professional.likedArticle(article)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			//Get the comments of the article
+			comments, err := article.getComments()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"uploader": articleUploader, "hasImage": hasImage, "liked": liked, "comments": comments})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
 		}
@@ -456,7 +468,12 @@ func addArticleComment(c *gin.Context) {
 				fmt.Println(err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 			} else {
-				c.JSON(http.StatusOK, gin.H{"message": "Comment added"})
+				response := ArticleCommentResponse{}
+				response.ID = -1 //temporary ID until the user refreshes the page
+				response.FirstName = professional.FirstName
+				response.LastName = professional.LastName
+				response.Comment = comment.Comment
+				c.JSON(http.StatusOK, gin.H{"comment": response})
 			}
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})

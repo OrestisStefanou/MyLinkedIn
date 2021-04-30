@@ -363,6 +363,25 @@ func (driver *DBClient) deleteArticleLike(like ArticleLike) error {
 	return nil
 }
 
+//Check if a professional liked a particular article
+func (driver *DBClient) professionalLikedArticle(professionalID int, article Article) (bool, error) {
+	var like ArticleLike
+	rows, err := driver.db.Query("SELECT * FROM Article_Likes WHERE ProfessionalID=? AND ArticleID=?", professionalID, article.ID)
+	if err != nil {
+		return false, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&like.ID, &like.ProfessionalID, &like.ArticleID)
+		if err != nil {
+			return false, err
+		}
+	}
+	if like.ID > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+
 //ArticleComment related functins
 func (driver *DBClient) createArticleComment(comment *ArticleComment) error {
 	stmt, err := driver.db.Prepare(`INSERT INTO Article_Comments SET 
@@ -378,6 +397,24 @@ func (driver *DBClient) createArticleComment(comment *ArticleComment) error {
 		return err
 	}
 	return nil
+}
+
+//Get the comments of an article
+func (driver *DBClient) getArticleComments(article *Article) ([]ArticleCommentResponse, error) {
+	comment := ArticleCommentResponse{}
+	rows, err := driver.db.Query("SELECT c.id,p.First_Name,p.Last_Name,c.Comment FROM Professionals p,Article_Comments c WHERE c.ArticleID = ? AND c.ProfessionalID = p.ProfessionalID ORDER BY c.Created", article.ID)
+	if err != nil {
+		return nil, err
+	}
+	var commentsArray []ArticleCommentResponse
+	for rows.Next() {
+		err = rows.Scan(&comment.ID, &comment.FirstName, &comment.LastName, &comment.Comment)
+		if err != nil {
+			return commentsArray, err
+		}
+		commentsArray = append(commentsArray, comment)
+	}
+	return commentsArray, nil
 }
 
 func checkErr(err error) {

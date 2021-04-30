@@ -99,6 +99,12 @@ func (prof *Professional) getFeed() ([]Article, error) {
 	return feed, err
 }
 
+//Check if a professional liked an article
+func (prof *Professional) likedArticle(article Article) (bool, error) {
+	liked, err := dbclient.professionalLikedArticle(prof.ID, article)
+	return liked, err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
@@ -181,6 +187,10 @@ func (article *Article) setFileURL() {
 }
 
 //Get the comments of an article
+func (article *Article) getComments() ([]ArticleCommentResponse, error) {
+	comments, err := dbclient.getArticleComments(article)
+	return comments, err
+}
 
 //Get the likes of an article
 
@@ -240,10 +250,11 @@ func (like *ArticleLike) save() error {
 
 //ArticleComment json struct
 type ArticleComment struct {
-	ID             int    `json:"id"`
-	ProfessionalID int    `json:"professionalId"`
-	ArticleID      int    `json:"articleId" binding:"required"`
-	Comment        string `json:"comment" binding:"required"`
+	ID             int     `json:"id"`
+	ProfessionalID int     `json:"professionalId"`
+	ArticleID      int     `json:"articleId" binding:"required"`
+	Comment        string  `json:"comment" binding:"required"`
+	Created        []uint8 `json:"created"`
 }
 
 //ArticleComment save method

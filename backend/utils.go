@@ -66,3 +66,11 @@ func setProfessionalSession(c *gin.Context, prof Professional) {
 	session.Set("userPhoto", prof.Photo)
 	session.Save()
 }
+
+//ArticleCommentResponse json struct
+type ArticleCommentResponse struct {
+	ID        int    `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Comment   string `json:"comment"`
+}
