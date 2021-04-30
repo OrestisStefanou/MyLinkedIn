@@ -396,7 +396,13 @@ func getArticleDetails(c *gin.Context) {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 				return
 			}
-			c.JSON(http.StatusOK, gin.H{"uploader": articleUploader, "hasImage": hasImage, "liked": liked, "comments": comments})
+			//Get the likes of the article
+			likes, err := article.getLikes()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"uploader": articleUploader, "hasImage": hasImage, "liked": liked, "comments": comments, "likes": likes})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
 		}

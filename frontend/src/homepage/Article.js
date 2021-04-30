@@ -58,6 +58,7 @@ export default function Article(props) {
   const [like,setLike] = useState(false);
   const [comment,setComment] = useState({articleId:props.articleInfo.id,comment:""});
   const [articleComments,setArticleComments] = useState([]);
+  const [articleLikes,setArticleLikes] = useState(0);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -108,6 +109,7 @@ export default function Article(props) {
                 }else{
                     console.log(json);
                     setLike(true);
+                    setArticleLikes(articleLikes+1);
                 }
           });       
     }else{
@@ -126,6 +128,7 @@ export default function Article(props) {
                 }else{
                     console.log(json);
                     setLike(false);
+                    setArticleLikes(articleLikes-1);
                 }
           });       
     }
@@ -152,6 +155,7 @@ export default function Article(props) {
                 if (json.comments !== null){
                   setArticleComments(json.comments);
                 }
+                setArticleLikes(json.likes);
             }
         });    
   },[props.articleInfo]);
@@ -188,9 +192,11 @@ export default function Article(props) {
         <IconButton aria-label="add to favorites" onClick={handleLike}>
         {like ? <ThumbUpAltIcon/> : <ThumbUpAltOutlinedIcon /> }
         </IconButton>
+        {articleLikes}
         <IconButton aria-label="share" onClick={handleExpandClick}>
           <ChatBubbleOutlineOutlinedIcon />
         </IconButton>
+        {articleComments.length}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,

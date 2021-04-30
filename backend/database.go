@@ -320,6 +320,40 @@ func (driver *DBClient) getArticleUploader(professionalID int) (Professional, er
 	return professional, nil
 }
 
+//Get the comments of an article
+func (driver *DBClient) getArticleComments(article *Article) ([]ArticleCommentResponse, error) {
+	comment := ArticleCommentResponse{}
+	rows, err := driver.db.Query("SELECT c.id,p.First_Name,p.Last_Name,c.Comment FROM Professionals p,Article_Comments c WHERE c.ArticleID = ? AND c.ProfessionalID = p.ProfessionalID ORDER BY c.Created", article.ID)
+	if err != nil {
+		return nil, err
+	}
+	var commentsArray []ArticleCommentResponse
+	for rows.Next() {
+		err = rows.Scan(&comment.ID, &comment.FirstName, &comment.LastName, &comment.Comment)
+		if err != nil {
+			return commentsArray, err
+		}
+		commentsArray = append(commentsArray, comment)
+	}
+	return commentsArray, nil
+}
+
+//Get the likes of an article
+func (driver *DBClient) getArticleLikes(article *Article) (int, error) {
+	var likes int
+	rows, err := driver.db.Query("SELECT COUNT(*) FROM Article_Likes WHERE ArticleID = ?", article.ID)
+	if err != nil {
+		return 0, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&likes)
+		if err != nil {
+			return 0, err
+		}
+	}
+	return likes, nil
+}
+
 func (driver *DBClient) getArticleFilePath(articleID int) (string, error) {
 	var path string
 	rows, err := driver.db.Query("SELECT Attached_File FROM Articles WHERE id=?", articleID)
@@ -397,24 +431,6 @@ func (driver *DBClient) createArticleComment(comment *ArticleComment) error {
 		return err
 	}
 	return nil
-}
-
-//Get the comments of an article
-func (driver *DBClient) getArticleComments(article *Article) ([]ArticleCommentResponse, error) {
-	comment := ArticleCommentResponse{}
-	rows, err := driver.db.Query("SELECT c.id,p.First_Name,p.Last_Name,c.Comment FROM Professionals p,Article_Comments c WHERE c.ArticleID = ? AND c.ProfessionalID = p.ProfessionalID ORDER BY c.Created", article.ID)
-	if err != nil {
-		return nil, err
-	}
-	var commentsArray []ArticleCommentResponse
-	for rows.Next() {
-		err = rows.Scan(&comment.ID, &comment.FirstName, &comment.LastName, &comment.Comment)
-		if err != nil {
-			return commentsArray, err
-		}
-		commentsArray = append(commentsArray, comment)
-	}
-	return commentsArray, nil
 }
 
 func checkErr(err error) {

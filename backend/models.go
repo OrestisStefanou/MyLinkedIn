@@ -193,6 +193,10 @@ func (article *Article) getComments() ([]ArticleCommentResponse, error) {
 }
 
 //Get the likes of an article
+func (article *Article) getLikes() (int, error) {
+	likes, err := dbclient.getArticleLikes(article)
+	return likes, err
+}
 
 //Get the info of the professional who uploaded the video
 func (article *Article) getUploader() (Professional, error) {
