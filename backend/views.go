@@ -424,9 +424,23 @@ func addArticleLike(c *gin.Context) {
 			if err != nil {
 				fmt.Println(err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
-			} else {
-				c.JSON(http.StatusOK, gin.H{"message": "Like added"})
+				return
 			}
+			if professional.ID != article.UploaderID {
+				//Create a notification
+				notification := Notification{}
+				notification.ProfessionalID = article.UploaderID
+				notification.Seen = false
+				notification.Msg = fmt.Sprintf("%s %s liked your article with title %s", professional.FirstName, professional.LastName, article.Title)
+				err = notification.save()
+				if err != nil {
+					fmt.Println(err)
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+					return
+				}
+			}
+			c.JSON(http.StatusOK, gin.H{"message": "Like added"})
+
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
 		}
@@ -465,15 +479,38 @@ func addArticleComment(c *gin.Context) {
 	} else {
 		var comment ArticleComment
 		if err := c.ShouldBindJSON(&comment); err == nil {
-			//Create article Object
-			article := Article{}
-			article.ID = comment.ArticleID
+			//Get article Object
+			article, err := dbclient.getArticle(comment.ArticleID)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
 			comment.ProfessionalID = professional.ID //ID of the user who liked the article
 			err = article.addComment(comment)
 			if err != nil {
 				fmt.Println(err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 			} else {
+				//Create a notification
+				uploader, err := article.getUploader()
+				if err != nil {
+					fmt.Println(err)
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+					return
+				}
+				if professional.ID != uploader.ID {
+					notification := Notification{}
+					notification.ProfessionalID = uploader.ID
+					notification.Seen = false
+					notification.Msg = fmt.Sprintf("%s %s commented on your article with title %s", professional.FirstName, professional.LastName, article.Title)
+					err = notification.save()
+					if err != nil {
+						fmt.Println(err)
+						c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+						return
+					}
+				}
 				response := ArticleCommentResponse{}
 				response.ID = -1 //temporary ID until the user refreshes the page
 				response.FirstName = professional.FirstName

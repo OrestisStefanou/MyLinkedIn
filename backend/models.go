@@ -105,6 +105,18 @@ func (prof *Professional) likedArticle(article Article) (bool, error) {
 	return liked, err
 }
 
+//Get the notifications of a Professional
+func (prof *Professional) getNotifications() ([]Notification, error) {
+	notifications, err := dbclient.getProfessionalNotifications(prof.ID)
+	return notifications, err
+}
+
+//Clear the notifications of a Professional
+func (prof *Professional) clearNotifications() error {
+	err := dbclient.clearProfessionalNotifications(prof.ID)
+	return err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
@@ -264,5 +276,20 @@ type ArticleComment struct {
 //ArticleComment save method
 func (comment *ArticleComment) save() error {
 	err := dbclient.createArticleComment(comment)
+	return err
+}
+
+//Notification json struct
+type Notification struct {
+	ID             int     `json:"id"`
+	ProfessionalID int     `json:"professionalId"`
+	Msg            string  `json:"msg" binding:"required"`
+	Seen           bool    `json:"seen"`
+	Created        []uint8 `json:"created"`
+}
+
+//Notification save method
+func (n *Notification) save() error {
+	err := dbclient.createNotification(n)
 	return err
 }

@@ -3,14 +3,12 @@
 -Otan kamno delete user na kamno delete je to media directory tou
 -Otan o xristis allazi foto profil na diagrafo tin proigumeni pou ixe?
 -Manage visibility of user's data
--Check ArticleForm component
 
-
--Na kamo ena component article pou tha kamni fetch ta likes,ta comment 
-je ta stixia tou xristi pou anevase to Article
--Otan piano ta details enos article na piano an ekame idi like o xristis
--An to attached file den ine image na ipaxi eikonidio pou anii to attached file
 -To recent Deposits sto homepage na dixni to profil tou xristi
 -I sinartisi getArticles sto database.go na allaksi
+-Create notification model 
+-Create a notification when a user makes a comment or like
+-Create an endpoint to get the notifications of a user
+-Create a view for a single Article
 
 ORGANIZE THE CODE DIFFERENT?

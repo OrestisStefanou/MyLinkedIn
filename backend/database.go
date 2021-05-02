@@ -284,6 +284,21 @@ func (driver *DBClient) createArticle(article *Article) error {
 	return nil
 }
 
+func (driver *DBClient) getArticle(articleID int) (Article, error) {
+	article := Article{}
+	rows, err := driver.db.Query("SELECT * FROM Articles WHERE id=?", articleID)
+	if err != nil {
+		return article, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&article.ID, &article.UploaderID, &article.Title, &article.Content, &article.AttachedFile, &article.Created)
+		if err != nil {
+			return article, err
+		}
+	}
+	return article, nil
+}
+
 //I SINARTISI DAME THA ALLAKSI JE THA PIANI ORISMA TO ID TOU
 //PROFESSIONAL POU THELOUME NA PIASOUME TA ARTHRA POU THA EMFANISTOUN
 //STO XRONOLOGIO TOU
@@ -429,6 +444,54 @@ func (driver *DBClient) createArticleComment(comment *ArticleComment) error {
 		return err
 	}
 	_, err = stmt.Exec(comment.ProfessionalID, comment.ArticleID, comment.Comment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//Notifications related functions
+func (driver *DBClient) createNotification(n *Notification) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Notifications SET 
+		ProfessionalID=?,
+		Msg=?,
+		Seen=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(n.ProfessionalID, n.Msg, n.Seen)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) getProfessionalNotifications(professionalID int) ([]Notification, error) {
+	n := Notification{}
+	rows, err := driver.db.Query("SELECT * FROM Notifications WHERE ProfessionalID=? AND Seen=False", professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var notifications []Notification
+	for rows.Next() {
+		err = rows.Scan(&n.ID, &n.ProfessionalID, &n.Msg, &n.Seen, &n.Created)
+		if err != nil {
+			return nil, err
+		}
+		notifications = append(notifications, n)
+	}
+	return notifications, nil
+}
+
+func (driver *DBClient) clearProfessionalNotifications(professionalID int) error {
+	stmt, err := driver.db.Prepare(`UPDATE Notifications SET
+		Seen=True WHERE ProfessionalID=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(professionalID)
 	if err != nil {
 		return err
 	}

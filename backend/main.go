@@ -12,6 +12,7 @@ import (
 
 func main() {
 	dbclient.initialize()
+	defer dbclient.db.Close()
 	router := gin.Default()
 
 	//Session middleware

@@ -69,3 +69,13 @@ CREATE TABLE Article_Comments (
        FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID),
        FOREIGN KEY(ArticleID) REFERENCES Articles(id)
 );
+
+CREATE TABLE Notifications (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       Msg varchar(255),
+       Seen boolean,
+       Created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
+);
