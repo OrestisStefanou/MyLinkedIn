@@ -125,14 +125,25 @@ export default function Homepage() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [notifications,setNotifications] = useState([]);
+  const [showNotifications,setShowNotifications] = useState(false);
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const handleShowNotifications = () => {
+    if (showNotifications === false){
+      //SEND A REQUEST TO THE SERVER TO CLEAR THE NOTIFICATIONS
+      setShowNotifications(true);
+    }else{
+      setShowNotifications(false);
+    }
+  }
+
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   let history = useHistory();
 
   const handleLogout = () => {
@@ -193,7 +204,7 @@ export default function Homepage() {
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <Badge badgeContent={notifications.length} color="secondary" >
+            <Badge badgeContent={notifications.length} color="secondary" onClick={handleShowNotifications}>
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -222,14 +233,13 @@ export default function Homepage() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={10}>
+            <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
                 <ArticleForm />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={2}>
+            <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
               </Paper>
@@ -239,10 +249,7 @@ export default function Homepage() {
                 <Articles/>
               </Paper>
             </Grid>
-
-
-                <Notifications/>
-
+            <Notifications notifications = {notifications}/>
           </Grid>
           <Box pt={4}>
             <Copyright />

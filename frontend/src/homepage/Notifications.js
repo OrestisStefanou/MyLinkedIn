@@ -22,15 +22,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Notifications() {
+export default function Notifications(props) {
   const classes = useStyles();
 
   return (
     <List className={classes.root} subheader={<li />}>
           <ul className={classes.ul}>
-            {[0, 1, 2,3,4,5,6,7,8,9,10].map((item) => (
-              <ListItem key={`item-${item}`}>
-                <ListItemText primary={`Item ${item}`} />
+            {props.notifications.map((notification) => (
+              <ListItem key={notification.id}>
+                <ListItemText primary={notification.msg} />
               </ListItem>
             ))}
           </ul>

@@ -6,10 +6,9 @@
 
 -To recent Deposits sto homepage na dixni to profil tou xristi
 -I sinartisi getArticles sto database.go na allaksi
--Create notification model 
--Create a notification when a user makes a comment or like
--Create an endpoint to get the notifications of a user
 -Create a view for a single Article
 -Ta notification na ta epistrefo sortarismena vasi to created field
+-Na kamo mia selida san to homepage gia ta notifications
+-Na kamo mia selida error not found
 
 ORGANIZE THE CODE DIFFERENT?

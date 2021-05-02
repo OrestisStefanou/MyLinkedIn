@@ -503,7 +503,7 @@ func addArticleComment(c *gin.Context) {
 					notification := Notification{}
 					notification.ProfessionalID = uploader.ID
 					notification.Seen = false
-					notification.Msg = fmt.Sprintf("%s %s commented on your article with title %s", professional.FirstName, professional.LastName, article.Title)
+					notification.Msg = fmt.Sprintf("%s %s commented %s on your article with title %s", professional.FirstName, professional.LastName, comment.Comment, article.Title)
 					err = notification.save()
 					if err != nil {
 						fmt.Println(err)
