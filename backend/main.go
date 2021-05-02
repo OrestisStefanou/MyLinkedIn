@@ -51,6 +51,7 @@ func main() {
 		v1.GET("/getSkills", getSkills)
 		//Professional endpoints
 		v1.POST("/updateProfessional", updateProfessional)
+		v1.GET("/homepage", homepage)
 		//Article endpoints
 		v1.POST("/addArticle", addArticle)
 		v1.GET("/getArticles", getArticles)

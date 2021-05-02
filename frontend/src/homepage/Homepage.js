@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -25,7 +25,7 @@ import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
 import Articles from "./Articles";
-
+import Notifications from "./Notifications"
 
 function Copyright() {
   return (
@@ -123,7 +123,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Homepage() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const [notifications,setNotifications] = useState([]);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -149,7 +150,7 @@ export default function Homepage() {
 
   useEffect(() => {
     const checkSession = async () => {
-      const response = await fetch('http://localhost:8080/v1/LinkedIn/authenticated',{
+      const response = await fetch('http://localhost:8080/v1/LinkedIn/homepage',{
         method: "GET",
         mode:"cors",
         credentials:"include",
@@ -159,6 +160,11 @@ export default function Homepage() {
       console.log(jsonResponse);
       if (response.status !== 202) {
         history.push(`/`);
+      }else{
+        console.log(jsonResponse.notifications);
+        if(jsonResponse.notifications !== null){
+          setNotifications(jsonResponse.notifications);
+        }
       }
     };
     checkSession();
@@ -187,7 +193,7 @@ export default function Homepage() {
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary" >
+            <Badge badgeContent={notifications.length} color="secondary" >
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -233,6 +239,10 @@ export default function Homepage() {
                 <Articles/>
               </Paper>
             </Grid>
+
+
+                <Notifications/>
+
           </Grid>
           <Box pt={4}>
             <Copyright />

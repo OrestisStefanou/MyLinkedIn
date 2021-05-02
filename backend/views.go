@@ -524,6 +524,23 @@ func addArticleComment(c *gin.Context) {
 	}
 }
 
+///v1/LinkedIn/homepage
+//Get the notifications and unread messages of a professional
+func homepage(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		//Get professional notifications
+		notifications, err := professional.getNotifications()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		c.JSON(http.StatusAccepted, gin.H{"notifications": notifications})
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)
