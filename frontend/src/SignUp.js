@@ -119,7 +119,7 @@ export default function SignUp() {
         if(result.error){
           setErrorMessage(result.error);
         }else{
-          history.push(`/signin`)
+          history.push(`/signin`);
         }
       })
   };

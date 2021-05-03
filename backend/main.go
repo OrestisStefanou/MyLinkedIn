@@ -59,6 +59,8 @@ func main() {
 		v1.POST("/article/addLike", addArticleLike)
 		v1.POST("/article/removeLike", removeArticleLike)
 		v1.POST("/article/addComment", addArticleComment)
+		//Notifications and messages endpoints
+		v1.GET("/notifications", getNotifications)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)

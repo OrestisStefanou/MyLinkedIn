@@ -6,6 +6,7 @@ import SignIn from "./SignIn";
 import WeclomePage from "./WelcomePage";
 import Homepage from './homepage/Homepage';
 import Profile from "./profile/Profile"
+import NotificationsPage from "./homepage/NotificationsPage"
 
 const App = () => {
     return(
@@ -25,6 +26,9 @@ const App = () => {
                 </Route>
                 <Route exact path='/profile'>
                     <Profile/>
+                </Route>
+                <Route exact path='/notifications'>
+                    <NotificationsPage/>
                 </Route>
             </Switch>
         </Router>

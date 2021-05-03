@@ -1,7 +1,5 @@
-import React from 'react';
-import Link from '@material-ui/core/Link';
+import React,{useEffect,useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Title from './Title';
 
 function preventDefault(event) {
@@ -16,20 +14,34 @@ const useStyles = makeStyles({
 
 export default function Deposits() {
   const classes = useStyles();
+  const [professionalInfo,setProfessionalInfo] = useState({});
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const response = await fetch('http://localhost:8080/v1/LinkedIn/authenticated',{
+        method: "GET",
+        mode:"cors",
+        credentials:"include",
+        headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+        });
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+      if (response.status !== 202) {
+        console.log("Something went wrong")
+      }else{
+        console.log(jsonResponse.professional);
+        setProfessionalInfo(jsonResponse.professional);
+      }
+    };
+    checkSession();
+  },[]);
+
   return (
     <React.Fragment>
-      <Title>Recent Deposits</Title>
-      <Typography component="p" variant="h4">
-        $3,024.00
-      </Typography>
-      <Typography color="textSecondary" className={classes.depositContext}>
-        on 15 March, 2019
-      </Typography>
-      <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
-      </div>
+      <Title>{professionalInfo.firstName + " " + professionalInfo.lastName}</Title>
+      
+      <Title> Email:{professionalInfo.email} </Title>
+      <Title> Phone Number:{professionalInfo.phoneNumber}</Title>
     </React.Fragment>
   );
 }

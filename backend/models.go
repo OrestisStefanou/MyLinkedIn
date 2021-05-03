@@ -111,6 +111,12 @@ func (prof *Professional) getNotifications() ([]Notification, error) {
 	return notifications, err
 }
 
+//Get the new notifications of a Professional
+func (prof *Professional) getNewNotifications() ([]Notification, error) {
+	notifications, err := dbclient.getProfessionalNewNotifications(prof.ID)
+	return notifications, err
+}
+
 //Clear the notifications of a Professional
 func (prof *Professional) clearNotifications() error {
 	err := dbclient.clearProfessionalNotifications(prof.ID)

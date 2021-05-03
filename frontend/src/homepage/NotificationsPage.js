@@ -18,13 +18,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItems  from './ListItems';
-import ArticleForm from './ArticleForm';
 import Deposits from './Deposits';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
-import Articles from "./Articles";
+import Notifications from "./Notifications"
 
 function Copyright() {
   return (
@@ -120,10 +119,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Homepage() {
+export default function NotificationsPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
-  const [notifications,setNotifications] = useState(0);
+  const [notifications,setNotifications] = useState([]);
+  const [showNotifications,setShowNotifications] = useState(false);
   
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -133,8 +133,12 @@ export default function Homepage() {
   };
 
   const handleShowNotifications = () => {
+    if (showNotifications === false){
       //SEND A REQUEST TO THE SERVER TO CLEAR THE NOTIFICATIONS
-      history.push(`/notifications`);
+      setShowNotifications(true);
+    }else{
+      setShowNotifications(false);
+    }
   }
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -153,9 +157,10 @@ export default function Homepage() {
     history.push("/");
   }
 
+  //Change this to clear the notifications
   useEffect(() => {
     const checkSession = async () => {
-      const response = await fetch('http://localhost:8080/v1/LinkedIn/homepage',{
+      const response = await fetch('http://localhost:8080/v1/LinkedIn/notifications',{
         method: "GET",
         mode:"cors",
         credentials:"include",
@@ -167,7 +172,9 @@ export default function Homepage() {
         history.push(`/`);
       }else{
         console.log(jsonResponse.notifications);
-        setNotifications(jsonResponse.notifications);
+        if(jsonResponse.notifications !== null){
+          setNotifications(jsonResponse.notifications);
+        }
       }
     };
     checkSession();
@@ -188,7 +195,7 @@ export default function Homepage() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            LinkedIn
+            <Link color="inherit" href="/home">LinkedIn</Link>
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={0} color="secondary" >
@@ -196,7 +203,7 @@ export default function Homepage() {
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <Badge badgeContent={notifications} color="secondary" onClick={handleShowNotifications}>
+            <Badge badgeContent={0} color="secondary" onClick={handleShowNotifications}>
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -227,7 +234,9 @@ export default function Homepage() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
-                <ArticleForm />
+                <Typography component="h6" variant="h6" color="inherit" noWrap className={classes.title}>
+                    No new friend requests 
+                </Typography>
               </Paper>
             </Grid>
             {/* Recent Deposits */}
@@ -238,7 +247,13 @@ export default function Homepage() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Articles/>
+              { notifications.length > 0 ?
+                <Notifications notifications = {notifications}/>
+                :
+                <Typography component="h6" variant="h6" color="inherit" noWrap className={classes.title}>
+                  No notifications 
+                </Typography>
+              }
               </Paper>
             </Grid>
           </Grid>

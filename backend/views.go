@@ -525,14 +525,37 @@ func addArticleComment(c *gin.Context) {
 }
 
 ///v1/LinkedIn/homepage
-//Get the notifications and unread messages of a professional
+//Get the number of notifications and unread messages of a professional
 func homepage(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		//Get professional's new notifications
+		notifications, err := professional.getNewNotifications()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		c.JSON(http.StatusAccepted, gin.H{"notifications": len(notifications)})
+	}
+}
+
+///v1/LinkedIn/notifications
+//Get the notifications and messages of a professional
+func getNotifications(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c)
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
 		//Get professional notifications
 		notifications, err := professional.getNotifications()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		//Set the new notifications to seen
+		err = professional.clearNotifications()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 			return

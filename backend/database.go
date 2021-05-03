@@ -469,6 +469,23 @@ func (driver *DBClient) createNotification(n *Notification) error {
 
 func (driver *DBClient) getProfessionalNotifications(professionalID int) ([]Notification, error) {
 	n := Notification{}
+	rows, err := driver.db.Query("SELECT * FROM Notifications WHERE ProfessionalID=? ORDER BY Created DESC", professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var notifications []Notification
+	for rows.Next() {
+		err = rows.Scan(&n.ID, &n.ProfessionalID, &n.Msg, &n.Seen, &n.Created)
+		if err != nil {
+			return nil, err
+		}
+		notifications = append(notifications, n)
+	}
+	return notifications, nil
+}
+
+func (driver *DBClient) getProfessionalNewNotifications(professionalID int) ([]Notification, error) {
+	n := Notification{}
 	rows, err := driver.db.Query("SELECT * FROM Notifications WHERE ProfessionalID=? AND Seen=False", professionalID)
 	if err != nil {
 		return nil, err
