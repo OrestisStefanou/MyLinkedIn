@@ -4,13 +4,11 @@
 -Otan o xristis allazi foto profil na diagrafo tin proigumeni pou ixe?
 -Manage visibility of user's data
 
--To recent Deposits sto homepage na dixni to profil tou xristi
 -I sinartisi getArticles sto database.go na allaksi
 -Create a view for a single Article
--Ta notification na ta epistrefo sortarismena vasi to created field
--Na kamo mia selida san to homepage gia ta notifications
 -Na kamo mia selida error not found
--Sto homepage i use effect tha kamni fetch mono ton arithmo ton notification 
-kai ton adiavaston minimaton
+-Change Deposits component name to ProfileInfo or something
 
-ORGANIZE THE CODE DIFFERENT?
+-Handle Friendships
+-Check searchProfessional function
+-Fix searchProfessional query 

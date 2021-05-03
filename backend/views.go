@@ -87,6 +87,24 @@ func signin(c *gin.Context) {
 	}
 }
 
+//GET /v1/LinkedIn/searchProfessional
+func searchProfessional(c *gin.Context) {
+	_, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		queryString := c.Query("query")
+		fmt.Println("QUERY STRING IS ", queryString)
+		searchResults, err := dbclient.searchProfessional(queryString)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"results": searchResults})
+		}
+	}
+}
+
 //POST /v1/LinkedIn/updateProfessional
 func updateProfessional(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c)

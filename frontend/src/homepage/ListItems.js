@@ -26,7 +26,7 @@ export default function ListItems() {
       </ListItemIcon>
       <ListItemText primary="Job ads" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={()=>history.push(`/network`)}>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>

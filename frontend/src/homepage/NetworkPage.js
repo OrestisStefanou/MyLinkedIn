@@ -18,13 +18,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItems  from './ListItems';
-import ArticleForm from './ArticleForm';
 import Deposits from './Deposits';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
-import Articles from "./Articles";
+import TextField from '@material-ui/core/TextField';
 
 function Copyright() {
   return (
@@ -120,10 +119,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Homepage() {
+export default function NetworkPage() {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
-  const [notifications,setNotifications] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [test,setTest] = useState();
+  const [searchResults,setSearchResults] = useState([]);
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setTest(value);
+    fetch('http://localhost:8080/v1/LinkedIn/searchProfessional?'+ new URLSearchParams({
+        query: value,
+    }),{
+        method: "GET",
+        mode:"cors",
+        credentials:"include",
+        headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+        })
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .catch(err => console.log('Request Failed',err))
+  }; 
   
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -131,10 +147,6 @@ export default function Homepage() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const handleShowNotifications = () => {
-    history.push(`/notifications`);
-  }
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   let history = useHistory();
@@ -152,25 +164,10 @@ export default function Homepage() {
     history.push("/");
   }
 
+  //Change this to clear the notifications
   useEffect(() => {
-    const checkSession = async () => {
-      const response = await fetch('http://localhost:8080/v1/LinkedIn/homepage',{
-        method: "GET",
-        mode:"cors",
-        credentials:"include",
-        headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
-        });
-      const jsonResponse = await response.json();
-      console.log(jsonResponse);
-      if (response.status !== 202) {
-        history.push(`/`);
-      }else{
-        console.log(jsonResponse.notifications);
-        setNotifications(jsonResponse.notifications);
-      }
-    };
-    checkSession();
-  },[history]);
+    //GET THE CONNECTED PROFESSIONALS HERE
+  });
 
   return (
     <div className={classes.root}>
@@ -187,7 +184,7 @@ export default function Homepage() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            LinkedIn
+            <Link color="inherit" href="/home">LinkedIn</Link>
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={0} color="secondary" >
@@ -195,7 +192,7 @@ export default function Homepage() {
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <Badge badgeContent={notifications} color="secondary" onClick={handleShowNotifications}>
+            <Badge badgeContent={0} color="secondary" onClick={()=>history.push(`/notifications`)}>
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -224,9 +221,24 @@ export default function Homepage() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
+          <TextField
+            id="standard-full-width"
+            label="Search a professional"
+            style={{ margin: 8 }}
+            placeholder="Search by first name,last name or email"
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+                shrink: true,
+            }}
+            onChange={handleChange}
+          />
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
-                <ArticleForm />
+                <Typography component="h6" variant="h6" color="inherit" noWrap className={classes.title}>
+                    SHOW SEARCH RESULTS HERE
+                    {test}
+                </Typography>
               </Paper>
             </Grid>
             {/* Recent Deposits */}
@@ -237,7 +249,9 @@ export default function Homepage() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Articles/>
+                <Typography component="h6" variant="h6" color="inherit" noWrap className={classes.title}>
+                  SHOW CONNECTED PROFESSIONALS HERE
+                </Typography>
               </Paper>
             </Grid>
           </Grid>

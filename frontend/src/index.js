@@ -7,6 +7,7 @@ import WeclomePage from "./WelcomePage";
 import Homepage from './homepage/Homepage';
 import Profile from "./profile/Profile"
 import NotificationsPage from "./homepage/NotificationsPage"
+import NetworkPage from "./homepage/NetworkPage";
 
 const App = () => {
     return(
@@ -29,6 +30,9 @@ const App = () => {
                 </Route>
                 <Route exact path='/notifications'>
                     <NotificationsPage/>
+                </Route>
+                <Route exact path='/network'>
+                    <NetworkPage/>
                 </Route>
             </Switch>
         </Router>

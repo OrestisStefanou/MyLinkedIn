@@ -95,6 +95,24 @@ func (driver *DBClient) getProfessional(email string) (Professional, error) {
 	return prof, nil
 }
 
+func (driver *DBClient) searchProfessional(query string) ([]Professional, error) {
+	prof := Professional{}
+	sql := "SELECT * FROM Professionals WHERE First_Name LIKE '%" + query + "?%' OR Last_Name LIKE '%" + query + "%' OR Email LIKE '%" + query + "%'"
+	rows, err := driver.db.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+	var searchResults []Professional
+	for rows.Next() {
+		err = rows.Scan(&prof.ID, &prof.FirstName, &prof.LastName, &prof.Email, &prof.Password, &prof.PhoneNumber, &prof.Photo)
+		if err != nil {
+			return nil, err
+		}
+		searchResults = append(searchResults, prof)
+	}
+	return searchResults, nil
+}
+
 //Education model related functions
 func (driver *DBClient) createEducation(education *Education) error {
 	stmt, err := driver.db.Prepare(`INSERT INTO Education SET 
