@@ -108,6 +108,7 @@ func (driver *DBClient) searchProfessional(query string) ([]Professional, error)
 		if err != nil {
 			return nil, err
 		}
+		prof.setPhotoURL() //Change the path of a photo to a url
 		searchResults = append(searchResults, prof)
 	}
 	return searchResults, nil

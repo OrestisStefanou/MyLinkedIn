@@ -24,6 +24,7 @@ import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
 import TextField from '@material-ui/core/TextField';
+import ProfessionalsList from "./ProfessionalsList"
 
 function Copyright() {
   return (
@@ -122,12 +123,14 @@ const useStyles = makeStyles((theme) => ({
 export default function NetworkPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [test,setTest] = useState();
   const [searchResults,setSearchResults] = useState([]);
 
   const handleChange = (e) => {
     const value = e.target.value;
-    setTest(value);
+    if (value.length === 0){
+      setSearchResults([]);
+      return;
+    }
     fetch('http://localhost:8080/v1/LinkedIn/searchProfessional?'+ new URLSearchParams({
         query: value,
     }),{
@@ -137,7 +140,11 @@ export default function NetworkPage() {
         headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
         })
         .then(response => response.json())
-        .then(json => console.log(json))
+        .then(json =>{
+          if (json.results !== null){
+            setSearchResults(json.results);
+          }
+        } )
         .catch(err => console.log('Request Failed',err))
   }; 
   
@@ -234,12 +241,13 @@ export default function NetworkPage() {
             onChange={handleChange}
           />
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={classes.paper}>
+            {searchResults.length > 0 && 
+              <Paper className={fixedHeightPaper}>
                 <Typography component="h6" variant="h6" color="inherit" noWrap className={classes.title}>
-                    SHOW SEARCH RESULTS HERE
-                    {test}
+                    <ProfessionalsList professionals={searchResults}/>
                 </Typography>
               </Paper>
+            }
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
