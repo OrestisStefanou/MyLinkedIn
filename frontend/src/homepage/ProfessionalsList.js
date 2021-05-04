@@ -6,6 +6,8 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import { useHistory } from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,13 +22,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProfessionalsList(props) {
   const classes = useStyles();
+  let history = useHistory();
 
   return (
     <List className={classes.root}>
         {props.professionals.map((professional) => {
             return(
                 <React.Fragment>
-                <ListItem button onClick={() => {console.log(professional)}} alignItems="flex-start">
+                <ListItem button onClick={() => {history.push(`professionals/${professional.email}`)}} alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar alt="Profile picture" src={professional.photo} />
                 </ListItemAvatar>

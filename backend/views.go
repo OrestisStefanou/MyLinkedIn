@@ -87,7 +87,7 @@ func signin(c *gin.Context) {
 	}
 }
 
-//GET /v1/LinkedIn/searchProfessional
+//GET /v1/LinkedIn/searchProfessional/:query
 func searchProfessional(c *gin.Context) {
 	_, err := getProfessionalFromSession(c)
 	if err != nil {
@@ -159,6 +159,42 @@ func updateProfessional(c *gin.Context) {
 		setProfessionalSession(c, professional)
 		professional.setPhotoURL() //Change the path to a url
 		c.JSON(http.StatusOK, gin.H{"profile": professional})
+	}
+}
+
+//GET /v1/LinkedIn/professional/:id
+func getProfessionalProfile(c *gin.Context) {
+	_, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		email := c.Query("email")
+		fmt.Println("QUERY STRING IS ", email)
+		prof, err := dbclient.getProfessional(email)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+			return
+		}
+		education, err := prof.getEducation()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+			return
+		}
+		experience, err := prof.getExperience()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+			return
+		}
+		skills, err := prof.getSkills()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"professional": prof, "education": education, "experience": experience, "skills": skills})
 	}
 }
 

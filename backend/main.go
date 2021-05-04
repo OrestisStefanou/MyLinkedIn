@@ -53,6 +53,7 @@ func main() {
 		v1.POST("/updateProfessional", updateProfessional)
 		v1.GET("/homepage", homepage)
 		v1.GET("/searchProfessional", searchProfessional)
+		v1.GET("/professional", getProfessionalProfile)
 		//Article endpoints
 		v1.POST("/addArticle", addArticle)
 		v1.GET("/getArticles", getArticles)
