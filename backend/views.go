@@ -164,18 +164,22 @@ func updateProfessional(c *gin.Context) {
 
 //GET /v1/LinkedIn/professional/:id
 func getProfessionalProfile(c *gin.Context) {
-	_, err := getProfessionalFromSession(c)
+	professional, err := getProfessionalFromSession(c)
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	} else {
 		email := c.Query("email")
 		fmt.Println("QUERY STRING IS ", email)
+		if email == "self" {
+			email = professional.Email
+		}
 		prof, err := dbclient.getProfessional(email)
 		if err != nil {
 			fmt.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
 			return
 		}
+		prof.setPhotoURL() //Change the path of the photo to a url
 		education, err := prof.getEducation()
 		if err != nil {
 			fmt.Println(err)

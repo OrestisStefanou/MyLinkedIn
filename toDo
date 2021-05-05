@@ -1,14 +1,13 @@
--DB.close()?
 -Create log files
 -Otan kamno delete user na kamno delete je to media directory tou
 -Otan o xristis allazi foto profil na diagrafo tin proigumeni pou ixe?
 -Manage visibility of user's data
 
 -I sinartisi getArticles sto database.go na allaksi
--Create a view for a single Article
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
+-Finish ProfessionalProfile component
+-Na allakso to profile component
+
 -Handle Friendships
--Check searchProfessional function
--Fix searchProfessional query 

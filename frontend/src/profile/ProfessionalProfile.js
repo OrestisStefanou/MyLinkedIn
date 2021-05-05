@@ -24,6 +24,7 @@ import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
 import {useParams} from 'react-router-dom';
+import ProfileCard from "./ProfileCard";
 
 function Copyright() {
   return (
@@ -122,7 +123,10 @@ const useStyles = makeStyles((theme) => ({
 export default function ProfessionalProfile() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
-  const [professionalEmail,setProfessionalEmail] = useState(useParams().email);
+  const [professionalInfo,setProfessionalInfo] = useState({});
+  const [education,setEducation] = useState([]);
+  const [experience,setExperience] = useState([]);
+  const [skills,setSkills] = useState([]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -137,6 +141,7 @@ export default function ProfessionalProfile() {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   let history = useHistory();
+  const professionalEmail = useParams().email;
 
   const handleLogout = () => {
     fetch('http://localhost:8080/v1/LinkedIn/logout',{
@@ -153,9 +158,8 @@ export default function ProfessionalProfile() {
 
   useEffect(() => {
     const getProfile = async () => {
-        fetch('http://localhost:8080/v1/LinkedIn/professional?'+ new URLSearchParams({
-            email: professionalEmail,
-        }),{
+      var url = 'http://localhost:8080/v1/LinkedIn/professional?email=' + professionalEmail; 
+        fetch(url,{
             method: "GET",
             mode:"cors",
             credentials:"include",
@@ -164,11 +168,21 @@ export default function ProfessionalProfile() {
             .then(response => response.json())
             .then(json =>{
                 console.log(json);
+                setProfessionalInfo(json.professional);
+                if(json.education !== null){
+                  setEducation(json.education);
+                }
+                if(json.experience !== null){
+                  setExperience(json.experience);
+                }
+                if(json.skills !== null){
+                  setSkills(json.skills);
+                }
             } )
             .catch(err => console.log('Request Failed',err))
       };
       getProfile();
-  });
+  },[professionalEmail]);
 
   return (
     <div className={classes.root}>
@@ -185,7 +199,7 @@ export default function ProfessionalProfile() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            LinkedIn
+            <Link color="inherit" href="/home">LinkedIn</Link>
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={0} color="secondary" >
@@ -223,11 +237,7 @@ export default function ProfessionalProfile() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={classes.paper}>
-                <Typography>
-                    {useParams().email}
-                </Typography>
-              </Paper>
+                  <ProfileCard professionalInfo={professionalInfo} education={education} experience={experience} skills = {skills}/>
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
