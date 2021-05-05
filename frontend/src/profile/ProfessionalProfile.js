@@ -142,6 +142,10 @@ export default function ProfessionalProfile() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   let history = useHistory();
   const professionalEmail = useParams().email;
+  let selfProfile = false;
+  if (professionalEmail === "self"){
+    selfProfile = true;
+  }
 
   const handleLogout = () => {
     fetch('http://localhost:8080/v1/LinkedIn/logout',{
@@ -237,7 +241,7 @@ export default function ProfessionalProfile() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
-                  <ProfileCard professionalInfo={professionalInfo} education={education} experience={experience} skills = {skills}/>
+                <ProfileCard professionalInfo={professionalInfo} education={education} experience={experience} skills={skills} selfProfile={selfProfile}/>
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>

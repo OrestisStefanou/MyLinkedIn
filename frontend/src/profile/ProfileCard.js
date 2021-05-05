@@ -32,6 +32,7 @@ export default function ProfileCard(props) {
   const educationArray = props.education;
   const experienceArray = props.experience;
   const skillsArray = props.skills;
+  const selfProfile = props.selfProfile;
 
   return (
     <Card className={classes.root}>
@@ -105,9 +106,11 @@ export default function ProfileCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
+        {!selfProfile && 
         <Button size="small" color="primary">
           Send friend request
         </Button>
+        }
       </CardActions>
     </Card>
   );

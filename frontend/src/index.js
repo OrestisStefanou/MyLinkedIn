@@ -26,7 +26,7 @@ const App = () => {
                 <Route exact path='/home'>
                     <Homepage/>
                 </Route>
-                <Route exact path='/profile'>
+                <Route exact path='/settings'>
                     <Profile/>
                 </Route>
                 <Route exact path='/notifications'>

@@ -14,7 +14,7 @@ export default function ListItems() {
   return(
   <List>
   <div>
-    <ListItem button onClick={()=>history.push(`/profile`)}>
+    <ListItem button onClick={()=>history.push(`/professionals/self`)}>
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
@@ -32,7 +32,7 @@ export default function ListItems() {
       </ListItemIcon>
       <ListItemText primary="My Network" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={()=>history.push(`/settings`)}>
       <ListItemIcon>
         <SettingsIcon/>
       </ListItemIcon>
