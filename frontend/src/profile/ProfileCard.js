@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -33,6 +33,49 @@ export default function ProfileCard(props) {
   const experienceArray = props.experience;
   const skillsArray = props.skills;
   const selfProfile = props.selfProfile;
+
+  const [status,setStatus] = useState("");
+
+  useEffect(() => {
+    const getStatus = async () => {
+      var url = 'http://localhost:8080/v1/LinkedIn/friendshipStatus?id=' + professionalInfo.id; 
+        fetch(url,{
+            method: "GET",
+            mode:"cors",
+            credentials:"include",
+            headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+            })
+            .then(response => response.json())
+            .then(json =>{
+                console.log(json.status);
+                if(json.status.length > 0){
+                  setStatus(json.status)
+                }
+            } )
+            .catch(err => console.log('Request Failed',err))
+      };
+      getStatus();
+  },[professionalInfo.id]);
+
+  const sendFriendRequest = () => {
+    const data = {professionalId2:professionalInfo.id}
+    fetch('http://localhost:8080/v1/LinkedIn/addFriendRequest', {
+      method: "POST",
+      mode:"cors",
+      credentials:"include",
+      body: JSON.stringify(data),
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+      })
+      .then(response => response.json())
+          .then((json) => {
+              if(json.error){
+                  //Show error message
+                  console.log(json.error);
+              }else{
+                  console.log(json);
+              }
+        });       
+  }
 
   return (
     <Card className={classes.root}>
@@ -106,10 +149,20 @@ export default function ProfileCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {!selfProfile && 
-        <Button size="small" color="primary">
+        {!selfProfile && status.length === 0 &&
+        <Button size="small" color="primary" onClick={sendFriendRequest}>
           Send friend request
         </Button>
+        }
+        {!selfProfile && status === "accept" &&
+        <Button size="small" color="primary" onClick={sendFriendRequest}>
+          Accept Friend Request
+        </Button>
+        }
+        {!selfProfile && status === "pending" &&
+        <Typography variant="h6" gutterBottom>
+          Friend request has been sent
+        </Typography>
         }
       </CardActions>
     </Card>

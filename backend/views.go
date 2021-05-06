@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/gin-contrib/sessions"
@@ -162,7 +163,7 @@ func updateProfessional(c *gin.Context) {
 	}
 }
 
-//GET /v1/LinkedIn/professional/:id
+//GET /v1/LinkedIn/professional?:id
 func getProfessionalProfile(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c)
 	if err != nil {
@@ -638,6 +639,43 @@ func addFriendRequest(c *gin.Context) {
 			} else {
 				c.JSON(http.StatusOK, gin.H{"message": "Sent friend request"})
 			}
+		}
+	}
+}
+
+//GET /v1/LinkedIn/friendshipStatus?id
+func friendshipStatus(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		id := c.Query("id")
+		professionalID2, err := strconv.Atoi(id)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		status, err := dbclient.getFriendshipStatus(professional.ID, professionalID2)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		if len(status) == 0 {
+			//Check if there is a pending request from professional2 to professional
+			status, err = dbclient.getFriendshipStatus(professionalID2, professional.ID)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			if len(status) > 0 { //Professional can accept the friend request
+				status = "accept"
+			}
+			c.JSON(http.StatusOK, gin.H{"status": status})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"status": status})
 		}
 	}
 }

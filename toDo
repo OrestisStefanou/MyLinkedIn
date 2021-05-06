@@ -7,7 +7,7 @@
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
--Finish ProfessionalProfile component
--Na allakso to profile component
 
--Handle Friendships
+-Sto network page na dixno ta friend request pou exi o xristis kai
+na iparxi dinatotita na ta dexti stin idia selida
+-Na kamo handle to accept friend request sto Profile card

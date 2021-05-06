@@ -63,6 +63,9 @@ func main() {
 		v1.POST("/article/addComment", addArticleComment)
 		//Notifications and messages endpoints
 		v1.GET("/notifications", getNotifications)
+		//Friendship endpoints
+		v1.GET("/friendshipStatus", friendshipStatus)
+		v1.POST("/addFriendRequest", addFriendRequest)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)
