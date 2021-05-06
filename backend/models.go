@@ -299,3 +299,11 @@ func (n *Notification) save() error {
 	err := dbclient.createNotification(n)
 	return err
 }
+
+//Friendship json struct
+type Friendship struct {
+	ID              int    `json:"id"`
+	ProfessionalID1 int    `json:"professionalId1"`
+	ProfessionalID2 int    `json:"professionalId2"`
+	Status          string `json:"status" `
+}

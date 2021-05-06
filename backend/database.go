@@ -534,6 +534,71 @@ func (driver *DBClient) clearProfessionalNotifications(professionalID int) error
 	return nil
 }
 
+//Friendship related functions
+func (driver *DBClient) createFriendRequest(professionalID1, professionalID2 int) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Friendships SET 
+		ProfessionalID1=?,
+		ProfessionalID2=?,
+		Status=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(professionalID1, professionalID2, "pending")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) createFriendship(professionalID1, professionalID2 int) error {
+	stmt, err := driver.db.Prepare(`UPDATE Friendships SET
+		Status=? WHERE ProfessionalID1=? AND ProfessionalID2=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec("friends", professionalID1, professionalID2)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) getFriendshipStatus(professionalID1, professionalID2 int) (string, error) {
+	var status string
+	rows, err := driver.db.Query("SELECT Status FROM Friendships WHERE ProfessionalID1=? AND ProfessionalID2=?", professionalID1, professionalID2)
+	if err != nil {
+		return status, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&status)
+		if err != nil {
+			return status, err
+		}
+	}
+	return status, nil
+}
+
+//Get the professionals that sent a friend request to professional with id:professionalID
+func (driver *DBClient) getProfessionalFriendRequests(professionalID int) ([]Professional, error) {
+	prof := Professional{}
+	rows, err := driver.db.Query(`SELECT p.First_Name,p.Last_Name,p.Email FROM Professionals p,Friendships f 
+	WHERE p.ProfessionalID = f.ProfessionalID1 AND f.ProfessionalID2=? AND f.Status="pending"`, professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var professionals []Professional
+	for rows.Next() {
+		err = rows.Scan(&prof.FirstName, &prof.LastName, &prof.Email)
+		if err != nil {
+			return nil, err
+		}
+		professionals = append(professionals, prof)
+	}
+	return professionals, nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

@@ -1,11 +1,7 @@
 -Admin User:
 
--Article
+-Friendships
 	-ID
-	-ProfessionalID(uploader)
-	-Titlos
-	-Periexomeno
-	-Episinaptomeno arxio
-
-	-ArticleComments
-	-ArticleLikes
+	-Professional1 ID
+	-Professional2 ID
+	-Status -> Pending,Friends

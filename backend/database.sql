@@ -79,3 +79,14 @@ CREATE TABLE Notifications (
        PRIMARY KEY(id),
        FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID)
 );
+
+/*Professional with ID1 sends a request to professional with ID2*/
+CREATE TABLE Friendships (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID1 int NOT NULL,
+       ProfessionalID2 int NOT NULL,
+       Status ENUM('pending', 'friends'),
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID1) REFERENCES Professionals(ProfessionalID),
+       FOREIGN KEY(ProfessionalID2) REFERENCES Professionals(ProfessionalID)
+);

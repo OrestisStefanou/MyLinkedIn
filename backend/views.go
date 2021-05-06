@@ -582,7 +582,7 @@ func addArticleComment(c *gin.Context) {
 	}
 }
 
-///v1/LinkedIn/homepage
+//GET v1/LinkedIn/homepage
 //Get the number of notifications and unread messages of a professional
 func homepage(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c)
@@ -599,7 +599,7 @@ func homepage(c *gin.Context) {
 	}
 }
 
-///v1/LinkedIn/notifications
+//GET v1/LinkedIn/notifications
 //Get the notifications and messages of a professional
 func getNotifications(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c)
@@ -619,6 +619,26 @@ func getNotifications(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusAccepted, gin.H{"notifications": notifications})
+	}
+}
+
+//POST /v1/LinkedIn/addFriendRequest
+func addFriendRequest(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var f Friendship
+		if err := c.ShouldBindJSON(&f); err == nil {
+			//Create a friend request
+			err = dbclient.createFriendRequest(professional.ID, f.ProfessionalID2)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Sent friend request"})
+			}
+		}
 	}
 }
 
