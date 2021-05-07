@@ -551,6 +551,18 @@ func (driver *DBClient) createFriendRequest(professionalID1, professionalID2 int
 	return nil
 }
 
+func (driver *DBClient) deleteFriendRequest(professionalID1, professionalID2 int) error {
+	stmt, err := driver.db.Prepare("DELETE FROM Friendships WHERE ProfessionalID1=? AND ProfessionalID2=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(professionalID1, professionalID2)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (driver *DBClient) createFriendship(professionalID1, professionalID2 int) error {
 	stmt, err := driver.db.Prepare(`UPDATE Friendships SET
 		Status=? WHERE ProfessionalID1=? AND ProfessionalID2=?`,
@@ -583,14 +595,14 @@ func (driver *DBClient) getFriendshipStatus(professionalID1, professionalID2 int
 //Get the professionals that sent a friend request to professional with id:professionalID
 func (driver *DBClient) getProfessionalFriendRequests(professionalID int) ([]Professional, error) {
 	prof := Professional{}
-	rows, err := driver.db.Query(`SELECT p.First_Name,p.Last_Name,p.Email FROM Professionals p,Friendships f 
+	rows, err := driver.db.Query(`SELECT p.ProfessionalID ,p.First_Name,p.Last_Name,p.Email FROM Professionals p,Friendships f 
 	WHERE p.ProfessionalID = f.ProfessionalID1 AND f.ProfessionalID2=? AND f.Status="pending"`, professionalID)
 	if err != nil {
 		return nil, err
 	}
 	var professionals []Professional
 	for rows.Next() {
-		err = rows.Scan(&prof.FirstName, &prof.LastName, &prof.Email)
+		err = rows.Scan(&prof.ID, &prof.FirstName, &prof.LastName, &prof.Email)
 		if err != nil {
 			return nil, err
 		}

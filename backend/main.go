@@ -66,7 +66,9 @@ func main() {
 		//Friendship endpoints
 		v1.GET("/friendshipStatus", friendshipStatus)
 		v1.POST("/addFriendRequest", addFriendRequest)
+		v1.POST("/removeFriendRequest", removeFriendRequest)
 		v1.POST("/addFriend", addFriend)
+		v1.GET("/friendRequests", getFriendRequests)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)

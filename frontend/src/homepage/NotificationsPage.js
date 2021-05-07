@@ -23,7 +23,9 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
-import Notifications from "./Notifications"
+import Notifications from "./Notifications";
+import FriendRequests from "./FriendRequests";
+
 
 function Copyright() {
   return (
@@ -234,9 +236,7 @@ export default function NotificationsPage() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
-                <Typography component="h6" variant="h6" color="inherit" noWrap className={classes.title}>
-                    No new friend requests 
-                </Typography>
+                <FriendRequests />
               </Paper>
             </Grid>
             {/* Recent Deposits */}

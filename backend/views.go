@@ -663,6 +663,42 @@ func addFriend(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/removeFriendRequest
+func removeFriendRequest(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var f Friendship
+		if err := c.ShouldBindJSON(&f); err == nil {
+			//Delete friend request
+			err = dbclient.deleteFriendRequest(f.ProfessionalID2, professional.ID)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Request deleted"})
+			}
+		}
+	}
+}
+
+//GET /v1/LinkedIn/friendRequests
+func getFriendRequests(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		requests, err := dbclient.getProfessionalFriendRequests(professional.ID)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"requests": requests})
+		}
+	}
+}
+
 //GET /v1/LinkedIn/friendshipStatus?id
 func friendshipStatus(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c)
