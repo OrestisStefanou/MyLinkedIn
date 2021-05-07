@@ -643,6 +643,26 @@ func addFriendRequest(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/addFriend
+func addFriend(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var f Friendship
+		if err := c.ShouldBindJSON(&f); err == nil {
+			//Create a friend request
+			err = dbclient.createFriendship(f.ProfessionalID2, professional.ID)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Frienship created"})
+			}
+		}
+	}
+}
+
 //GET /v1/LinkedIn/friendshipStatus?id
 func friendshipStatus(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c)

@@ -73,6 +73,28 @@ export default function ProfileCard(props) {
                   console.log(json.error);
               }else{
                   console.log(json);
+                  setStatus("pending");
+              }
+        });       
+  }
+
+  const acceptFriendRequest = () => {
+    const data = {professionalId2:professionalInfo.id}
+    fetch('http://localhost:8080/v1/LinkedIn/addFriend', {
+      method: "POST",
+      mode:"cors",
+      credentials:"include",
+      body: JSON.stringify(data),
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+      })
+      .then(response => response.json())
+          .then((json) => {
+              if(json.error){
+                  //Show error message
+                  console.log(json.error);
+              }else{
+                  console.log(json);
+                  setStatus("friends");
               }
         });       
   }
@@ -155,13 +177,18 @@ export default function ProfileCard(props) {
         </Button>
         }
         {!selfProfile && status === "accept" &&
-        <Button size="small" color="primary" onClick={sendFriendRequest}>
+        <Button size="small" color="primary" onClick={acceptFriendRequest}>
           Accept Friend Request
         </Button>
         }
         {!selfProfile && status === "pending" &&
         <Typography variant="h6" gutterBottom>
           Friend request has been sent
+        </Typography>
+        }
+        {!selfProfile && status === "friends" &&
+        <Typography variant="h6" gutterBottom>
+          Connected
         </Typography>
         }
       </CardActions>
