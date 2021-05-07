@@ -10,10 +10,14 @@ import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
+
 
 export default function FriendRequests(){
     const [requestsArray,setRequestsArray] = useState([]);
-  
+
+    let history = useHistory();
+
     const removeRequest = (requestInfo) => {
         const data = {professionalId2:requestInfo.id}
         fetch('http://localhost:8080/v1/LinkedIn/removeFriendRequest', {
@@ -89,7 +93,7 @@ export default function FriendRequests(){
         <List dense={false}>
             {requestsArray.map((request,index) =>{
                 return(
-                    <ListItem button key={index}>
+                    <ListItem button onClick={() => {history.push(`professionals/${request.email}`)}} key={index}>
                     <ListItemAvatar>
                       <Avatar>
                         <PersonIcon />

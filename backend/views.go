@@ -637,6 +637,17 @@ func addFriendRequest(c *gin.Context) {
 				fmt.Println(err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 			} else {
+				//Create a notification
+				notification := Notification{}
+				notification.ProfessionalID = f.ProfessionalID2
+				notification.Seen = false
+				notification.Msg = fmt.Sprintf("%s %s sent you a friend request", professional.FirstName, professional.LastName)
+				err = notification.save()
+				if err != nil {
+					fmt.Println(err)
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+					return
+				}
 				c.JSON(http.StatusOK, gin.H{"message": "Sent friend request"})
 			}
 		}
@@ -726,7 +737,7 @@ func friendshipStatus(c *gin.Context) {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 				return
 			}
-			if len(status) > 0 { //Professional can accept the friend request
+			if status == "pending" { //Professional can accept the friend request
 				status = "accept"
 			}
 			c.JSON(http.StatusOK, gin.H{"status": status})
