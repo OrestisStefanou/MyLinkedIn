@@ -731,6 +731,7 @@ func friendshipStatus(c *gin.Context) {
 		}
 		if len(status) == 0 {
 			//Check if there is a pending request from professional2 to professional
+			//Or if there is a connection from professional2 to professional
 			status, err = dbclient.getFriendshipStatus(professionalID2, professional.ID)
 			if err != nil {
 				fmt.Println(err)
@@ -743,6 +744,21 @@ func friendshipStatus(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"status": status})
 		} else {
 			c.JSON(http.StatusOK, gin.H{"status": status})
+		}
+	}
+}
+
+//GET /v1/LinkedIn/connectedProfessionals
+func getConnectedProfessionals(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		connectedProfessionals, err := professional.getFriends()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"connectedProfessionals": connectedProfessionals})
 		}
 	}
 }

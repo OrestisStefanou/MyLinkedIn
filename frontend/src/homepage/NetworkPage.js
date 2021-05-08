@@ -124,6 +124,7 @@ export default function NetworkPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [searchResults,setSearchResults] = useState([]);
+  const [connectedProfessionals,setConnectedProfessionals] = useState([]);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -171,10 +172,27 @@ export default function NetworkPage() {
     history.push("/");
   }
 
-  //Change this to clear the notifications
   useEffect(() => {
-    //GET THE CONNECTED PROFESSIONALS HERE
-  });
+    const getConnectedProfessionals = async () => {
+      const response = await fetch('http://localhost:8080/v1/LinkedIn/connectedProfessionals',{
+        method: "GET",
+        mode:"cors",
+        credentials:"include",
+        headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+        });
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+      if (response.status !== 200) {
+        history.push(`/`);
+      }else{
+        console.log(jsonResponse.connectedProfessionals);
+        if(jsonResponse.connectedProfessionals !== null){
+          setConnectedProfessionals(jsonResponse.connectedProfessionals);
+        }
+      }
+    };
+    getConnectedProfessionals();
+  },[history]);
 
   return (
     <div className={classes.root}>
@@ -258,8 +276,9 @@ export default function NetworkPage() {
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Typography component="h6" variant="h6" color="inherit" noWrap className={classes.title}>
-                  SHOW CONNECTED PROFESSIONALS HERE
+                  Connected Professionals with me
                 </Typography>
+                <ProfessionalsList professionals={connectedProfessionals}/>
               </Paper>
             </Grid>
           </Grid>

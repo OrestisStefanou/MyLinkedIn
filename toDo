@@ -7,9 +7,7 @@
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
-
--Sto network page na dixno ta friend request pou exi o xristis kai
-na iparxi dinatotita na ta dexti stin idia selida
--Add notification otan kapios stelni friend request
--Apo to friend request na mporo na pao sto profil tou xristi pou estile to request 
 -Na dixno tous xristes pou ine o sindedemenos o user sto network page
+
+$ sudo sysctl fs.inotify.max_user_watches=524288
+$ sudo sysctl -p

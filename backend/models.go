@@ -123,6 +123,12 @@ func (prof *Professional) clearNotifications() error {
 	return err
 }
 
+//Get the friends of a Professional
+func (prof *Professional) getFriends() ([]Professional, error) {
+	friends, err := dbclient.getProfessionalFriends(prof.ID)
+	return friends, err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`

@@ -611,6 +611,40 @@ func (driver *DBClient) getProfessionalFriendRequests(professionalID int) ([]Pro
 	return professionals, nil
 }
 
+func (driver *DBClient) getProfessionalFriends(professionalID int) ([]Professional, error) {
+	prof := Professional{}
+	rows, err := driver.db.Query(`SELECT p.ProfessionalID ,p.First_Name,p.Last_Name,p.Email,p.Photo
+	FROM Professionals p,Friendships f 
+	WHERE p.ProfessionalID = f.ProfessionalID1 AND f.ProfessionalID2=? AND f.Status="friends"`, professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var professionals []Professional
+	for rows.Next() {
+		err = rows.Scan(&prof.ID, &prof.FirstName, &prof.LastName, &prof.Email, &prof.Photo)
+		if err != nil {
+			return nil, err
+		}
+		prof.setPhotoURL() //Change directory of photo to a url
+		professionals = append(professionals, prof)
+	}
+	rows, err = driver.db.Query(`SELECT p.ProfessionalID ,p.First_Name,p.Last_Name,p.Email,p.Photo
+	FROM Professionals p,Friendships f 
+	WHERE p.ProfessionalID = f.ProfessionalID2 AND f.ProfessionalID1=? AND f.Status="friends"`, professionalID)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&prof.ID, &prof.FirstName, &prof.LastName, &prof.Email, &prof.Photo)
+		if err != nil {
+			return nil, err
+		}
+		prof.setPhotoURL() //Change directory of photo to a url
+		professionals = append(professionals, prof)
+	}
+	return professionals, nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)
