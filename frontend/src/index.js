@@ -8,7 +8,8 @@ import Homepage from './homepage/Homepage';
 import Profile from "./profile/Profile"
 import NotificationsPage from "./homepage/NotificationsPage"
 import NetworkPage from "./homepage/NetworkPage";
-import ProfessionalProfile from "./profile/ProfessionalProfile"
+import ProfessionalProfile from "./profile/ProfessionalProfile";
+import MessagesPage from "./homepage/MessagesPage";
 
 const App = () => {
     return(
@@ -34,6 +35,9 @@ const App = () => {
                 </Route>
                 <Route exact path='/network'>
                     <NetworkPage/>
+                </Route>
+                <Route exact path='/messages'>
+                    <MessagesPage/>
                 </Route>
                 <Route exact path='/professionals/:email' children={<ProfessionalProfile/>}></Route>
             </Switch>

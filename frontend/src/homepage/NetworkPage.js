@@ -212,7 +212,7 @@ export default function NetworkPage() {
             <Link color="inherit" href="/home">LinkedIn</Link>
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary" >
+            <Badge badgeContent={0} color="secondary" onClick={()=>history.push(`/messages`)}>
               <ChatIcon />
             </Badge>
           </IconButton>

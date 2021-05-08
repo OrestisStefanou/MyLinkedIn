@@ -190,7 +190,7 @@ export default function Homepage() {
             LinkedIn
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary" >
+            <Badge badgeContent={0} color="secondary" onClick={()=>history.push(`/messages`)}>
               <ChatIcon />
             </Badge>
           </IconButton>

@@ -7,7 +7,7 @@
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
--Na dixno tous xristes pou ine o sindedemenos o user sto network page
+-Handle Messages
 
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p

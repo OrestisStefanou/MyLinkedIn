@@ -17,14 +17,12 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import ListItems  from '../homepage/ListItems';
-import Deposits from '../homepage/Deposits';
+import ListItems  from './ListItems';
+import Deposits from './Deposits';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
-import {useParams} from 'react-router-dom';
-import ProfileCard from "./ProfileCard";
 
 function Copyright() {
   return (
@@ -120,14 +118,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfessionalProfile() {
+export default function MessagesPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
-  const [professionalInfo,setProfessionalInfo] = useState({});
-  const [education,setEducation] = useState([]);
-  const [experience,setExperience] = useState([]);
-  const [skills,setSkills] = useState([]);
-
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -141,11 +135,6 @@ export default function ProfessionalProfile() {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   let history = useHistory();
-  const professionalEmail = useParams().email;
-  let selfProfile = false;
-  if (professionalEmail === "self"){
-    selfProfile = true;
-  }
 
   const handleLogout = () => {
     fetch('http://localhost:8080/v1/LinkedIn/logout',{
@@ -161,32 +150,8 @@ export default function ProfessionalProfile() {
   }
 
   useEffect(() => {
-    const getProfile = async () => {
-      var url = 'http://localhost:8080/v1/LinkedIn/professional?email=' + professionalEmail; 
-        fetch(url,{
-            method: "GET",
-            mode:"cors",
-            credentials:"include",
-            headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
-            })
-            .then(response => response.json())
-            .then(json =>{
-                console.log(json);
-                setProfessionalInfo(json.professional);
-                if(json.education !== null){
-                  setEducation(json.education);
-                }
-                if(json.experience !== null){
-                  setExperience(json.experience);
-                }
-                if(json.skills !== null){
-                  setSkills(json.skills);
-                }
-            } )
-            .catch(err => console.log('Request Failed',err))
-      };
-      getProfile();
-  },[professionalEmail]);
+    //GET THE MESSAGES HERE
+  },[]);
 
   return (
     <div className={classes.root}>
@@ -203,10 +168,10 @@ export default function ProfessionalProfile() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            <Link color="inherit" href="/home">LinkedIn</Link>
+            LinkedIn
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary" onClick={()=>history.push(`/messages`)}>
+            <Badge badgeContent={0} color="secondary" >
               <ChatIcon />
             </Badge>
           </IconButton>
@@ -241,12 +206,19 @@ export default function ProfessionalProfile() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
-                <ProfileCard professionalInfo={professionalInfo} education={education} experience={experience} skills={skills} selfProfile={selfProfile}/>
+              <Paper className={classes.paper}>
+                <Typography>SHOW MESSAGES HERE</Typography>
+              </Paper>
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <Typography>DELETE THIS?</Typography>
               </Paper>
             </Grid>
           </Grid>

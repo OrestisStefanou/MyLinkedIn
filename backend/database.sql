@@ -90,3 +90,15 @@ CREATE TABLE Friendships (
        FOREIGN KEY(ProfessionalID1) REFERENCES Professionals(ProfessionalID),
        FOREIGN KEY(ProfessionalID2) REFERENCES Professionals(ProfessionalID)
 );
+
+CREATE TABLE Messages (
+       id int NOT NULL AUTO_INCREMENT,
+       Sender int NOT NULL,
+       Receiver int NOT NULL,
+       Msg TEXT NOT NULL,
+       Seen boolean,
+       Created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+       PRIMARY KEY(id),
+       FOREIGN KEY(Sender) REFERENCES Professionals(ProfessionalID),
+       FOREIGN KEY(Receiver) REFERENCES Professionals(ProfessionalID)
+);
