@@ -23,6 +23,9 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
+import TextField from '@material-ui/core/TextField';
+import SendIcon from '@material-ui/icons/Send';
+import {useParams} from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -116,9 +119,16 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
-export default function MessagesPage() {
+export default function ChatPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   
@@ -135,6 +145,7 @@ export default function MessagesPage() {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   let history = useHistory();
+  const professionalID = useParams().id;
 
   const handleLogout = () => {
     fetch('http://localhost:8080/v1/LinkedIn/logout',{
@@ -171,7 +182,7 @@ export default function MessagesPage() {
             LinkedIn
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary" >
+            <Badge badgeContent={0} color="secondary" onClick={()=>history.push(`/messages`)}>
               <ChatIcon />
             </Badge>
           </IconButton>
@@ -207,7 +218,34 @@ export default function MessagesPage() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
-                <Typography>SHOW DIALOGS</Typography>
+                <Typography>SHOW Previous Messages with {professionalID}</Typography>
+                <form className={classes.form} noValidate>
+                <Grid container spacing={1}>
+                    <Grid item xs={12} sm={8}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="message"
+                        label="Message"
+                        type="text"
+                        id="message"
+                        autoComplete="message"
+                    />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        endIcon={<SendIcon/>}
+                    >
+                    Send
+                    </Button>
+                    </Grid>
+                </Grid>
+                </form>
               </Paper>
             </Grid>
             {/* Recent Deposits */}

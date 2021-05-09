@@ -763,6 +763,26 @@ func getConnectedProfessionals(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/sendMessage
+func sendMessage(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var m Message
+		if err := c.ShouldBindJSON(&m); err == nil {
+			m.Sender = professional.ID
+			err = m.save() //Save message in the database
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Message sent"})
+			}
+		}
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

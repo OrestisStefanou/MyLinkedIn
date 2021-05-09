@@ -15,6 +15,7 @@ import Avatar from '@material-ui/core/Avatar';
 import WorkIcon from '@material-ui/icons/Work';
 import SchoolIcon from '@material-ui/icons/School';
 import BuildIcon from '@material-ui/icons/Build';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles({
@@ -35,6 +36,7 @@ export default function ProfileCard(props) {
   const selfProfile = props.selfProfile;
 
   const [status,setStatus] = useState("");
+  let history = useHistory();
 
   useEffect(() => {
     const getStatus = async () => {
@@ -187,9 +189,14 @@ export default function ProfileCard(props) {
         </Typography>
         }
         {!selfProfile && status === "friends" &&
+        <React.Fragment>
         <Typography variant="h6" gutterBottom>
           Connected
         </Typography>
+        <Button size="medium" color="primary" onClick={() => {history.push(`/chat/${professionalInfo.id}`)}}>
+            Send message
+        </Button>
+        </React.Fragment>
         }
       </CardActions>
     </Card>

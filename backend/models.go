@@ -313,3 +313,19 @@ type Friendship struct {
 	ProfessionalID2 int    `json:"professionalId2"`
 	Status          string `json:"status" `
 }
+
+//Message json struct
+type Message struct {
+	ID       int     `json:"id"`
+	Sender   int     `json:"sender"`
+	Receiver int     `json:"receiver"`
+	Msg      string  `json:"msg" binding:"required" `
+	Seen     bool    `json:"seen"`
+	Created  []uint8 `json:"created"`
+}
+
+//Message save method
+func (m *Message) save() error {
+	err := dbclient.createMessage(m)
+	return err
+}

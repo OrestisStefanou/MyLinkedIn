@@ -10,6 +10,7 @@ import NotificationsPage from "./homepage/NotificationsPage"
 import NetworkPage from "./homepage/NetworkPage";
 import ProfessionalProfile from "./profile/ProfessionalProfile";
 import MessagesPage from "./homepage/MessagesPage";
+import ChatPage from "./homepage/ChatPage";
 
 const App = () => {
     return(
@@ -40,6 +41,7 @@ const App = () => {
                     <MessagesPage/>
                 </Route>
                 <Route exact path='/professionals/:email' children={<ProfessionalProfile/>}></Route>
+                <Route exact path='/chat/:id' children={<ChatPage/>}></Route>
             </Switch>
         </Router>
     )

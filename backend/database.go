@@ -645,6 +645,24 @@ func (driver *DBClient) getProfessionalFriends(professionalID int) ([]Profession
 	return professionals, nil
 }
 
+//Message related functions
+func (driver *DBClient) createMessage(message *Message) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Messages SET 
+		Sender=?,
+		Receiver=?,
+		Msg=?,
+		Seen=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(message.Sender, message.Receiver, message.Msg, false)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)
