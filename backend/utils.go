@@ -74,3 +74,10 @@ type ArticleCommentResponse struct {
 	LastName  string `json:"lastName"`
 	Comment   string `json:"comment"`
 }
+
+//ChatMessage json struct
+type ChatMessage struct {
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Msg       string `json:"msg"`
+}

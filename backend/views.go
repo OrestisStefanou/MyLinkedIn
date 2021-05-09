@@ -650,6 +650,8 @@ func addFriendRequest(c *gin.Context) {
 				}
 				c.JSON(http.StatusOK, gin.H{"message": "Sent friend request"})
 			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
 		}
 	}
 }
@@ -670,6 +672,8 @@ func addFriend(c *gin.Context) {
 			} else {
 				c.JSON(http.StatusOK, gin.H{"message": "Frienship created"})
 			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
 		}
 	}
 }
@@ -690,6 +694,8 @@ func removeFriendRequest(c *gin.Context) {
 			} else {
 				c.JSON(http.StatusOK, gin.H{"message": "Request deleted"})
 			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
 		}
 	}
 }
@@ -779,6 +785,31 @@ func sendMessage(c *gin.Context) {
 			} else {
 				c.JSON(http.StatusOK, gin.H{"message": "Message sent"})
 			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		}
+	}
+}
+
+//GET /v1/LinkedIn/chat?id
+func getChatMessages(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		id := c.Query("id")
+		professionalID2, err := strconv.Atoi(id)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		chatMessages, err := dbclient.getChat(professional.ID, professionalID2)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"chat": chatMessages})
 		}
 	}
 }

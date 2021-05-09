@@ -70,6 +70,9 @@ func main() {
 		v1.POST("/addFriend", addFriend)
 		v1.GET("/friendRequests", getFriendRequests)
 		v1.GET("/connectedProfessionals", getConnectedProfessionals)
+		//Message endpoints
+		v1.POST("/sendMessage", sendMessage)
+		v1.GET("/chat", getChatMessages)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)

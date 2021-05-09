@@ -129,9 +129,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ChatPage() {
+  const receiverID = parseInt(useParams().id);
   const classes = useStyles();
   const [open, setOpen] = useState(true);
+  const [messageInfo,setMessageInfo] = useState({receiver:receiverID,msg:""})
   
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  let history = useHistory();
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -143,9 +148,11 @@ export default function ChatPage() {
     history.push(`/notifications`);
   }
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  let history = useHistory();
-  const professionalID = useParams().id;
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setMessageInfo({ ...messageInfo, [name]: value });
+  };
 
   const handleLogout = () => {
     fetch('http://localhost:8080/v1/LinkedIn/logout',{
@@ -160,9 +167,50 @@ export default function ChatPage() {
     history.push("/");
   }
 
+  const handleMessageSubmit = (e) => {
+    e.preventDefault();
+    console.log(messageInfo);
+    fetch('http://localhost:8080/v1/LinkedIn/sendMessage', {
+      method: "POST",
+      mode:"cors",
+      credentials:"include",
+      body: JSON.stringify(messageInfo),
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+      })
+      .then(response => response.json())
+          .then((json) => {
+              if(json.error){
+                  //Show error message
+                  console.log(json.error);
+              }else{
+                  //Show the message on the message section
+                  console.log(json);
+                  //setArticleComments([...articleComments,json.comment]);
+                  setMessageInfo({receiver:receiverID,msg:""})
+                }
+        });       
+  };
+
   useEffect(() => {
-    //GET THE MESSAGES HERE
-  },[]);
+    const getChat = async () => {
+        var url = 'http://localhost:8080/v1/LinkedIn/chat?id=' + receiverID; 
+          fetch(url,{
+              method: "GET",
+              mode:"cors",
+              credentials:"include",
+              headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+              })
+              .then(response => response.json())
+              .then(json =>{
+                  console.log(json.chat);
+                  //if(json.status.length > 0){
+                  //  setStatus(json.status)
+                  //}
+              } )
+              .catch(err => console.log('Request Failed',err))
+        };
+        getChat();
+  },[receiverID]);
 
   return (
     <div className={classes.root}>
@@ -218,7 +266,7 @@ export default function ChatPage() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
-                <Typography>SHOW Previous Messages with {professionalID}</Typography>
+                <Typography>SHOW Previous Messages with {receiverID}</Typography>
                 <form className={classes.form} noValidate>
                 <Grid container spacing={1}>
                     <Grid item xs={12} sm={8}>
@@ -227,10 +275,12 @@ export default function ChatPage() {
                         margin="normal"
                         required
                         fullWidth
-                        name="message"
+                        name="msg"
                         label="Message"
                         type="text"
                         id="message"
+                        value={messageInfo['msg']}
+                        onChange={handleChange}
                         autoComplete="message"
                     />
                     </Grid>
@@ -240,6 +290,7 @@ export default function ChatPage() {
                         color="primary"
                         className={classes.submit}
                         endIcon={<SendIcon/>}
+                        onClick={handleMessageSubmit}
                     >
                     Send
                     </Button>
