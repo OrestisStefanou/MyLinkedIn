@@ -229,7 +229,7 @@ export default function ChatPage() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            LinkedIn
+            <Link color="inherit" href="/home">LinkedIn</Link>
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={0} color="secondary" onClick={()=>history.push(`/messages`)}>
@@ -305,11 +305,6 @@ export default function ChatPage() {
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Typography>DELETE THIS?</Typography>
               </Paper>
             </Grid>
           </Grid>

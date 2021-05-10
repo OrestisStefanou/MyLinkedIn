@@ -684,6 +684,34 @@ func (driver *DBClient) getChat(professionalID1, professionalID2 int) ([]ChatMes
 	return chatMessages, nil
 }
 
+//Set unseen messages of a professional to seen
+func (driver *DBClient) updateMessagesStatus(professionalID, sender int) error {
+	stmt, err := driver.db.Prepare(`UPDATE Messages SET
+		Seen=? WHERE Receiver=? AND Sender=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(true, professionalID, sender)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//Get the number of unread dialogs
+func (driver *DBClient) getUnreadDialogs(professionalID int) (int, error) {
+	count := 0
+	rows, err := driver.db.Query(`SELECT COUNT(*) FROM Messages WHERE Receiver=? AND Seen=0 GROUP BY Sender`, professionalID)
+	if err != nil {
+		return 0, err
+	}
+	for rows.Next() {
+		count = count + 1
+	}
+	return count, nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

@@ -124,6 +124,7 @@ export default function Homepage() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [notifications,setNotifications] = useState(0);
+  const [unreadMessages,setUnreadMessages] = useState(0);
   
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -167,6 +168,7 @@ export default function Homepage() {
       }else{
         console.log(jsonResponse.notifications);
         setNotifications(jsonResponse.notifications);
+        setUnreadMessages(jsonResponse.unreadMessages);
       }
     };
     checkSession();
@@ -190,7 +192,7 @@ export default function Homepage() {
             LinkedIn
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary" onClick={()=>history.push(`/messages`)}>
+            <Badge badgeContent={unreadMessages} color="secondary" onClick={()=>history.push(`/messages`)}>
               <ChatIcon />
             </Badge>
           </IconButton>

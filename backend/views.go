@@ -596,7 +596,13 @@ func homepage(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 			return
 		}
-		c.JSON(http.StatusAccepted, gin.H{"notifications": len(notifications)})
+		//Get professional's unread message dialogs
+		unreadCount, err := professional.getUnreadDialogs()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		c.JSON(http.StatusAccepted, gin.H{"notifications": len(notifications), "unreadMessages": unreadCount})
 	}
 }
 
@@ -816,6 +822,8 @@ func getChatMessages(c *gin.Context) {
 			fmt.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 		} else {
+			//Update unseen messages to seen
+			dbclient.updateMessagesStatus(professional.ID, professionalID2)
 			c.JSON(http.StatusOK, gin.H{"chat": chatMessages})
 		}
 	}

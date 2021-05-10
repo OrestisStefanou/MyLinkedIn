@@ -129,6 +129,12 @@ func (prof *Professional) getFriends() ([]Professional, error) {
 	return friends, err
 }
 
+//Get unread dialogs of a Professional
+func (prof *Professional) getUnreadDialogs() (int, error) {
+	count, err := dbclient.getUnreadDialogs(prof.ID)
+	return count, err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
