@@ -783,7 +783,14 @@ func sendMessage(c *gin.Context) {
 				fmt.Println(err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 			} else {
-				c.JSON(http.StatusOK, gin.H{"message": "Message sent"})
+				//Create ChatMessage response
+				response := ChatMessage{}
+				response.FirstName = professional.FirstName
+				response.LastName = professional.LastName
+				response.Photo = professional.Photo
+				response.Msg = m.Msg
+				response.setPhotoURL()
+				c.JSON(http.StatusOK, gin.H{"message": response})
 			}
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})

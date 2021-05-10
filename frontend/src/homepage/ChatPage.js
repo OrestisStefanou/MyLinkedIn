@@ -26,6 +26,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import {useParams} from 'react-router-dom';
+import Chat from "./Chat";
 
 function Copyright() {
   return (
@@ -133,7 +134,8 @@ export default function ChatPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [messageInfo,setMessageInfo] = useState({receiver:receiverID,msg:""})
-  
+  const [chatMessages,setChatMessages] = useState([]);
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   let history = useHistory();
 
@@ -185,7 +187,7 @@ export default function ChatPage() {
               }else{
                   //Show the message on the message section
                   console.log(json);
-                  //setArticleComments([...articleComments,json.comment]);
+                  setChatMessages([...chatMessages,json.message]);
                   setMessageInfo({receiver:receiverID,msg:""})
                 }
         });       
@@ -203,9 +205,9 @@ export default function ChatPage() {
               .then(response => response.json())
               .then(json =>{
                   console.log(json.chat);
-                  //if(json.status.length > 0){
-                  //  setStatus(json.status)
-                  //}
+                  if(json.chat !== null){
+                    setChatMessages(json.chat);
+                  }
               } )
               .catch(err => console.log('Request Failed',err))
         };
@@ -266,7 +268,7 @@ export default function ChatPage() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
-                <Typography>SHOW Previous Messages with {receiverID}</Typography>
+                <Chat chatMessages={chatMessages} />
                 <form className={classes.form} noValidate>
                 <Grid container spacing={1}>
                     <Grid item xs={12} sm={8}>

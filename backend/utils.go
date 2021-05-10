@@ -79,5 +79,12 @@ type ArticleCommentResponse struct {
 type ChatMessage struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
+	Photo     string `json:"photo"`
 	Msg       string `json:"msg"`
+}
+
+//Create profile photo url
+func (c *ChatMessage) setPhotoURL() {
+	photoURL := mediaURL + c.Photo
+	c.Photo = photoURL
 }

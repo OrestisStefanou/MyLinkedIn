@@ -665,7 +665,7 @@ func (driver *DBClient) createMessage(message *Message) error {
 
 func (driver *DBClient) getChat(professionalID1, professionalID2 int) ([]ChatMessage, error) {
 	msg := ChatMessage{}
-	rows, err := driver.db.Query(`SELECT p.First_Name,p.Last_Name,m.Msg FROM Professionals p,Messages m 
+	rows, err := driver.db.Query(`SELECT p.First_Name,p.Last_Name,p.Photo,m.Msg FROM Professionals p,Messages m 
 	WHERE p.ProfessionalID=m.Sender 
 	AND ((m.Sender=? AND m.Receiver=?) OR (m.Sender=? AND m.Receiver=?)) ORDER BY m.Created`, professionalID1, professionalID2, professionalID2, professionalID1)
 	if err != nil {
@@ -673,10 +673,12 @@ func (driver *DBClient) getChat(professionalID1, professionalID2 int) ([]ChatMes
 	}
 	var chatMessages []ChatMessage
 	for rows.Next() {
-		err = rows.Scan(&msg.FirstName, &msg.LastName, &msg.Msg)
+		err = rows.Scan(&msg.FirstName, &msg.LastName, &msg.Photo, &msg.Msg)
 		if err != nil {
 			return nil, err
 		}
+		//Change photo path to a url
+		msg.setPhotoURL()
 		chatMessages = append(chatMessages, msg)
 	}
 	return chatMessages, nil

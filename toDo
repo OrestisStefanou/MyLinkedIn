@@ -8,7 +8,7 @@
 -Change Deposits component name to ProfileInfo or something
 
 -Create a component to show the dialogs
--Create a component for chatting with a specific user
+-Show messages in ChatPage component
 
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p
