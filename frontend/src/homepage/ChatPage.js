@@ -120,6 +120,9 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  chatFixedHeight: {
+    height: 540,
+  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
@@ -137,6 +140,7 @@ export default function ChatPage() {
   const [chatMessages,setChatMessages] = useState([]);
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const chatFixedHeightPaper = clsx(classes.paper, classes.chatFixedHeight);
   let history = useHistory();
 
   const handleDrawerOpen = () => {
@@ -211,7 +215,10 @@ export default function ChatPage() {
               } )
               .catch(err => console.log('Request Failed',err))
         };
-        getChat();
+        //getChat();
+        setInterval(() => {
+          getChat();
+        }, 1000);
   },[receiverID]);
 
   return (
@@ -267,7 +274,7 @@ export default function ChatPage() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={classes.paper}>
+              <Paper className={chatFixedHeightPaper}>
                 <Chat chatMessages={chatMessages} />
                 <form className={classes.form} noValidate>
                 <Grid container spacing={1}>
