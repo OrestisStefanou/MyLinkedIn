@@ -216,9 +216,7 @@ export default function ChatPage() {
               .catch(err => console.log('Request Failed',err))
         };
         //getChat();
-        setInterval(() => {
-          getChat();
-        }, 1000);
+        setInterval(getChat,1000);
   },[receiverID]);
 
   return (
