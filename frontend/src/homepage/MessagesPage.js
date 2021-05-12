@@ -23,6 +23,7 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
+import Dialogs from "./Dialogs";
 
 function Copyright() {
   return (
@@ -121,7 +122,8 @@ const useStyles = makeStyles((theme) => ({
 export default function MessagesPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
-  
+  const [chatDialogs,setChatDialogs] = useState([]);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -162,7 +164,7 @@ export default function MessagesPage() {
             .then(json =>{
                 console.log(json.dialogs);
                 if(json.dialogs !== null){
-                  //setChatMessages(json.chat);
+                  setChatDialogs(json.dialogs);
                 }
             } )
             .catch(err => console.log('Request Failed',err))
@@ -224,7 +226,7 @@ export default function MessagesPage() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
-                <Typography>SHOW DIALOGS</Typography>
+                <Dialogs chatDialogs={chatDialogs} />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
