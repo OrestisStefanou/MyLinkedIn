@@ -61,7 +61,7 @@ func main() {
 		v1.POST("/article/addLike", addArticleLike)
 		v1.POST("/article/removeLike", removeArticleLike)
 		v1.POST("/article/addComment", addArticleComment)
-		//Notifications and messages endpoints
+		//Notifications endpoints
 		v1.GET("/notifications", getNotifications)
 		//Friendship endpoints
 		v1.GET("/friendshipStatus", friendshipStatus)
@@ -73,6 +73,7 @@ func main() {
 		//Message endpoints
 		v1.POST("/sendMessage", sendMessage)
 		v1.GET("/chat", getChatMessages)
+		v1.GET("/chatDialogs", chatDialogs)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)

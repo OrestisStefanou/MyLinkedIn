@@ -150,7 +150,24 @@ export default function MessagesPage() {
   }
 
   useEffect(() => {
-    //GET THE MESSAGES HERE
+    const getChatDialogs = async () => {
+      var url = 'http://localhost:8080/v1/LinkedIn/chatDialogs';
+        fetch(url,{
+            method: "GET",
+            mode:"cors",
+            credentials:"include",
+            headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+            })
+            .then(response => response.json())
+            .then(json =>{
+                console.log(json.dialogs);
+                if(json.dialogs !== null){
+                  //setChatMessages(json.chat);
+                }
+            } )
+            .catch(err => console.log('Request Failed',err))
+      };
+      getChatDialogs();
   },[]);
 
   return (
@@ -214,11 +231,6 @@ export default function MessagesPage() {
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Typography>DELETE THIS?</Typography>
               </Paper>
             </Grid>
           </Grid>

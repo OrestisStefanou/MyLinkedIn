@@ -712,6 +712,49 @@ func (driver *DBClient) getUnreadDialogs(professionalID int) (int, error) {
 	return count, nil
 }
 
+//Functions to use for getting the user that a professioanl already has a chat and how many
+//unread messages he has from each one
+//SELECT DISTINCT p.ProfessionalID, p.First_Name,p.Last_Name,p.Photo FROM Professionals p,Messages m WHERE m.Sender=p.ProfessionalID AND m.receiver=?;
+//Get the dialogs(users that he has messaged) of the user
+func (driver *DBClient) getProfessionalDialogs(professionalID int) ([]ChatDialog, error) {
+	dialog := ChatDialog{}
+	//Get the users that the professional has messaged
+	rows, err := driver.db.Query(`SELECT DISTINCT p.ProfessionalID, p.First_Name,p.Last_Name,p.Photo FROM Professionals p,Messages m WHERE m.Sender=p.ProfessionalID AND m.receiver=?`, professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var chatDialogs []ChatDialog
+	for rows.Next() {
+		err = rows.Scan(&dialog.ProfessionalID, &dialog.FirstName, &dialog.LastName, &dialog.ProfessionalPhoto)
+		if err != nil {
+			return nil, err
+		}
+		//Change photo path to a url
+		dialog.setPhotoURL()
+		chatDialogs = append(chatDialogs, dialog)
+	}
+	//Get number of unread messages from each user
+	for i := 0; i < len(chatDialogs); i++ {
+		rows, err := driver.db.Query(`SELECT COUNT(*) FROM Messages m WHERE m.Sender = ? AND m.Receiver=? AND m.Seen = 0`, chatDialogs[i].ProfessionalID, professionalID)
+		if err != nil {
+			return nil, err
+		}
+		var count int
+		for rows.Next() {
+			err = rows.Scan(&count)
+			if err != nil {
+				return nil, err
+			}
+			//Change photo path to a url
+			chatDialogs[i].UnreadMessages = count
+		}
+	}
+	return chatDialogs, nil
+}
+
+//SELECT COUNT(*) FROM Messages m WHERE m.Sender = ? AND m.Receiver=? AND m.Seen = 0;
+//Order them by count?
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

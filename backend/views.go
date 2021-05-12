@@ -829,6 +829,22 @@ func getChatMessages(c *gin.Context) {
 	}
 }
 
+//GET /v1/LinkedIn/chatDialogs
+func chatDialogs(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		dialogs, err := professional.getChatDialogs()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"dialogs": dialogs})
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

@@ -88,3 +88,18 @@ func (c *ChatMessage) setPhotoURL() {
 	photoURL := mediaURL + c.Photo
 	c.Photo = photoURL
 }
+
+//ChatDialog json struct
+type ChatDialog struct {
+	ProfessionalID    int    `json:"professionalID"`
+	FirstName         string `json:"firstName"`
+	LastName          string `json:"lastName"`
+	ProfessionalPhoto string `json:"professionalPhoto"`
+	UnreadMessages    int    `json:"unreadMessages"`
+}
+
+//Create profile photo url
+func (c *ChatDialog) setPhotoURL() {
+	photoURL := mediaURL + c.ProfessionalPhoto
+	c.ProfessionalPhoto = photoURL
+}

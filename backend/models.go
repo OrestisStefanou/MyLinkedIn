@@ -135,6 +135,12 @@ func (prof *Professional) getUnreadDialogs() (int, error) {
 	return count, err
 }
 
+//Get the chat dialogs of a Professional
+func (prof *Professional) getChatDialogs() ([]ChatDialog, error) {
+	dialogs, err := dbclient.getProfessionalDialogs(prof.ID)
+	return dialogs, err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
