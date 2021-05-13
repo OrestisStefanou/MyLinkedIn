@@ -11,6 +11,7 @@ import NetworkPage from "./homepage/NetworkPage";
 import ProfessionalProfile from "./profile/ProfessionalProfile";
 import MessagesPage from "./homepage/MessagesPage";
 import ChatPage from "./homepage/ChatPage";
+import JobAdsPage from "./homepage/JobAdsPage";
 
 const App = () => {
     return(
@@ -39,6 +40,9 @@ const App = () => {
                 </Route>
                 <Route exact path='/messages'>
                     <MessagesPage/>
+                </Route>
+                <Route exact path='/jobs'>
+                    <JobAdsPage/>
                 </Route>
                 <Route exact path='/professionals/:email' children={<ProfessionalProfile/>}></Route>
                 <Route exact path='/chat/:id' children={<ChatPage/>}></Route>

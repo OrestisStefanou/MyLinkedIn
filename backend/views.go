@@ -845,6 +845,42 @@ func chatDialogs(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/addJobAd
+func addJobAd(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var newJobAd JobAd
+		file, filerError := c.FormFile("file")
+		newJobAd.Title = c.PostForm("title")
+		newJobAd.JobDescription = c.PostForm("description")
+		newJobAd.UploaderID = professional.ID
+		var filePath string
+		if filerError == nil { //In case of attached file
+			//Check if is a valid file
+			extension := filepath.Ext(file.Filename)
+			if !validFileExtension(extension) {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file type"})
+				return
+			}
+			//Create a directory for the ad
+			now := time.Now()
+			os.MkdirAll(filepath.Join(mediaDir, professional.Email, newJobAd.Title, now.Format("2006-02-01 15:04:05.000 MST")), 0755)
+			//Upload the file
+			filePath = filepath.Join(mediaDir, professional.Email, newJobAd.Title, now.Format("2006-02-01 15:04:05.000 MST"), file.Filename)
+			c.SaveUploadedFile(file, filePath)
+			//Path to save in the database
+			filePath = filepath.Join(professional.Email, newJobAd.Title, now.Format("2006-02-01 15:04:05.000 MST"), file.Filename)
+		} else {
+			filePath = ""
+		}
+		newJobAd.AttachedFile = filePath
+		newJobAd.save()
+		c.JSON(http.StatusCreated, gin.H{"adInfo": newJobAd})
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

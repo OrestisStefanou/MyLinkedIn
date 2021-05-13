@@ -3,10 +3,10 @@
 -Otan o xristis allazi foto profil na diagrafo tin proigumeni pou ixe?
 -Manage visibility of user's data
 
--I sinartisi getArticles sto database.go na allaksi
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
+-Create an endpoint to create a job ad
 
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p

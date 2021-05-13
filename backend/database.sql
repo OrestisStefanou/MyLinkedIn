@@ -103,6 +103,13 @@ CREATE TABLE Messages (
        FOREIGN KEY(Receiver) REFERENCES Professionals(ProfessionalID)
 );
 
-
-SELECT * FROM Articles WHERE (UploaderID IN (SELECT ProfessionalID2 FROM Friendships WHERE ProfessionalID1 = 16) OR  UploaderID IN (SELECT ProfessionalID1 FROM Friendships WHERE ProfessionalID2=16)) 
-OR (id IN(SELECT al.ArticleID FROM Article_Likes al,Friendships f WHERE al.ProfessionalID = f.ProfessionalID2 AND f.ProfessionalID1=16) OR id IN(SELECT al.ArticleID FROM Article_Likes al,Friendships f WHERE al.ProfessionalID = f.ProfessionalID1 AND f.ProfessionalID2=16)) ORDER BY Created DESC;
+CREATE TABLE JobAds (
+       id int NOT NULL AUTO_INCREMENT,
+       UploaderID int NOT NULL,
+       Title varchar(255) NOT NULL,
+       Job_Description TEXT  NOT NULL,
+       Attached_File varchar(255),
+       Created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+       PRIMARY KEY(id),
+       FOREIGN KEY(UploaderID) REFERENCES Professionals(ProfessionalID)      
+);

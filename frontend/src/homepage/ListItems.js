@@ -20,7 +20,7 @@ export default function ListItems() {
       </ListItemIcon>
       <ListItemText primary="My profile" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={()=>history.push(`/jobs`)}>
       <ListItemIcon>
         <DescriptionIcon />
       </ListItemIcon>
