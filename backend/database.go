@@ -318,9 +318,6 @@ func (driver *DBClient) getArticle(articleID int) (Article, error) {
 	return article, nil
 }
 
-//I SINARTISI DAME THA ALLAKSI JE THA PIANI ORISMA TO ID TOU
-//PROFESSIONAL POU THELOUME NA PIASOUME TA ARTHRA POU THA EMFANISTOUN
-//STO XRONOLOGIO TOU
 func (driver *DBClient) getArticles(professionalID int) ([]Article, error) {
 	articleInfo := Article{}
 	rows, err := driver.db.Query(`SELECT * FROM Articles WHERE 
@@ -717,10 +714,8 @@ func (driver *DBClient) getUnreadDialogs(professionalID int) (int, error) {
 	return count, nil
 }
 
-//Functions to use for getting the user that a professioanl already has a chat and how many
+//Function to use for getting the users that a professioanl already has a chat and how many
 //unread messages he has from each one
-//SELECT DISTINCT p.ProfessionalID, p.First_Name,p.Last_Name,p.Photo FROM Professionals p,Messages m WHERE m.Sender=p.ProfessionalID AND m.receiver=?;
-//Get the dialogs(users that he has messaged) of the user
 func (driver *DBClient) getProfessionalDialogs(professionalID int) ([]ChatDialog, error) {
 	dialog := ChatDialog{}
 	//Get the users that the professional has messaged
@@ -757,8 +752,23 @@ func (driver *DBClient) getProfessionalDialogs(professionalID int) ([]ChatDialog
 	return chatDialogs, nil
 }
 
-//SELECT COUNT(*) FROM Messages m WHERE m.Sender = ? AND m.Receiver=? AND m.Seen = 0;
-//Order them by count?
+//JobAd related functions
+func (driver *DBClient) createJobAd(ad *JobAd) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO JobAds SET 
+		UploaderID=?,
+		Title=?,
+		Job_Description=?,
+		Attached_File=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(ad.UploaderID, ad.Title, ad.JobDescription, ad.AttachedFile)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 func checkErr(err error) {
 	if err != nil {

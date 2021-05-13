@@ -341,3 +341,19 @@ func (m *Message) save() error {
 	err := dbclient.createMessage(m)
 	return err
 }
+
+//JobAd json struct
+type JobAd struct {
+	ID             int     `json:"id"`
+	UploaderID     int     `json:"uploaderId"`
+	Title          string  `json:"title" binding:"required"`
+	JobDescription string  `json:"jobDescription" binding:"required"`
+	AttachedFile   string  `json:"file"`
+	Created        []uint8 `json:"created"`
+}
+
+//JobAd save method
+func (ad *JobAd) save() error {
+	err := dbclient.createJobAd(ad)
+	return err
+}
