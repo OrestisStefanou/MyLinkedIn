@@ -6,7 +6,9 @@
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
--Create an endpoint to create a job ad
+-Create jobAd component
+-Create jobAds component
+-Create an endpoint to get the jobAds of a professional
 
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p

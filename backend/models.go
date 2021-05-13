@@ -357,3 +357,9 @@ func (ad *JobAd) save() error {
 	err := dbclient.createJobAd(ad)
 	return err
 }
+
+//Create a url for the attached file of the job ad
+func (ad *JobAd) setFileURL() {
+	fileURL := mediaURL + ad.AttachedFile
+	ad.AttachedFile = fileURL
+}
