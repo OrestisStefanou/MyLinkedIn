@@ -321,9 +321,14 @@ func (driver *DBClient) getArticle(articleID int) (Article, error) {
 //I SINARTISI DAME THA ALLAKSI JE THA PIANI ORISMA TO ID TOU
 //PROFESSIONAL POU THELOUME NA PIASOUME TA ARTHRA POU THA EMFANISTOUN
 //STO XRONOLOGIO TOU
-func (driver *DBClient) getArticles() ([]Article, error) {
+func (driver *DBClient) getArticles(professionalID int) ([]Article, error) {
 	articleInfo := Article{}
-	rows, err := driver.db.Query("SELECT * FROM Articles ORDER BY Created DESC")
+	rows, err := driver.db.Query(`SELECT * FROM Articles WHERE 
+	(UploaderID IN (SELECT ProfessionalID2 FROM Friendships WHERE ProfessionalID1 = ?) 
+	OR  UploaderID IN (SELECT ProfessionalID1 FROM Friendships WHERE ProfessionalID2=?)) 
+	OR (id IN(SELECT al.ArticleID FROM Article_Likes al,Friendships f WHERE al.ProfessionalID = f.ProfessionalID2 AND f.ProfessionalID1=?) 
+	OR id IN(SELECT al.ArticleID FROM Article_Likes al,Friendships f WHERE al.ProfessionalID = f.ProfessionalID1 AND f.ProfessionalID2=?)) 
+	ORDER BY Created DESC;`, professionalID, professionalID, professionalID, professionalID)
 	if err != nil {
 		return nil, err
 	}

@@ -102,3 +102,7 @@ CREATE TABLE Messages (
        FOREIGN KEY(Sender) REFERENCES Professionals(ProfessionalID),
        FOREIGN KEY(Receiver) REFERENCES Professionals(ProfessionalID)
 );
+
+
+SELECT * FROM Articles WHERE (UploaderID IN (SELECT ProfessionalID2 FROM Friendships WHERE ProfessionalID1 = 16) OR  UploaderID IN (SELECT ProfessionalID1 FROM Friendships WHERE ProfessionalID2=16)) 
+OR (id IN(SELECT al.ArticleID FROM Article_Likes al,Friendships f WHERE al.ProfessionalID = f.ProfessionalID2 AND f.ProfessionalID1=16) OR id IN(SELECT al.ArticleID FROM Article_Likes al,Friendships f WHERE al.ProfessionalID = f.ProfessionalID1 AND f.ProfessionalID2=16)) ORDER BY Created DESC;

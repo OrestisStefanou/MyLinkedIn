@@ -95,7 +95,7 @@ func (prof *Professional) removeSkill(skillInfo Skill) error {
 
 //Get the feed of a professional
 func (prof *Professional) getFeed() ([]Article, error) {
-	feed, err := dbclient.getArticles()
+	feed, err := dbclient.getArticles(prof.ID)
 	return feed, err
 }
 

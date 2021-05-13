@@ -7,8 +7,6 @@
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
--Create a component to show the dialogs
--Show messages in ChatPage component
 
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p
