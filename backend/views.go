@@ -1056,6 +1056,40 @@ func addJobAdComment(c *gin.Context) {
 	}
 }
 
+//GET /v1/LinkedIn/professionalJobAds
+func getProfeesionalJobAds(c *gin.Context) {
+	type UserJobAd struct {
+		Ad                      JobAd          `json:"ad"`
+		InterestedProfessionals []Professional `json:"interestedProfessionals"`
+	}
+
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var jobAds []UserJobAd
+		//Get the job ads that the user uploaded
+		userAds, err := professional.getMyJobAds()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		for i := 0; i < len(userAds); i++ {
+			//Get the interested Professionals for each job ad
+			interestedProf, err := userAds[i].getInterestedProfessionals()
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				jobAd := UserJobAd{userAds[i], interestedProf}
+				jobAds = append(jobAds, jobAd)
+			}
+		}
+		c.JSON(http.StatusOK, gin.H{"profAds": jobAds})
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

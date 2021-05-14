@@ -81,6 +81,7 @@ func main() {
 		v1.POST("/jobAd/removeInterest", removeJobInterest)
 		v1.POST("/jobAd/addComment", addJobAdComment)
 		v1.POST("/getJobAdDetails", getJobAdDetails)
+		v1.GET("/professionalJobAds", getProfeesionalJobAds)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)

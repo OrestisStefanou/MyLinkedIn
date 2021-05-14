@@ -153,6 +153,12 @@ func (prof *Professional) isInterestedAtJob(ad JobAd) (bool, error) {
 	return interested, err
 }
 
+//Get the job ads that the user uploaded
+func (prof *Professional) getMyJobAds() ([]JobAd, error) {
+	jobAds, err := dbclient.getUserUploadedJobAds(prof.ID)
+	return jobAds, err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
@@ -382,7 +388,7 @@ func (ad *JobAd) getComments() ([]JobAdCommentResponse, error) {
 	return comments, err
 }
 
-//Get the interest of a jobAd
+//Get the interest(how many are interested) of a jobAd
 func (ad *JobAd) getInterest() (int, error) {
 	likes, err := dbclient.getJobAdInterest(ad)
 	return likes, err
@@ -424,6 +430,11 @@ func (ad *JobAd) addComment(comment JobComment) error {
 	comment.JobID = ad.ID
 	err := dbclient.createJobComment(&comment)
 	return err
+}
+
+func (ad *JobAd) getInterestedProfessionals() ([]Professional, error) {
+	interested, err := dbclient.getInterestedProfessionals(ad.ID)
+	return interested, err
 }
 
 //JobInterest json struct
