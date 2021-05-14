@@ -12,6 +12,7 @@ import ProfessionalProfile from "./profile/ProfessionalProfile";
 import MessagesPage from "./homepage/MessagesPage";
 import ChatPage from "./homepage/ChatPage";
 import JobAdsPage from "./homepage/JobAdsPage";
+import UserJobAdsPage from "./homepage/UserJobAdsPage";
 
 const App = () => {
     return(
@@ -43,6 +44,9 @@ const App = () => {
                 </Route>
                 <Route exact path='/jobs'>
                     <JobAdsPage/>
+                </Route>
+                <Route exact path='/myAds'>
+                    <UserJobAdsPage/>
                 </Route>
                 <Route exact path='/professionals/:email' children={<ProfessionalProfile/>}></Route>
                 <Route exact path='/chat/:id' children={<ChatPage/>}></Route>

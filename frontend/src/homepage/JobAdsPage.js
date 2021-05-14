@@ -25,6 +25,7 @@ import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
 import JobAdForm from "./JobAdForm";
 import JobAds from "./JobAds";
+import WorkIcon from '@material-ui/icons/Work';
 
 function Copyright() {
   return (
@@ -217,6 +218,17 @@ export default function JobAdsPage() {
               <Paper className={fixedHeightPaper}>
                 <Deposits />
               </Paper>
+            </Grid>
+            <Grid item xs={12} md={4} lg={3}>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              startIcon={<WorkIcon />}
+              onClick={()=> history.push(`/myAds`)}
+            >
+              My Job Ads
+            </Button>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>

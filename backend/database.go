@@ -770,10 +770,12 @@ func (driver *DBClient) createJobAd(ad *JobAd) error {
 	return nil
 }
 
-//CHANGE THIS FUNCTIION
 func (driver *DBClient) getJobAds(professionalID int) ([]JobAd, error) {
 	ad := JobAd{}
-	rows, err := driver.db.Query(`SELECT * FROM JobAds`)
+	rows, err := driver.db.Query(`SELECT * FROM JobAds WHERE 
+	(UploaderID IN (SELECT ProfessionalID2 FROM Friendships WHERE ProfessionalID1 = ?) 
+	OR  UploaderID IN (SELECT ProfessionalID1 FROM Friendships WHERE ProfessionalID2=?)) ORDER BY Created DESC`, professionalID, professionalID)
+
 	if err != nil {
 		return nil, err
 	}
@@ -930,6 +932,40 @@ func (driver *DBClient) getJobAd(adID int) (JobAd, error) {
 		}
 	}
 	return ad, nil
+}
+
+func (driver *DBClient) getUserUploadedJobAds(profeesionalID int) ([]JobAd, error) {
+	ad := JobAd{}
+	rows, err := driver.db.Query("SELECT * FROM JobAds WHERE UploaderID=?", profeesionalID)
+	if err != nil {
+		return nil, err
+	}
+	var jobsArray []JobAd
+	for rows.Next() {
+		err = rows.Scan(&ad.ID, &ad.UploaderID, &ad.Title, &ad.JobDescription, &ad.AttachedFile, &ad.Created)
+		if err != nil {
+			return nil, err
+		}
+		jobsArray = append(jobsArray, ad)
+	}
+	return jobsArray, nil
+}
+
+func (driver *DBClient) getInterestedProfessionals(jobID int) ([]Professional, error) {
+	prof := Professional{}
+	rows, err := driver.db.Query("SELECT * FROM Professionals WHERE ProfessionalID IN (SELECT ProfessionalID FROM Job_Interest WHERE JobID=?)", jobID)
+	if err != nil {
+		return nil, err
+	}
+	var usersArray []Professional
+	for rows.Next() {
+		err = rows.Scan(&prof.ID, &prof.FirstName, &prof.LastName, &prof.Email, &prof.Password, &prof.PhoneNumber, &prof.Photo)
+		if err != nil {
+			return nil, err
+		}
+		usersArray = append(usersArray, prof)
+	}
+	return usersArray, nil
 }
 
 func checkErr(err error) {

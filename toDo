@@ -6,9 +6,12 @@
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
--Create an endpoint to get the details of a job ad
--Create an endpoint to add a comment to a job add
--Find a way to show the professionals that are interested for the job that a user uploaded
+-Create a page to show the professionals that are interested for the job that a user uploaded
+
+struct{
+    JobAd ad
+    []Professional interestedPeople
+}
 
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p
