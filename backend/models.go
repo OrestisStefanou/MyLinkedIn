@@ -141,6 +141,18 @@ func (prof *Professional) getChatDialogs() ([]ChatDialog, error) {
 	return dialogs, err
 }
 
+//Get the job ads related to the professional
+func (prof *Professional) getAds() ([]JobAd, error) {
+	ads, err := dbclient.getJobAds(prof.ID)
+	return ads, err
+}
+
+//Check if a professional is interested in a job
+func (prof *Professional) isInterestedAtJob(ad JobAd) (bool, error) {
+	interested, err := dbclient.professionalInterestedForJob(prof.ID, ad)
+	return interested, err
+}
+
 //Education json struct
 type Education struct {
 	ID             int    `json:"id"`
@@ -362,4 +374,82 @@ func (ad *JobAd) save() error {
 func (ad *JobAd) setFileURL() {
 	fileURL := mediaURL + ad.AttachedFile
 	ad.AttachedFile = fileURL
+}
+
+//Get the comments of a jobAd
+func (ad *JobAd) getComments() ([]JobAdCommentResponse, error) {
+	comments, err := dbclient.getJobAdComments(ad)
+	return comments, err
+}
+
+//Get the interest of a jobAd
+func (ad *JobAd) getInterest() (int, error) {
+	likes, err := dbclient.getJobAdInterest(ad)
+	return likes, err
+}
+
+//Get the info of the professional who uploaded the ad
+func (ad *JobAd) getUploader() (Professional, error) {
+	professional, err := dbclient.getJobAdUploader(ad.UploaderID)
+	professional.Password = ""
+	return professional, err
+}
+
+//Check if the attached file of the article is an image
+func (ad *JobAd) fileIsImage() (bool, error) {
+	fileName, err := dbclient.getJobAdFilePath(ad.ID)
+	if err != nil {
+		return false, err
+	}
+	extension := filepath.Ext(fileName)
+	if validImgExtension(extension) {
+		return true, nil
+	}
+	return false, nil
+}
+
+func (ad *JobAd) addInterest(interest JobInterest) error {
+	interest.JobID = ad.ID
+	err := dbclient.createJobInterest(&interest)
+	return err
+}
+
+func (ad *JobAd) removeInterest(interest JobInterest) error {
+	interest.JobID = ad.ID
+	err := dbclient.deleteJobInterest(interest)
+	return err
+}
+
+func (ad *JobAd) addComment(comment JobComment) error {
+	comment.JobID = ad.ID
+	err := dbclient.createJobComment(&comment)
+	return err
+}
+
+//JobInterest json struct
+type JobInterest struct {
+	ID             int `json:"id"`
+	ProfessionalID int `json:"professionalId"`
+	JobID          int `json:"jobId" binding:"required"`
+}
+
+//ArticleLike save method
+func (interest *JobInterest) save() error {
+	err := dbclient.createJobInterest(interest)
+	return err
+}
+
+//JobComment json struct
+type JobComment struct {
+	ID             int     `json:"id"`
+	ProfessionalID int     `json:"professionalId"`
+	JobID          int     `json:"jobId" binding:"required"`
+	Comment        string  `json:"comment" binding:"required"`
+	Created        []uint8 `json:"created"`
+}
+
+//ArticleComment save method
+func (comment *JobComment) save() error {
+	err := dbclient.createJobComment(comment)
+	return err
 }

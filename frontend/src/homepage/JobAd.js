@@ -13,12 +13,12 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ChatBubbleOutlineOutlinedIcon from '@material-ui/icons/ChatBubbleOutlineOutlined';
-import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
+import GradeIcon from '@material-ui/icons/Grade';
+import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,7 +94,7 @@ export default function JobAd(props) {
 
   const handleLike = () => {    //Change the name to handle interest
     if (like === false){
-      fetch('http://localhost:8080/v1/LinkedIn/article/addLike', {  //Change the endpoint
+      fetch('http://localhost:8080/v1/LinkedIn/jobAd/addInterest', {  
         method: "POST",
         mode:"cors",
         credentials:"include",
@@ -113,7 +113,7 @@ export default function JobAd(props) {
                 }
           });       
     }else{
-      fetch('http://localhost:8080/v1/LinkedIn/article/removeLike', {   //Change the endpoint
+      fetch('http://localhost:8080/v1/LinkedIn/jobAd/removeInterest', {   
         method: "POST",
         mode:"cors",
         credentials:"include",
@@ -135,7 +135,7 @@ export default function JobAd(props) {
   };
 
   useEffect(() => {
-    fetch('http://localhost:8080/v1/LinkedIn/getArticleDetails', {  //Change the endpoint 
+    fetch('http://localhost:8080/v1/LinkedIn/getJobAdDetails', {  //Change the endpoint 
     method: "POST",
     mode:"cors",
     credentials:"include",
@@ -190,7 +190,7 @@ export default function JobAd(props) {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites" onClick={handleLike}>
-        {like ? <ThumbUpAltIcon/> : <ThumbUpAltOutlinedIcon /> }
+        {like ? <GradeIcon/> : <GradeOutlinedIcon /> }
         </IconButton>
         {adInterest}
         <IconButton aria-label="share" onClick={handleExpandClick}>
@@ -245,7 +245,7 @@ export default function JobAd(props) {
           {/*Show the comments */}
           {adComments.map((adComment) => {
             return(
-              <Typography key={articleComment.id} variant="subtitle1" gutterBottom>
+              <Typography key={adComment.id} variant="subtitle1" gutterBottom>
                 {adComment.firstName + " " + adComment.lastName + ":" + adComment.comment}
               </Typography>
             )

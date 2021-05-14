@@ -770,6 +770,153 @@ func (driver *DBClient) createJobAd(ad *JobAd) error {
 	return nil
 }
 
+//CHANGE THIS FUNCTIION
+func (driver *DBClient) getJobAds(professionalID int) ([]JobAd, error) {
+	ad := JobAd{}
+	rows, err := driver.db.Query(`SELECT * FROM JobAds`)
+	if err != nil {
+		return nil, err
+	}
+	var jobAds []JobAd
+	for rows.Next() {
+		err = rows.Scan(&ad.ID, &ad.UploaderID, &ad.Title, &ad.JobDescription, &ad.AttachedFile, &ad.Created)
+		if err != nil {
+			return nil, err
+		}
+		if len(ad.AttachedFile) > 0 {
+			ad.setFileURL() //Change the path of the file to a url
+		}
+		jobAds = append(jobAds, ad)
+	}
+	return jobAds, nil
+}
+
+func (driver *DBClient) createJobInterest(interest *JobInterest) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Job_Interest SET 
+		ProfessionalID=?,
+		JobID=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(interest.ProfessionalID, interest.JobID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) deleteJobInterest(interest JobInterest) error {
+	stmt, err := driver.db.Prepare("DELETE FROM Job_Interest WHERE ProfessionalID=? AND JobID=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(interest.ProfessionalID, interest.JobID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) createJobComment(comment *JobComment) error {
+	stmt, err := driver.db.Prepare(`INSERT INTO Job_Comments SET 
+		ProfessionalID=?,
+		JobID=?,
+		Comment=?`,
+	)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(comment.ProfessionalID, comment.JobID, comment.Comment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (driver *DBClient) getJobAdUploader(professionalID int) (Professional, error) {
+	professional := Professional{}
+	rows, err := driver.db.Query("SELECT * FROM Professionals WHERE ProfessionalID=?", professionalID)
+	if err != nil {
+		return professional, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&professional.ID, &professional.FirstName, &professional.LastName, &professional.Email, &professional.Password, &professional.PhoneNumber, &professional.Photo)
+		if err != nil {
+			return professional, err
+		}
+	}
+	return professional, nil
+}
+
+//Get the comments of a job ad
+func (driver *DBClient) getJobAdComments(ad *JobAd) ([]JobAdCommentResponse, error) {
+	comment := JobAdCommentResponse{}
+	rows, err := driver.db.Query("SELECT c.id,p.First_Name,p.Last_Name,c.Comment FROM Professionals p,Job_Comments c WHERE c.JobID = ? AND c.ProfessionalID = p.ProfessionalID ORDER BY c.Created", ad.ID)
+	if err != nil {
+		return nil, err
+	}
+	var commentsArray []JobAdCommentResponse
+	for rows.Next() {
+		err = rows.Scan(&comment.ID, &comment.FirstName, &comment.LastName, &comment.Comment)
+		if err != nil {
+			return commentsArray, err
+		}
+		commentsArray = append(commentsArray, comment)
+	}
+	return commentsArray, nil
+}
+
+//Get the interest of a jobAd
+func (driver *DBClient) getJobAdInterest(ad *JobAd) (int, error) {
+	var interestCount int
+	rows, err := driver.db.Query("SELECT COUNT(*) FROM Job_Interest WHERE JobID = ?", ad.ID)
+	if err != nil {
+		return 0, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&interestCount)
+		if err != nil {
+			return 0, err
+		}
+	}
+	return interestCount, nil
+}
+
+func (driver *DBClient) getJobAdFilePath(adID int) (string, error) {
+	var path string
+	rows, err := driver.db.Query("SELECT Attached_File FROM JobAds WHERE id=?", adID)
+	if err != nil {
+		return path, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&path)
+		if err != nil {
+			return path, err
+		}
+	}
+	return path, nil
+}
+
+//Check if a professional is interested in a  particular job
+func (driver *DBClient) professionalInterestedForJob(professionalID int, ad JobAd) (bool, error) {
+	var interest JobInterest
+	rows, err := driver.db.Query("SELECT * FROM Job_Interest WHERE ProfessionalID=? AND JobID=?", professionalID, ad.ID)
+	if err != nil {
+		return false, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&interest.ID, &interest.ProfessionalID, &interest.JobID)
+		if err != nil {
+			return false, err
+		}
+	}
+	if interest.ID > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

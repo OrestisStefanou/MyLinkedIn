@@ -881,6 +881,127 @@ func addJobAd(c *gin.Context) {
 	}
 }
 
+//GET /v1/LinkedIn/jobAds
+func getJobAds(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		ads, err := professional.getAds()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"jobAds": ads})
+	}
+}
+
+//POST /v1/LinkedIn/jobAd/addInterest
+func addJobInterest(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var ad JobAd
+		if err := c.ShouldBindJSON(&ad); err == nil {
+			//Create interest object
+			interest := JobInterest{}
+			interest.ProfessionalID = professional.ID //ID of the user who is interested for the job
+			err = ad.addInterest(interest)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			if professional.ID != ad.UploaderID {
+				//Create a notification
+				notification := Notification{}
+				notification.ProfessionalID = ad.UploaderID
+				notification.Seen = false
+				notification.Msg = fmt.Sprintf("%s %s is interested for the job with title %s", professional.FirstName, professional.LastName, ad.Title)
+				err = notification.save()
+				if err != nil {
+					fmt.Println(err)
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+					return
+				}
+			}
+			c.JSON(http.StatusOK, gin.H{"message": "Interest added"})
+
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		}
+	}
+}
+
+//POST /v1/LinkedIn/jobAd/removeInterest
+func removeJobInterest(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var ad JobAd
+		if err := c.ShouldBindJSON(&ad); err == nil {
+			//Create interest object
+			interest := JobInterest{}
+			interest.ProfessionalID = professional.ID //ID of the user who is not interested anymore for the job
+			err = ad.removeInterest(interest)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Interest removed"})
+			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		}
+	}
+}
+
+//POST /v1/LinkedIn/getJobAdDetails
+func getJobAdDetails(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var ad JobAd
+		if err := c.ShouldBindJSON(&ad); err == nil {
+			adUploader, err := ad.getUploader()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			hasImage, err := ad.fileIsImage()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			//Check if user is interested for this job
+			interested, err := professional.isInterestedAtJob(ad)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			//Get the comments of the job ad
+			comments, err := ad.getComments()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			//Get the interest of the job ad
+			interest, err := ad.getInterest()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"uploader": adUploader, "hasImage": hasImage, "interested": interested, "comments": comments, "interest": interest})
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		}
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

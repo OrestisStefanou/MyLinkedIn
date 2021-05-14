@@ -76,6 +76,10 @@ func main() {
 		v1.GET("/chatDialogs", chatDialogs)
 		//JobAd endpoints
 		v1.POST("/addJobAd", addJobAd)
+		v1.GET("/jobAds", getJobAds)
+		v1.POST("/jobAd/addInterest", addJobInterest)
+		v1.POST("/jobAd/removeInterest", removeJobInterest)
+		v1.POST("/getJobAdDetails", getJobAdDetails)
 		//Logout and session endpoints
 		v1.GET("/logout", logout)
 		v1.GET("/authenticated", authenticated)

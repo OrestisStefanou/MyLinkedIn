@@ -103,3 +103,11 @@ func (c *ChatDialog) setPhotoURL() {
 	photoURL := mediaURL + c.ProfessionalPhoto
 	c.ProfessionalPhoto = photoURL
 }
+
+//JobAdCommentResponse json struct
+type JobAdCommentResponse struct {
+	ID        int    `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Comment   string `json:"comment"`
+}

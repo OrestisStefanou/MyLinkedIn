@@ -113,3 +113,23 @@ CREATE TABLE JobAds (
        PRIMARY KEY(id),
        FOREIGN KEY(UploaderID) REFERENCES Professionals(ProfessionalID)      
 );
+
+CREATE TABLE Job_Interest (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       JobID int NOT NULL,
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID),
+       FOREIGN KEY(JobID) REFERENCES JobAds(id)
+);
+
+CREATE TABLE Job_Comments (
+       id int NOT NULL AUTO_INCREMENT,
+       ProfessionalID int NOT NULL,
+       JobID int NOT NULL,
+       Comment varchar(255),
+       Created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+       PRIMARY KEY(id),
+       FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID),
+       FOREIGN KEY(JobID) REFERENCES JobAds(id)
+);

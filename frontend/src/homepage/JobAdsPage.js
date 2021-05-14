@@ -24,6 +24,7 @@ import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
 import JobAdForm from "./JobAdForm";
+import JobAds from "./JobAds";
 
 function Copyright() {
   return (
@@ -219,7 +220,7 @@ export default function JobAdsPage() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Typography>Show job ads here</Typography>
+                <JobAds/>
               </Paper>
             </Grid>
           </Grid>
