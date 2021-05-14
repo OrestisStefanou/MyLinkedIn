@@ -917,6 +917,21 @@ func (driver *DBClient) professionalInterestedForJob(professionalID int, ad JobA
 	return false, nil
 }
 
+func (driver *DBClient) getJobAd(adID int) (JobAd, error) {
+	ad := JobAd{}
+	rows, err := driver.db.Query("SELECT * FROM JobAds WHERE id=?", adID)
+	if err != nil {
+		return ad, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&ad.ID, &ad.UploaderID, &ad.Title, &ad.JobDescription, &ad.AttachedFile, &ad.Created)
+		if err != nil {
+			return ad, err
+		}
+	}
+	return ad, nil
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)

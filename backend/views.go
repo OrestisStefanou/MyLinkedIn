@@ -1002,6 +1002,60 @@ func getJobAdDetails(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/jobAd/addComment
+func addJobAdComment(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var comment JobComment
+		if err := c.ShouldBindJSON(&comment); err == nil {
+			//Get JobAd Object
+			ad, err := dbclient.getJobAd(comment.JobID)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			comment.ProfessionalID = professional.ID //ID of the user who commented to the ad
+			err = ad.addComment(comment)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				//Create a notification
+				uploader, err := ad.getUploader()
+				if err != nil {
+					fmt.Println(err)
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+					return
+				}
+				if professional.ID != uploader.ID {
+					notification := Notification{}
+					notification.ProfessionalID = uploader.ID
+					notification.Seen = false
+					notification.Msg = fmt.Sprintf("%s %s commented %s on your job ad with title %s", professional.FirstName, professional.LastName, comment.Comment, ad.Title)
+					err = notification.save()
+					if err != nil {
+						fmt.Println(err)
+						c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+						return
+					}
+				}
+				response := JobAdCommentResponse{}
+				response.ID = -1 //temporary ID until the user refreshes the page
+				response.FirstName = professional.FirstName
+				response.LastName = professional.LastName
+				response.Comment = comment.Comment
+				c.JSON(http.StatusOK, gin.H{"comment": response})
+			}
+		} else {
+			fmt.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		}
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

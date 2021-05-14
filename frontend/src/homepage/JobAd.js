@@ -56,7 +56,7 @@ export default function JobAd(props) {
   const [uploaderInfo,setUploaderInfo] = useState({firstName:"",lastName:""});
   const [hasImage,setHasImage] = useState(false);
   const [like,setLike] = useState(false);
-  const [comment,setComment] = useState({adId:props.adInfo.id,comment:""});
+  const [comment,setComment] = useState({jobId:props.adInfo.id,comment:""});
   const [adComments,setAdComments] = useState([]);
   const [adInterest,setAdInterest] = useState(0);
 
@@ -72,7 +72,8 @@ export default function JobAd(props) {
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
-    fetch('http://localhost:8080/v1/LinkedIn/article/addComment', {     //Change the endpoint here
+    console.log(comment);
+    fetch('http://localhost:8080/v1/LinkedIn/jobAd/addComment', {     
       method: "POST",
       mode:"cors",
       credentials:"include",
@@ -86,6 +87,7 @@ export default function JobAd(props) {
                   console.log(json.error);
               }else{
                   //Show the comment on the comment section
+                  setComment({jobId:props.adInfo.id,comment:""});
                   console.log(json);
                   setAdComments([...adComments,json.comment]);
               }
@@ -98,7 +100,7 @@ export default function JobAd(props) {
         method: "POST",
         mode:"cors",
         credentials:"include",
-        body: JSON.stringify(props.articleInfo),
+        body: JSON.stringify(props.adInfo),
         headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
         })
         .then(response => response.json())
@@ -151,11 +153,11 @@ export default function JobAd(props) {
                 console.log(json);
                 setUploaderInfo(json.uploader);
                 setHasImage(json.hasImage);
-                setLike(json.liked);
+                setLike(json.interested);
                 if (json.comments !== null){
                   setAdComments(json.comments);
                 }
-                setAdInterest(json.likes);
+                setAdInterest(json.interest);
             }
         });    
   },[props.adInfo]);
@@ -224,6 +226,7 @@ export default function JobAd(props) {
                 label="Comment"
                 type="text"
                 id="content"
+                value={comment['comment']}
                 onChange={handleChange}
                 autoComplete="content"
               />
