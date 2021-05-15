@@ -425,6 +425,22 @@ func getArticles(c *gin.Context) {
 	}
 }
 
+//GET /v1/LinkedIn/getProfessionalArticles
+func getProfessionalArticles(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c) //Get professional object from session
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		articles, err := professional.getMyArticles()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusAccepted, gin.H{"articles": articles})
+		}
+	}
+}
+
 //POST /v1/LinkedIn/getArticleDetails
 func getArticleDetails(c *gin.Context) {
 	professional, err := getProfessionalFromSession(c) //Get professional object from session

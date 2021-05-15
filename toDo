@@ -6,7 +6,7 @@
 -Na kamo mia selida error not found
 -Change Deposits component name to ProfileInfo or something
 
--Add the functionality to a user to see the articles he uploaded
+-Add the functionality for a user to see the articles he uploaded
 
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p

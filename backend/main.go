@@ -61,6 +61,7 @@ func main() {
 		v1.POST("/article/addLike", addArticleLike)
 		v1.POST("/article/removeLike", removeArticleLike)
 		v1.POST("/article/addComment", addArticleComment)
+		v1.GET("/getProfessionalArticles", getProfessionalArticles)
 		//Notifications endpoints
 		v1.GET("/notifications", getNotifications)
 		//Friendship endpoints

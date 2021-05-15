@@ -189,7 +189,7 @@ export default function Homepage() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            LinkedIn
+            <Link color="inherit" href="/home">LinkedIn</Link>
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={unreadMessages} color="secondary" onClick={()=>history.push(`/messages`)}>
