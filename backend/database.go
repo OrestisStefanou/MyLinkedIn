@@ -303,6 +303,57 @@ func (driver *DBClient) createArticle(article *Article) error {
 	return nil
 }
 
+func (driver *DBClient) getProfessionalArticles(professionalID int) ([]Article, error) {
+	articleInfo := Article{}
+	rows, err := driver.db.Query(`SELECT * FROM Articles WHERE UploaderID=?`, professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var articlesArray []Article
+	for rows.Next() {
+		err = rows.Scan(&articleInfo.ID, &articleInfo.UploaderID, &articleInfo.Title, &articleInfo.Content, &articleInfo.AttachedFile, &articleInfo.Created)
+		if err != nil {
+			return articlesArray, err
+		}
+		if len(articleInfo.AttachedFile) > 0 { //If there is an attached file
+			articleInfo.setFileURL() //Change the file directory to a url
+		}
+		articlesArray = append(articlesArray, articleInfo)
+	}
+	return articlesArray, nil
+}
+
+func (driver *DBClient) deleteArticle(articleID int) error {
+	//First delete the likes
+	stmt, err := driver.db.Prepare("DELETE FROM Article_Likes WHERE ArticleID=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(articleID)
+	if err != nil {
+		return err
+	}
+	//Then delete the comments
+	stmt, err = driver.db.Prepare("DELETE FROM Article_Comments WHERE ArticleID=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(articleID)
+	if err != nil {
+		return err
+	}
+	//Finally delete the article
+	stmt, err = driver.db.Prepare("DELETE FROM Articles WHERE id=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(articleID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (driver *DBClient) getArticle(articleID int) (Article, error) {
 	article := Article{}
 	rows, err := driver.db.Query("SELECT * FROM Articles WHERE id=?", articleID)

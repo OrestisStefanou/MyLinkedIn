@@ -99,6 +99,12 @@ func (prof *Professional) getFeed() ([]Article, error) {
 	return feed, err
 }
 
+//Get the articles that the professional uploaded
+func (prof *Professional) getMyArticles() ([]Article, error) {
+	articles, err := dbclient.getProfessionalArticles(prof.ID)
+	return articles, err
+}
+
 //Check if a professional liked an article
 func (prof *Professional) likedArticle(article Article) (bool, error) {
 	liked, err := dbclient.professionalLikedArticle(prof.ID, article)
