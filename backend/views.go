@@ -1090,6 +1090,31 @@ func getProfeesionalJobAds(c *gin.Context) {
 	}
 }
 
+//POST /v1/LinkedIn/removeJobAd
+func removeJobAd(c *gin.Context) {
+	professional, err := getProfessionalFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		var ad JobAd
+		if err := c.ShouldBindJSON(&ad); err == nil {
+			if ad.UploaderID != professional.ID {
+				c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated to perform this action"})
+				return
+			}
+			err = dbclient.deleteJobAd(ad.ID)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"message": "Job ad removed"})
+			}
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		}
+	}
+}
+
 //GET /v1/LinkedIn/logout
 func logout(c *gin.Context) {
 	session := sessions.Default(c)

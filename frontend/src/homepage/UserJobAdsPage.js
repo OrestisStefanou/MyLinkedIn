@@ -23,6 +23,7 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import ChatIcon from '@material-ui/icons/Chat';
+import UserJobAd from "./UserJobAd";
 
 function Copyright() {
   return (
@@ -121,6 +122,7 @@ const useStyles = makeStyles((theme) => ({
 export default function JobAdsPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
+  const [myAds,setMyAds] = useState([]);
   
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -150,8 +152,26 @@ export default function JobAdsPage() {
   }
 
   useEffect(() => {
-    //Get job ads of the user here
-  });
+    fetch('http://localhost:8080/v1/LinkedIn/professionalJobAds', {
+      method: "GET",
+      mode:"cors",
+      credentials:"include",
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+      })
+      .then(response => response.json())
+          .then((json) => {
+              if(json.error){
+                  //Show error message
+                  console.log(json.error);
+              }else{
+                  //Add the education info on the screen
+                  console.log(json.profAds);
+                  if (json.profAds!==null){
+                  setMyAds(json.profAds);
+                  }
+              }
+          }); 
+  },[]);
 
   return (
     <div className={classes.root}>
@@ -207,18 +227,17 @@ export default function JobAdsPage() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
-                <Typography>Show the ads of the user here</Typography>
+              {myAds && myAds.map((adInfo) => {
+                return(
+                    <UserJobAd key={adInfo.ad.id} adInfo={adInfo}/>
+                )
+              })}
               </Paper>
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Typography>DELETE?</Typography>
               </Paper>
             </Grid>
           </Grid>

@@ -8,10 +8,5 @@
 
 -Create a page to show the professionals that are interested for the job that a user uploaded
 
-struct{
-    JobAd ad
-    []Professional interestedPeople
-}
-
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p

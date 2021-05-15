@@ -946,6 +946,9 @@ func (driver *DBClient) getUserUploadedJobAds(profeesionalID int) ([]JobAd, erro
 		if err != nil {
 			return nil, err
 		}
+		if len(ad.AttachedFile) > 0 {
+			ad.setFileURL()
+		}
 		jobsArray = append(jobsArray, ad)
 	}
 	return jobsArray, nil
@@ -963,9 +966,43 @@ func (driver *DBClient) getInterestedProfessionals(jobID int) ([]Professional, e
 		if err != nil {
 			return nil, err
 		}
+		if len(prof.Photo) > 0 {
+			prof.setPhotoURL()
+		}
 		usersArray = append(usersArray, prof)
 	}
 	return usersArray, nil
+}
+
+func (driver *DBClient) deleteJobAd(jobAdID int) error {
+	//First delete all the jobInterest for this job
+	stmt, err := driver.db.Prepare("DELETE FROM Job_Interest WHERE JobID=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(jobAdID)
+	if err != nil {
+		return err
+	}
+	//Delete all the comments on this job ad
+	stmt, err = driver.db.Prepare("DELETE FROM Job_Comments WHERE JobID=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(jobAdID)
+	if err != nil {
+		return err
+	}
+	//Finally delete the job ad
+	stmt, err = driver.db.Prepare("DELETE FROM JobAds WHERE id=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(jobAdID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func checkErr(err error) {
