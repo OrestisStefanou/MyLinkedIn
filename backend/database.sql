@@ -141,5 +141,5 @@ CREATE TABLE Admins (
 	Email varchar(255) NOT NULL,
 	Password varchar(255) NOT NULL,
 	Phone_Number varchar(100) NOT NULL,
-	PRIMARY KEY(ProfessionalID)
+	PRIMARY KEY(AdminID)
 );

@@ -93,6 +93,7 @@ func main() {
 	adminEndpoints := router.Group("/admin/LinkedIn")
 	{
 		adminEndpoints.POST("/signin", adminSignin)
+		adminEndpoints.GET("/authenticated", adminAuthenticated)
 	}
 	router.Run()
 }

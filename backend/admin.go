@@ -50,6 +50,17 @@ func getAdminFromSession(c *gin.Context) (Admin, error) {
 
 }
 
+//GET /admin/LinkedIn/authenticated
+func adminAuthenticated(c *gin.Context) {
+	admin, err := getAdminFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		//fmt.Println(professional)
+		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "admin": admin})
+	}
+}
+
 func (driver *DBClient) getAdmin(email string) (Admin, error) {
 	adminInfo := Admin{}
 	rows, err := driver.db.Query("SELECT * FROM Admins WHERE Email=?", email)
