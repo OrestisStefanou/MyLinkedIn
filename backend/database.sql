@@ -133,3 +133,13 @@ CREATE TABLE Job_Comments (
        FOREIGN KEY(ProfessionalID) REFERENCES Professionals(ProfessionalID),
        FOREIGN KEY(JobID) REFERENCES JobAds(id)
 );
+
+CREATE TABLE Admins (
+       AdminID int NOT NULL AUTO_INCREMENT,
+	First_Name varchar(100) NOT NULL,
+	Last_Name varchar(100) NOT NULL,
+	Email varchar(255) NOT NULL,
+	Password varchar(255) NOT NULL,
+	Phone_Number varchar(100) NOT NULL,
+	PRIMARY KEY(ProfessionalID)
+);

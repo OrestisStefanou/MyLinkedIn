@@ -90,5 +90,9 @@ func main() {
 		//Media endpoint
 		v1.StaticFS("/media", http.Dir("./media"))
 	}
+	adminEndpoints := router.Group("/admin/LinkedIn")
+	{
+		adminEndpoints.POST("/signin", adminSignin)
+	}
 	router.Run()
 }
