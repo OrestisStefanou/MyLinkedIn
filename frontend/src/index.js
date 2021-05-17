@@ -13,8 +13,9 @@ import MessagesPage from "./homepage/MessagesPage";
 import ChatPage from "./homepage/ChatPage";
 import JobAdsPage from "./homepage/JobAdsPage";
 import UserJobAdsPage from "./homepage/UserJobAdsPage";
-import ErrorPage from "./errorPage"
-import AdminSignIn from "./admin/AdminSignIn"
+import ErrorPage from "./errorPage";
+import AdminSignIn from "./admin/AdminSignIn";
+import AdminHomepage from "./admin/AdminHomepage";
 
 const App = () => {
     return(
@@ -55,6 +56,9 @@ const App = () => {
                 {/*Admin routes */}
                 <Route exact path='/admin/signin'>
                     <AdminSignIn/>
+                </Route>
+                <Route exact path='/admin/home'>
+                    <AdminHomepage/>
                 </Route>
                 <Route path='*'>
                     <ErrorPage />

@@ -91,7 +91,7 @@ export default function AdminSignIn() {
       if(json.error){
         setErrorMessage(json.error);
       }else{
-        //history.push(`/home`)   //Change this to the homepage of the admin
+        history.push(`/admin/home`)   //Change this to the homepage of the admin
       }
     });
   }
