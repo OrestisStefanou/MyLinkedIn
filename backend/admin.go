@@ -85,3 +85,64 @@ func (driver *DBClient) getAllUsers() ([]UserResponse, error) {
 	}
 	return response, nil
 }
+
+func (driver *DBClient) getUserDetails(userID int) (UserDetailInfo, error) {
+	userInfo := UserDetailInfo{}
+	//Get the professionalInfo first
+	prof, err := dbclient.getProfessionalByID(userID)
+	if err != nil {
+		return userInfo, err
+	}
+	userInfo.UserInfo = prof
+	//Get the education of a professional
+	userInfo.EducationInfo, err = prof.getEducation()
+	if err != nil {
+		return userInfo, err
+	}
+	//Get the experience
+	userInfo.ExperienceInfo, err = prof.getExperience()
+	if err != nil {
+		return userInfo, err
+	}
+	//Get the skills
+	userInfo.SkillsInfo, err = prof.getSkills()
+	if err != nil {
+		return userInfo, err
+	}
+	//Get the uploaded articles
+	userInfo.ArticlesInfo, err = prof.getMyArticles()
+	if err != nil {
+		return userInfo, err
+	}
+	//Get liked Articles
+	userInfo.ArticleLikes, err = prof.getLikedArticles()
+	if err != nil {
+		return userInfo, err
+	}
+	//Get Article comments
+	userInfo.ArticleComments, err = dbclient.getProfessionalArticleComments(prof.ID)
+	if err != nil {
+		return userInfo, err
+	}
+	//Get the connected Professionals
+	userInfo.ConnectedProfessionals, err = prof.getFriends()
+	if err != nil {
+		return userInfo, err
+	}
+	//Get the uploaded job ads
+	userInfo.JobAds, err = prof.getMyJobAds()
+	if err != nil {
+		return userInfo, err
+	}
+	//Get the jobs that the professional is interested
+	userInfo.JobInterests, err = prof.getInterestedJobs()
+	if err != nil {
+		return userInfo, err
+	}
+	//Get the job ad comments that the professional made
+	userInfo.JobComments, err = prof.getMyJobAdComments()
+	if err != nil {
+		return userInfo, err
+	}
+	return userInfo, nil
+}

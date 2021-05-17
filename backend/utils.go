@@ -117,3 +117,18 @@ type UserResponse struct {
 	User    Professional `json:"userInfo"`
 	Checked bool         `json:"checked"`
 }
+
+//UserDetailInfo json struct
+type UserDetailInfo struct {
+	UserInfo               Professional     `json:"userInfo"`
+	EducationInfo          []Education      `json:"education"`
+	ExperienceInfo         []Experience     `json:"experience"`
+	SkillsInfo             []Skill          `json:"skills"`
+	ArticlesInfo           []Article        `json:"articles"`
+	ArticleLikes           []Article        `json:"articleLikes"`
+	ArticleComments        []ArticleComment `json:"articleComments"`
+	ConnectedProfessionals []Professional   `json:"connectedProfessionals"`
+	JobAds                 []JobAd          `json:"jobAds"`
+	JobInterests           []JobAd          `json:"jobInterests"`
+	JobComments            []JobComment     `json:"jobComments"`
+}

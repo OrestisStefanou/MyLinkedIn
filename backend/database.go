@@ -95,6 +95,40 @@ func (driver *DBClient) getProfessional(email string) (Professional, error) {
 	return prof, nil
 }
 
+func (driver *DBClient) getProfessionalByID(id int) (Professional, error) {
+	prof := Professional{}
+	rows, err := driver.db.Query("SELECT * FROM Professionals WHERE ProfessionalID=?", id)
+	if err != nil {
+		return prof, err
+	}
+	for rows.Next() {
+		err = rows.Scan(&prof.ID, &prof.FirstName, &prof.LastName, &prof.Email, &prof.Password, &prof.PhoneNumber, &prof.Photo)
+		if err != nil {
+			return prof, err
+		}
+	}
+	return prof, nil
+}
+
+//Get the articles that a professional liked
+func (driver *DBClient) getProfessionalLikedArticles(id int) ([]Article, error) {
+	articleInfo := Article{}
+	rows, err := driver.db.Query("SELECT a.* FROM Articles a,Article_Likes al WHERE al.ProfessionalID = ? AND a.id = al.ArticleID", id)
+	if err != nil {
+		return nil, err
+	}
+	var articles []Article
+	for rows.Next() {
+		err = rows.Scan(&articleInfo.ID, &articleInfo.UploaderID, &articleInfo.Title, &articleInfo.Content, &articleInfo.AttachedFile, &articleInfo.Created)
+		if err != nil {
+			return nil, err
+		}
+		articleInfo.setFileURL()
+		articles = append(articles, articleInfo)
+	}
+	return articles, nil
+}
+
 func (driver *DBClient) searchProfessional(query string) ([]Professional, error) {
 	prof := Professional{}
 	sql := "SELECT * FROM Professionals WHERE First_Name LIKE '%" + query + "?%' OR Last_Name LIKE '%" + query + "%' OR Email LIKE '%" + query + "%'"
@@ -522,6 +556,24 @@ func (driver *DBClient) createArticleComment(comment *ArticleComment) error {
 	return nil
 }
 
+//Get all the article commments that a Professional made
+func (driver *DBClient) getProfessionalArticleComments(professionalID int) ([]ArticleComment, error) {
+	comment := ArticleComment{}
+	rows, err := driver.db.Query("SELECT * FROM Article_Comments WHERE ProfessionalID=?", professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var commentsArray []ArticleComment
+	for rows.Next() {
+		err = rows.Scan(&comment.ID, &comment.ProfessionalID, &comment.ArticleID, &comment.Comment, &comment.Created)
+		if err != nil {
+			return nil, err
+		}
+		commentsArray = append(commentsArray, comment)
+	}
+	return commentsArray, nil
+}
+
 //Notifications related functions
 func (driver *DBClient) createNotification(n *Notification) error {
 	stmt, err := driver.db.Prepare(`INSERT INTO Notifications SET 
@@ -819,6 +871,42 @@ func (driver *DBClient) createJobAd(ad *JobAd) error {
 		return err
 	}
 	return nil
+}
+
+//Get the jobads that a professional is interested to
+func (driver *DBClient) getProfessionalJobInterest(professionalID int) ([]JobAd, error) {
+	ad := JobAd{}
+	rows, err := driver.db.Query("SELECT j.* FROM JobAds j,Job_Interest ji WHERE ji.ProfessionalID = ? AND j.id = ji.JobID", professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var jobAdsArray []JobAd
+	for rows.Next() {
+		err = rows.Scan(&ad.ID, &ad.UploaderID, &ad.Title, &ad.JobDescription, &ad.AttachedFile, &ad.Created)
+		if err != nil {
+			return nil, err
+		}
+		jobAdsArray = append(jobAdsArray, ad)
+	}
+	return jobAdsArray, nil
+}
+
+//Get the jobAd comments that a professional made
+func (driver *DBClient) getProfessionalJobAdComments(professionalID int) ([]JobComment, error) {
+	comment := JobComment{}
+	rows, err := driver.db.Query("SELECT * FROM Job_Comments WHERE ProfessionalID=?", professionalID)
+	if err != nil {
+		return nil, err
+	}
+	var commentsArray []JobComment
+	for rows.Next() {
+		err = rows.Scan(&comment.ID, &comment.ProfessionalID, &comment.JobID, &comment.Comment, &comment.Created)
+		if err != nil {
+			return nil, err
+		}
+		commentsArray = append(commentsArray, comment)
+	}
+	return commentsArray, nil
 }
 
 func (driver *DBClient) getJobAds(professionalID int) ([]JobAd, error) {

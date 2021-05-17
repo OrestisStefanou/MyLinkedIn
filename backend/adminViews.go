@@ -73,6 +73,12 @@ func jsonUsers(c *gin.Context) {
 	var idArray UsersIDArray
 	if err := c.ShouldBindJSON(&idArray); err == nil {
 		fmt.Println(idArray.UsersIDs)
+		detailInfo, err := dbclient.getUserDetails(idArray.UsersIDs[0])
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"userDetails": detailInfo})
+		}
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are necessary"})
 	}

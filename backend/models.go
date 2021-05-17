@@ -105,6 +105,24 @@ func (prof *Professional) getMyArticles() ([]Article, error) {
 	return articles, err
 }
 
+//Get the articles that the professional liked
+func (prof *Professional) getLikedArticles() ([]Article, error) {
+	likedArticles, err := dbclient.getProfessionalLikedArticles(prof.ID)
+	return likedArticles, err
+}
+
+//Get the jobs that the professional is interested
+func (prof *Professional) getInterestedJobs() ([]JobAd, error) {
+	jobs, err := dbclient.getProfessionalJobInterest(prof.ID)
+	return jobs, err
+}
+
+//Get the JobAd comments that the professional made
+func (prof *Professional) getMyJobAdComments() ([]JobComment, error) {
+	comments, err := dbclient.getProfessionalJobAdComments(prof.ID)
+	return comments, err
+}
+
 //Check if a professional liked an article
 func (prof *Professional) likedArticle(article Article) (bool, error) {
 	liked, err := dbclient.professionalLikedArticle(prof.ID, article)
