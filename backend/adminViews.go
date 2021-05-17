@@ -63,3 +63,17 @@ func getAllUsers(c *gin.Context) {
 		}
 	}
 }
+
+//POST /admin/LinkedIn/jsonUsers
+func jsonUsers(c *gin.Context) {
+	type UsersIDArray struct {
+		UsersIDs []int `json:"ids"`
+	}
+	//First check if admin is authencticated
+	var idArray UsersIDArray
+	if err := c.ShouldBindJSON(&idArray); err == nil {
+		fmt.Println(idArray.UsersIDs)
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are necessary"})
+	}
+}

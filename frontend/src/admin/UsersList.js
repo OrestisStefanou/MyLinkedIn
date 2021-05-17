@@ -37,9 +37,29 @@ export default function UsersList(props) {
     }
   }
 
+  const exportToJson = () => {
+    const selectedUsers = {ids:selectedUsersID}
+    fetch('http://localhost:8080/admin/LinkedIn/jsonUsers', {
+      method: "POST",
+      mode:"cors",
+      credentials:"include",
+      body: JSON.stringify(selectedUsers),
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+    })
+    .then(response => response.json())
+    .then((json) => {
+      console.log(json);
+      if(json.error){
+        //setErrorMessage(json.error);
+      }else{
+        //history.push(`/admin/home`)   //Change this to the homepage of the admin
+      }
+    });
+  }
+
   return (
     <React.Fragment>
-    <Button variant="outlined" color="primary" onClick={() => console.log(selectedUsersID)}>
+    <Button variant="outlined" color="primary" onClick={exportToJson}>
     Export to json
     </Button>
     <Button variant="outlined" color="default">
