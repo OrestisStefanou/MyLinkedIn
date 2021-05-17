@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -50,17 +49,6 @@ func getAdminFromSession(c *gin.Context) (Admin, error) {
 
 }
 
-//GET /admin/LinkedIn/authenticated
-func adminAuthenticated(c *gin.Context) {
-	admin, err := getAdminFromSession(c)
-	if err != nil {
-		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
-	} else {
-		//fmt.Println(professional)
-		c.JSON(http.StatusAccepted, gin.H{"status": "Authenticated", "admin": admin})
-	}
-}
-
 func (driver *DBClient) getAdmin(email string) (Admin, error) {
 	adminInfo := Admin{}
 	rows, err := driver.db.Query("SELECT * FROM Admins WHERE Email=?", email)
@@ -76,32 +64,21 @@ func (driver *DBClient) getAdmin(email string) (Admin, error) {
 	return adminInfo, nil
 }
 
-//POST /admin/LinkedIn/signin
-func adminSignin(c *gin.Context) {
-	type adminLoginInfo struct {
-		Email    string `json:"email" binding:"required"`
-		Password string `json:"password" binding:"required"`
+func (driver *DBClient) getAllUsers() ([]Professional, error) {
+	prof := Professional{}
+	sql := "SELECT * FROM Professionals"
+	rows, err := driver.db.Query(sql)
+	if err != nil {
+		return nil, err
 	}
-	var adminInfo adminLoginInfo
-	if err := c.ShouldBindJSON(&adminInfo); err == nil {
-		admin, err := dbclient.getAdmin(adminInfo.Email)
+	var results []Professional
+	for rows.Next() {
+		err = rows.Scan(&prof.ID, &prof.FirstName, &prof.LastName, &prof.Email, &prof.Password, &prof.PhoneNumber, &prof.Photo)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
-		} else {
-			if admin.ID == 0 { //An admin with this email does not exist
-				c.JSON(http.StatusNotFound, gin.H{"error": "Wrong email or password"})
-			} else {
-				//Get md5 hash of password
-				md5pass := getMD5Hash(adminInfo.Password)
-				if md5pass == admin.Password {
-					setAdminSession(c, admin)
-					c.JSON(http.StatusAccepted, gin.H{"message": "Login successfull"})
-				} else {
-					c.JSON(http.StatusNotFound, gin.H{"error": "Wrong email or password"})
-				}
-			}
+			return nil, err
 		}
-	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are necessary"})
+		prof.setPhotoURL() //Change the path of a photo to a url
+		results = append(results, prof)
 	}
+	return results, nil
 }

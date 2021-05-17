@@ -176,7 +176,7 @@ export default function AdminHomepage() {
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
                 <List component="nav" aria-label="main mailbox folders">
-                    <ListItem button>
+                    <ListItem button onClick={() => history.push(`/admin/users`)}>
                     <ListItemIcon>
                         <GroupIcon />
                     </ListItemIcon>
