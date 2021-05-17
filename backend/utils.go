@@ -111,3 +111,9 @@ type JobAdCommentResponse struct {
 	LastName  string `json:"lastName"`
 	Comment   string `json:"comment"`
 }
+
+//UserResponse json struct
+type UserResponse struct {
+	User    Professional `json:"userInfo"`
+	Checked bool         `json:"checked"`
+}

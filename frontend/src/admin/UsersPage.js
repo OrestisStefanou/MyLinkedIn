@@ -169,14 +169,6 @@ export default function UsersPage() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <Button variant="contained" color="primary">
-                Export to json
-            </Button>
-            <Button variant="contained" color="default">
-                Export to XML
-            </Button>
-          </Grid>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={classes.paper}>
                 <UsersList users={users} />

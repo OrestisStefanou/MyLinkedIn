@@ -64,21 +64,24 @@ func (driver *DBClient) getAdmin(email string) (Admin, error) {
 	return adminInfo, nil
 }
 
-func (driver *DBClient) getAllUsers() ([]Professional, error) {
+func (driver *DBClient) getAllUsers() ([]UserResponse, error) {
 	prof := Professional{}
+	user := UserResponse{}
 	sql := "SELECT * FROM Professionals"
 	rows, err := driver.db.Query(sql)
 	if err != nil {
 		return nil, err
 	}
-	var results []Professional
+	var response []UserResponse
 	for rows.Next() {
 		err = rows.Scan(&prof.ID, &prof.FirstName, &prof.LastName, &prof.Email, &prof.Password, &prof.PhoneNumber, &prof.Photo)
 		if err != nil {
 			return nil, err
 		}
 		prof.setPhotoURL() //Change the path of a photo to a url
-		results = append(results, prof)
+		user.User = prof
+		user.Checked = false
+		response = append(response, user)
 	}
-	return results, nil
+	return response, nil
 }
