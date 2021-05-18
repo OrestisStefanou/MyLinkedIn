@@ -1,0 +1,301 @@
+[
+ {
+  "userInfo": {
+   "id": 16,
+   "firstName": "Orestis",
+   "lastName": "Stefanou",
+   "email": "orestis@hotmail.com",
+   "password": "25f9e794323b453885f5181f1b624d0b",
+   "phoneNumber": "97657569",
+   "photo": "orestis@hotmail.com/profilePhoto/python.jpg"
+  },
+  "education": [
+   {
+    "id": 32,
+    "professionalId": 16,
+    "degreeName": "IT",
+    "schoolName": "EKPA",
+    "startDate": "2017-10-09",
+    "finishDate": ""
+   }
+  ],
+  "experience": [
+   {
+    "id": 13,
+    "professionalId": 16,
+    "employerName": "Microsoft",
+    "jobTitle": "Software Engineer",
+    "startDate": "2019-03-20",
+    "finishDate": "2021-04-30"
+   }
+  ],
+  "skills": [
+   {
+    "id": 1,
+    "professionalId": 16,
+    "name": "Database design"
+   }
+  ],
+  "articles": [
+   {
+    "id": 3,
+    "uploaderId": 16,
+    "title": "First Article",
+    "content": "First Article Content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/First Article/2021-29-04 12:07:36.007 EEST/folder.jpg",
+    "created": "MjAyMS0wNC0yOSAxMjowNzozNg=="
+   },
+   {
+    "id": 6,
+    "uploaderId": 16,
+    "title": "Test Article",
+    "content": "An article with a pdf attachment",
+    "file": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/Test Article/2021-30-04 19:00:41.772 EEST/git.pdf",
+    "created": "MjAyMS0wNC0zMCAxOTowMDo0MQ=="
+   }
+  ],
+  "articleLikes": [
+   {
+    "id": 5,
+    "uploaderId": 17,
+    "title": "Learn Django APIs",
+    "content": "Just some content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/",
+    "created": "MjAyMS0wNC0yOSAxMjowODo1MQ=="
+   }
+  ],
+  "articleComments": [
+   {
+    "id": 11,
+    "professionalId": 16,
+    "articleId": 5,
+    "comment": "Ullo malakies",
+    "created": "MjAyMS0wNS0wMiAxMTo0NjowMQ=="
+   }
+  ],
+  "connectedProfessionals": [
+   {
+    "id": 17,
+    "firstName": "Stefanos",
+    "lastName": "Savva",
+    "email": "stefanos@email.com",
+    "password": "",
+    "phoneNumber": "",
+    "photo": "http://localhost:8080/v1/LinkedIn/media/stefanos@email.com/profilePhoto/pdf.jpg"
+   },
+   {
+    "id": 18,
+    "firstName": "Kostis",
+    "lastName": "Kostaki",
+    "email": "kostis@hotmail.com",
+    "password": "",
+    "phoneNumber": "",
+    "photo": "http://localhost:8080/v1/LinkedIn/media/"
+   }
+  ],
+  "jobAds": [
+   {
+    "id": 2,
+    "uploaderId": 16,
+    "title": "Test Job Title",
+    "jobDescription": "Test job Description",
+    "file": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/Test Job Title/2021-13-05 12:17:04.844 EEST/timetable_spring2021.pdf",
+    "created": "MjAyMS0wNS0xMyAxMjoxNzowNA=="
+   }
+  ],
+  "jobInterests": [
+   {
+    "id": 3,
+    "uploaderId": 17,
+    "title": "Kreopolis",
+    "jobDescription": "Na kseris na ppaliazis",
+    "file": "",
+    "created": "MjAyMS0wNS0xNCAxNToyOTo1OA=="
+   }
+  ],
+  "jobComments": [
+   {
+    "id": 3,
+    "professionalId": 16,
+    "jobId": 3,
+    "comment": "En i dulia mou i ppala re stefane!",
+    "created": "MjAyMS0wNS0xNCAxNTozMDo1OA=="
+   }
+  ]
+ },
+ {
+  "userInfo": {
+   "id": 17,
+   "firstName": "Stefanos",
+   "lastName": "Savva",
+   "email": "stefanos@email.com",
+   "password": "377e58fc5fd96aca7ebb30cbdf412890",
+   "phoneNumber": "99458961",
+   "photo": "stefanos@email.com/profilePhoto/pdf.jpg"
+  },
+  "education": null,
+  "experience": null,
+  "skills": [
+   {
+    "id": 4,
+    "professionalId": 17,
+    "name": "Database design"
+   },
+   {
+    "id": 5,
+    "professionalId": 17,
+    "name": "Networking"
+   }
+  ],
+  "articles": [
+   {
+    "id": 4,
+    "uploaderId": 17,
+    "title": "Second Article",
+    "content": "Second Article content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/stefanos@email.com/Second Article/2021-29-04 12:08:23.486 EEST/pdf.jpg",
+    "created": "MjAyMS0wNC0yOSAxMjowODoyMw=="
+   },
+   {
+    "id": 5,
+    "uploaderId": 17,
+    "title": "Learn Django APIs",
+    "content": "Just some content",
+    "file": "",
+    "created": "MjAyMS0wNC0yOSAxMjowODo1MQ=="
+   }
+  ],
+  "articleLikes": [
+   {
+    "id": 3,
+    "uploaderId": 16,
+    "title": "First Article",
+    "content": "First Article Content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/First Article/2021-29-04 12:07:36.007 EEST/folder.jpg",
+    "created": "MjAyMS0wNC0yOSAxMjowNzozNg=="
+   },
+   {
+    "id": 6,
+    "uploaderId": 16,
+    "title": "Test Article",
+    "content": "An article with a pdf attachment",
+    "file": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/Test Article/2021-30-04 19:00:41.772 EEST/git.pdf",
+    "created": "MjAyMS0wNC0zMCAxOTowMDo0MQ=="
+   },
+   {
+    "id": 7,
+    "uploaderId": 19,
+    "title": "Carlo's article title",
+    "content": "Carlo's article content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/",
+    "created": "MjAyMS0wNS0xMiAyMjoyNTowMQ=="
+   }
+  ],
+  "articleComments": [
+   {
+    "id": 12,
+    "professionalId": 17,
+    "articleId": 6,
+    "comment": "Very helpful",
+    "created": "MjAyMS0wNS0wMiAxNjozMDo0MA=="
+   },
+   {
+    "id": 13,
+    "professionalId": 17,
+    "articleId": 6,
+    "comment": "Very helpful",
+    "created": "MjAyMS0wNS0wMiAxNjozMDo0NA=="
+   },
+   {
+    "id": 14,
+    "professionalId": 17,
+    "articleId": 6,
+    "comment": "Very helpful pdf",
+    "created": "MjAyMS0wNS0wMiAxNjozMTo1NQ=="
+   },
+   {
+    "id": 15,
+    "professionalId": 17,
+    "articleId": 6,
+    "comment": "Ullo malakies",
+    "created": "MjAyMS0wNS0wMyAxMToyNjoyMw=="
+   },
+   {
+    "id": 16,
+    "professionalId": 17,
+    "articleId": 3,
+    "comment": "Ullo malakies",
+    "created": "MjAyMS0wNS0wMyAxMToyNjo0Mg=="
+   },
+   {
+    "id": 17,
+    "professionalId": 17,
+    "articleId": 3,
+    "comment": "Gamo to spiti sou",
+    "created": "MjAyMS0wNS0wMyAxMToyNjo1NA=="
+   }
+  ],
+  "connectedProfessionals": [
+   {
+    "id": 16,
+    "firstName": "Orestis",
+    "lastName": "Stefanou",
+    "email": "orestis@hotmail.com",
+    "password": "",
+    "phoneNumber": "",
+    "photo": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/profilePhoto/python.jpg"
+   }
+  ],
+  "jobAds": [
+   {
+    "id": 3,
+    "uploaderId": 17,
+    "title": "Kreopolis",
+    "jobDescription": "Na kseris na ppaliazis",
+    "file": "",
+    "created": "MjAyMS0wNS0xNCAxNToyOTo1OA=="
+   }
+  ],
+  "jobInterests": null,
+  "jobComments": [
+   {
+    "id": 1,
+    "professionalId": 17,
+    "jobId": 2,
+    "comment": "Endiaferome file",
+    "created": "MjAyMS0wNS0xNCAxMjoyMzoyNw=="
+   }
+  ]
+ },
+ {
+  "userInfo": {
+   "id": 18,
+   "firstName": "Kostis",
+   "lastName": "Kostaki",
+   "email": "kostis@hotmail.com",
+   "password": "25f9e794323b453885f5181f1b624d0b",
+   "phoneNumber": "77777777",
+   "photo": ""
+  },
+  "education": null,
+  "experience": null,
+  "skills": null,
+  "articles": null,
+  "articleLikes": null,
+  "articleComments": null,
+  "connectedProfessionals": [
+   {
+    "id": 16,
+    "firstName": "Orestis",
+    "lastName": "Stefanou",
+    "email": "orestis@hotmail.com",
+    "password": "",
+    "phoneNumber": "",
+    "photo": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/profilePhoto/python.jpg"
+   }
+  ],
+  "jobAds": null,
+  "jobInterests": null,
+  "jobComments": null
+ }
+]

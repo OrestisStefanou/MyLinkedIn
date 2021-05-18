@@ -14,3 +14,6 @@ var dbclient DBClient
 
 var validImageExtensions = [...]string{".jpeg", ".jpg", ".png", ".gif"}
 var validAttachedFileExtensions = [...]string{".jpeg", ".jpg", ".png", ".gif", ".mp4", ".mp3", ".pdf"}
+
+//Admin directories
+const adminDir = "/home/orestis/Desktop/GitHubRep/MyLinkedIn/backend/media/admin/"

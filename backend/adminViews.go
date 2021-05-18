@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 )
@@ -73,12 +76,23 @@ func jsonUsers(c *gin.Context) {
 	var idArray UsersIDArray
 	if err := c.ShouldBindJSON(&idArray); err == nil {
 		fmt.Println(idArray.UsersIDs)
-		detailInfo, err := dbclient.getUserDetails(idArray.UsersIDs[0])
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
-		} else {
-			c.JSON(http.StatusOK, gin.H{"userDetails": detailInfo})
+		var data []UserDetailInfo
+		for i := 0; i < len(idArray.UsersIDs); i++ {
+			detailInfo, err := dbclient.getUserDetails(idArray.UsersIDs[i])
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			data = append(data, detailInfo)
 		}
+		//Create the json file
+		path := filepath.Join(adminDir, "users.json")
+		jsonFile, _ := json.MarshalIndent(data, "", " ")
+		_ = ioutil.WriteFile(path, jsonFile, 0644)
+		//Return the file url
+		fileURL := mediaURL + "admin/" + "users.json"
+		c.JSON(http.StatusOK, gin.H{"users": fileURL})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are necessary"})
 	}
