@@ -11,6 +11,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Button } from '@material-ui/core';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -52,7 +53,29 @@ export default function UsersList(props) {
       if(json.error){
         //setErrorMessage(json.error);
       }else{
-        //history.push(`/admin/home`)   //Change this to the homepage of the admin
+        //history.push(json.users)
+        window.open(json.users);
+      }
+    });
+  }
+
+  const exportToXml = () => {
+    const selectedUsers = {ids:selectedUsersID}
+    fetch('http://localhost:8080/admin/LinkedIn/xmlUsers', {
+      method: "POST",
+      mode:"cors",
+      credentials:"include",
+      body: JSON.stringify(selectedUsers),
+      headers: {"Content-type": "application/json; charset=UTF-8",/*"Origin":"http://localhost:3000"*/}
+    })
+    .then(response => response.json())
+    .then((json) => {
+      console.log(json);
+      if(json.error){
+        //setErrorMessage(json.error);
+      }else{
+        //history.push(json.users)
+        window.open(json.users);
       }
     });
   }
@@ -60,10 +83,10 @@ export default function UsersList(props) {
   return (
     <React.Fragment>
     <Button variant="outlined" color="primary" onClick={exportToJson}>
-    Export to json
+      Export to json
     </Button>
-    <Button variant="outlined" color="default">
-    Export to XML
+    <Button variant="outlined" color="default" onClick={exportToXml}>
+      Export to XML
     </Button>
     <List className={classes.root}>
         {props.users.map((user) => {

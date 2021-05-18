@@ -297,5 +297,35 @@
   "jobAds": null,
   "jobInterests": null,
   "jobComments": null
+ },
+ {
+  "userInfo": {
+   "id": 19,
+   "firstName": "Carlos",
+   "lastName": "Mavros",
+   "email": "carlos@outlook.com",
+   "password": "25f9e794323b453885f5181f1b624d0b",
+   "phoneNumber": "99213141",
+   "photo": "carlos@outlook.com/profilePhoto/file.jpg"
+  },
+  "education": null,
+  "experience": null,
+  "skills": null,
+  "articles": [
+   {
+    "id": 7,
+    "uploaderId": 19,
+    "title": "Carlo's article title",
+    "content": "Carlo's article content",
+    "file": "",
+    "created": "MjAyMS0wNS0xMiAyMjoyNTowMQ=="
+   }
+  ],
+  "articleLikes": null,
+  "articleComments": null,
+  "connectedProfessionals": null,
+  "jobAds": null,
+  "jobInterests": null,
+  "jobComments": null
  }
 ]

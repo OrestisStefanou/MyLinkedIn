@@ -95,6 +95,23 @@ func (driver *DBClient) getProfessional(email string) (Professional, error) {
 	return prof, nil
 }
 
+func (driver *DBClient) getAllProfessionalIDs() ([]int, error) {
+	var id int
+	rows, err := driver.db.Query("SELECT ProfessionalID FROM Professionals")
+	if err != nil {
+		return nil, err
+	}
+	var ids []int
+	for rows.Next() {
+		err = rows.Scan(&id)
+		if err != nil {
+			return nil, err
+		}
+		ids = append(ids, id)
+	}
+	return ids, nil
+}
+
 func (driver *DBClient) getProfessionalByID(id int) (Professional, error) {
 	prof := Professional{}
 	rows, err := driver.db.Query("SELECT * FROM Professionals WHERE ProfessionalID=?", id)

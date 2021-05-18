@@ -96,6 +96,7 @@ func main() {
 		adminEndpoints.GET("/authenticated", adminAuthenticated)
 		adminEndpoints.GET("/allUsers", getAllUsers)
 		adminEndpoints.POST("/jsonUsers", jsonUsers)
+		adminEndpoints.POST("/xmlUsers", xmlUsers)
 	}
 	router.Run()
 }
