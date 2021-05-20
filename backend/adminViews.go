@@ -155,3 +155,40 @@ func xmlUsers(c *gin.Context) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
 	}
 }
+
+//GET /admin/LinkedIn/professional?:email
+func getUserProfile(c *gin.Context) {
+	_, err := getAdminFromSession(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Not authenticated"})
+	} else {
+		email := c.Query("email")
+		fmt.Println("QUERY STRING IS ", email)
+		prof, err := dbclient.getProfessional(email)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+			return
+		}
+		prof.setPhotoURL() //Change the path of the photo to a url
+		education, err := prof.getEducation()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+			return
+		}
+		experience, err := prof.getExperience()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+			return
+		}
+		skills, err := prof.getSkills()
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Interval server error"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"professional": prof, "education": education, "experience": experience, "skills": skills})
+	}
+}

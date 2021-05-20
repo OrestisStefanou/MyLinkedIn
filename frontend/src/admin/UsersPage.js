@@ -113,7 +113,6 @@ export default function UsersPage() {
   const classes = useStyles();
   const [users,setUsers] = useState([]);
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   let history = useHistory();
 
   const handleLogout = () => {

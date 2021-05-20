@@ -1,8 +1,8 @@
 -Create log files
 -Change Deposits component name to ProfileInfo or something
 
--Otan o admin den dialegi xristes to export se json na tous kamni olous export
--Na kamo to idio gia xml
+-Finish admin page
+-Fix xml export
 
 $ sudo sysctl fs.inotify.max_user_watches=524288
 $ sudo sysctl -p

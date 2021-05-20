@@ -202,11 +202,6 @@ export default function AdminHomepage() {
               </React.Fragment>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Typography>Delete this?</Typography>
-              </Paper>
-            </Grid>
           </Grid>
           <Box pt={4}>
             <Copyright />

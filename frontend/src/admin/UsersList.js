@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
 export default function UsersList(props) {
   const classes = useStyles();
   const [selectedUsersID,setSelectedUsersID] = useState([]);
+
+  let history = useHistory();
 
   const selectUser = (user) => {
     if (user.checked === false){
@@ -118,7 +121,7 @@ export default function UsersList(props) {
                                 >
                                     {user.userInfo.email}
                                 </Typography>
-                                <Button variant="outlined" color="primary">
+                                <Button variant="outlined" color="primary" onClick={() => history.push(`/admin/user/${user.userInfo.email}`)}>
                                     Show profile
                                 </Button>
                                 </React.Fragment>

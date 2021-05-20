@@ -16,7 +16,8 @@ import UserJobAdsPage from "./homepage/UserJobAdsPage";
 import ErrorPage from "./errorPage";
 import AdminSignIn from "./admin/AdminSignIn";
 import AdminHomepage from "./admin/AdminHomepage";
-import UsersPage from "./admin/UsersPage"
+import UsersPage from "./admin/UsersPage";
+import UserProfile from "./admin/UserProfile";
 
 const App = () => {
     return(
@@ -64,6 +65,7 @@ const App = () => {
                 <Route exact path='/admin/users'>
                     <UsersPage/>
                 </Route>
+                <Route exact path='/admin/user/:email' children={<UserProfile/>}></Route>
                 <Route path='*'>
                     <ErrorPage />
                 </Route>
