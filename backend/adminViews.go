@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
@@ -115,7 +116,7 @@ func jsonUsers(c *gin.Context) {
 //POST /admin/LinkedIn/xmlUsers
 func xmlUsers(c *gin.Context) {
 	type UsersIDArray struct {
-		UsersIDs []int `xml:"ids"`
+		UsersIDs []int `json:"ids"`
 	}
 	//First check if admin is authencticated
 	_, err := getAdminFromSession(c)
@@ -141,12 +142,26 @@ func xmlUsers(c *gin.Context) {
 				}
 				data = append(data, detailInfo)
 			}
+			//fmt.Println(data)
 			//Create the xml file
-			path := filepath.Join(adminDir, "users")
-			xmlFile, _ := xml.MarshalIndent(data, "", " ")
-			_ = ioutil.WriteFile(path, xmlFile, 0644)
+			path := filepath.Join(adminDir, "users.xml")
+			xmlFile, err := os.Create(path)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
+			xmlFile.WriteString(xml.Header)
+			encoder := xml.NewEncoder(xmlFile)
+			encoder.Indent("", "\t")
+			err = encoder.Encode(&data)
+			if err != nil {
+				fmt.Println(err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+				return
+			}
 			//Return the file url
-			fileURL := mediaURL + "admin/" + "users"
+			fileURL := mediaURL + "admin/" + "users.xml"
 			c.JSON(http.StatusOK, gin.H{"users": fileURL})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are necessary"})

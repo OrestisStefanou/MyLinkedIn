@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/xml"
 	"errors"
 
 	"github.com/gin-contrib/sessions"
@@ -120,15 +121,16 @@ type UserResponse struct {
 
 //UserDetailInfo json struct
 type UserDetailInfo struct {
-	UserInfo               Professional     `json:"userInfo" xml:"userInfo"`
-	EducationInfo          []Education      `json:"education" xml:"education"`
-	ExperienceInfo         []Experience     `json:"experience" xml:"experience"`
-	SkillsInfo             []Skill          `json:"skills" xml:"skills"`
-	ArticlesInfo           []Article        `json:"articles" xml:"articles"`
-	ArticleLikes           []Article        `json:"articleLikes" xml:"articleLIkes"`
-	ArticleComments        []ArticleComment `json:"articleComments" xml:"articleComments"`
-	ConnectedProfessionals []Professional   `json:"connectedProfessionals" xml:"connectedProfessionals"`
-	JobAds                 []JobAd          `json:"jobAds" xml:"jobAds"`
-	JobInterests           []JobAd          `json:"jobInterests" xml:"jobInterests"`
-	JobComments            []JobComment     `json:"jobComments" xml:"jobComments"`
+	XMLName                xml.Name         `xml:"userDetailInfo"`
+	UserInfo               Professional     `json:"userInfo" `
+	EducationInfo          []Education      `json:"education"`
+	ExperienceInfo         []Experience     `json:"experience"`
+	SkillsInfo             []Skill          `json:"skills"`
+	ArticlesInfo           []Article        `json:"articles" `
+	ArticleLikes           []Article        `json:"articleLikes" `
+	ArticleComments        []ArticleComment `json:"articleComments"`
+	ConnectedProfessionals []Professional   `json:"connectedProfessionals"`
+	JobAds                 []JobAd          `json:"jobAds"`
+	JobInterests           []JobAd          `json:"jobInterests"`
+	JobComments            []JobComment     `json:"jobComments"`
 }

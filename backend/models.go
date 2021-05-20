@@ -1,18 +1,20 @@
 package main
 
 import (
+	"encoding/xml"
 	"path/filepath"
 )
 
 //Professional json struct
 type Professional struct {
-	ID          int    `json:"id" xml:"id"`
-	FirstName   string `json:"firstName" binding:"required" xml:"firstName"`
-	LastName    string `json:"lastName" binding:"required" xml:"lastName"`
-	Email       string `json:"email" binding:"required" xml:"email"`
-	Password    string `json:"password" binding:"required" xml:"password"`
-	PhoneNumber string `json:"phoneNumber" xml:"phoneNumber"`
-	Photo       string `json:"photo" xml:"photo"`
+	XMLName     xml.Name `xml:"professional"`
+	ID          int      `json:"id" xml:"id"`
+	FirstName   string   `json:"firstName" binding:"required" xml:"firstName"`
+	LastName    string   `json:"lastName" binding:"required" xml:"lastName"`
+	Email       string   `json:"email" binding:"required" xml:"email"`
+	Password    string   `json:"password" binding:"required" xml:"password"`
+	PhoneNumber string   `json:"phoneNumber" xml:"phoneNumber"`
+	Photo       string   `json:"photo" xml:"photo"`
 }
 
 //Save method for Professional
@@ -185,12 +187,13 @@ func (prof *Professional) getMyJobAds() ([]JobAd, error) {
 
 //Education json struct
 type Education struct {
-	ID             int    `json:"id" xml:"id"`
-	ProfessionalID int    `json:"professionalId" xml:"professionalId"`
-	DegreeName     string `json:"degreeName" binding:"required" xml:"degreeName"`
-	SchoolName     string `json:"schoolName" binding:"required" xml:"schoolName"`
-	StartDate      string `json:"startDate" binding:"required" xml:"startDate"`
-	FinishDate     string `json:"finishDate" xml:"finishDate"`
+	XMLName        xml.Name `xml:"education"`
+	ID             int      `json:"id" xml:"id"`
+	ProfessionalID int      `json:"professionalId" xml:"professionalId"`
+	DegreeName     string   `json:"degreeName" binding:"required" xml:"degreeName"`
+	SchoolName     string   `json:"schoolName" binding:"required" xml:"schoolName"`
+	StartDate      string   `json:"startDate" binding:"required" xml:"startDate"`
+	FinishDate     string   `json:"finishDate" xml:"finishDate"`
 }
 
 //Save method for Education
@@ -208,12 +211,13 @@ func (education *Education) setID() error {
 
 //Experience json struct
 type Experience struct {
-	ID             int    `json:"id" xml:"id"`
-	ProfessionalID int    `json:"professionalId" xml:"professionalId"`
-	EmployerName   string `json:"employerName" binding:"required" xml:"employerName"`
-	JobTitle       string `json:"jobTitle" binding:"required" xml:"jobTitle"`
-	StartDate      string `json:"startDate" binding:"required" xml:"startDate"`
-	FinishDate     string `json:"finishDate" xml:"finishDate"`
+	XMLName        xml.Name `xml:"experience"`
+	ID             int      `json:"id" xml:"id"`
+	ProfessionalID int      `json:"professionalId" xml:"professionalId"`
+	EmployerName   string   `json:"employerName" binding:"required" xml:"employerName"`
+	JobTitle       string   `json:"jobTitle" binding:"required" xml:"jobTitle"`
+	StartDate      string   `json:"startDate" binding:"required" xml:"startDate"`
+	FinishDate     string   `json:"finishDate" xml:"finishDate"`
 }
 
 //Save method for experience
@@ -231,9 +235,10 @@ func (experience *Experience) setID() error {
 
 //Skill json struct
 type Skill struct {
-	ID             int    `json:"id" xml:"id"`
-	ProfessionalID int    `json:"professionalId" xml:"professionalId"`
-	Name           string `json:"name" binding:"required" xml:"name"`
+	XMLName        xml.Name `xml:"skill"`
+	ID             int      `json:"id" xml:"id"`
+	ProfessionalID int      `json:"professionalId" xml:"professionalId"`
+	Name           string   `json:"name" binding:"required" xml:"name"`
 }
 
 //Save method for skill
@@ -244,12 +249,13 @@ func (skill *Skill) save() error {
 
 //Article json struct
 type Article struct {
-	ID           int     `json:"id" xml:"id"`
-	UploaderID   int     `json:"uploaderId" xml:"uploaderId"`
-	Title        string  `json:"title" binding:"required" xml:"title"`
-	Content      string  `json:"content" binding:"required" xml:"content" `
-	AttachedFile string  `json:"file" xml:"file"`
-	Created      []uint8 `json:"created" xml:"created"`
+	XMLName      xml.Name `xml:"article"`
+	ID           int      `json:"id" xml:"id"`
+	UploaderID   int      `json:"uploaderId" xml:"uploaderId"`
+	Title        string   `json:"title" binding:"required" xml:"title"`
+	Content      string   `json:"content" binding:"required" xml:"content" `
+	AttachedFile string   `json:"file" xml:"file"`
+	Created      []uint8  `json:"created" xml:"created"`
 }
 
 //Save method for article
@@ -319,9 +325,10 @@ func (article *Article) addComment(comment ArticleComment) error {
 
 //ArticleLike json struct
 type ArticleLike struct {
-	ID             int `json:"id" xml:"id"`
-	ProfessionalID int `json:"professionalId" xml:"professionalId"`
-	ArticleID      int `json:"articleId" binding:"required" xml:"articleId"`
+	XMLName        xml.Name `xml:"articleLike"`
+	ID             int      `json:"id" xml:"id"`
+	ProfessionalID int      `json:"professionalId" xml:"professionalId"`
+	ArticleID      int      `json:"articleId" binding:"required" xml:"articleId"`
 }
 
 //ArticleLike save method
@@ -332,11 +339,12 @@ func (like *ArticleLike) save() error {
 
 //ArticleComment json struct
 type ArticleComment struct {
-	ID             int     `json:"id" xml:"id"`
-	ProfessionalID int     `json:"professionalId" xml:"professionalId"`
-	ArticleID      int     `json:"articleId" binding:"required" xml:"articleId"`
-	Comment        string  `json:"comment" binding:"required" xml:"comment"`
-	Created        []uint8 `json:"created" xml:"created"`
+	XMLName        xml.Name `xml:"articleComment"`
+	ID             int      `json:"id" xml:"id"`
+	ProfessionalID int      `json:"professionalId" xml:"professionalId"`
+	ArticleID      int      `json:"articleId" binding:"required" xml:"articleId"`
+	Comment        string   `json:"comment" binding:"required" xml:"comment"`
+	Created        []uint8  `json:"created" xml:"created"`
 }
 
 //ArticleComment save method
@@ -347,11 +355,12 @@ func (comment *ArticleComment) save() error {
 
 //Notification json struct
 type Notification struct {
-	ID             int     `json:"id" xml:"id"`
-	ProfessionalID int     `json:"professionalId" xml:"professionalId"`
-	Msg            string  `json:"msg" binding:"required" xml:"msg"`
-	Seen           bool    `json:"seen" xml:"seen"`
-	Created        []uint8 `json:"created" xml:"created"`
+	XMLName        xml.Name `xml:"notification"`
+	ID             int      `json:"id" xml:"id"`
+	ProfessionalID int      `json:"professionalId" xml:"professionalId"`
+	Msg            string   `json:"msg" binding:"required" xml:"msg"`
+	Seen           bool     `json:"seen" xml:"seen"`
+	Created        []uint8  `json:"created" xml:"created"`
 }
 
 //Notification save method
@@ -362,20 +371,22 @@ func (n *Notification) save() error {
 
 //Friendship json struct
 type Friendship struct {
-	ID              int    `json:"id" xml:"id"`
-	ProfessionalID1 int    `json:"professionalId1" xml:"professionalId1"`
-	ProfessionalID2 int    `json:"professionalId2" xml:"professionalId2"`
-	Status          string `json:"status" xml:"status"`
+	XMLName         xml.Name `xml:"friendship"`
+	ID              int      `json:"id" xml:"id"`
+	ProfessionalID1 int      `json:"professionalId1" xml:"professionalId1"`
+	ProfessionalID2 int      `json:"professionalId2" xml:"professionalId2"`
+	Status          string   `json:"status" xml:"status"`
 }
 
 //Message json struct
 type Message struct {
-	ID       int     `json:"id" xml:"id"`
-	Sender   int     `json:"sender" xml:"sender"`
-	Receiver int     `json:"receiver" xml:"receiver"`
-	Msg      string  `json:"msg" binding:"required" xml:"msg"`
-	Seen     bool    `json:"seen" xml:"seen"`
-	Created  []uint8 `json:"created" xml:"created"`
+	XMLName  xml.Name `xml:"message"`
+	ID       int      `json:"id" xml:"id"`
+	Sender   int      `json:"sender" xml:"sender"`
+	Receiver int      `json:"receiver" xml:"receiver"`
+	Msg      string   `json:"msg" binding:"required" xml:"msg"`
+	Seen     bool     `json:"seen" xml:"seen"`
+	Created  []uint8  `json:"created" xml:"created"`
 }
 
 //Message save method
@@ -386,12 +397,13 @@ func (m *Message) save() error {
 
 //JobAd json struct
 type JobAd struct {
-	ID             int     `json:"id" xml:"id"`
-	UploaderID     int     `json:"uploaderId" xml:"uploaderId"`
-	Title          string  `json:"title" binding:"required" xml:"title"`
-	JobDescription string  `json:"jobDescription" binding:"required" xml:"jobDescription"`
-	AttachedFile   string  `json:"file" xml:"file"`
-	Created        []uint8 `json:"created" xml:"created"`
+	XMLName        xml.Name `xml:"jobAd"`
+	ID             int      `json:"id" xml:"id"`
+	UploaderID     int      `json:"uploaderId" xml:"uploaderId"`
+	Title          string   `json:"title" binding:"required" xml:"title"`
+	JobDescription string   `json:"jobDescription" binding:"required" xml:"jobDescription"`
+	AttachedFile   string   `json:"file" xml:"file"`
+	Created        []uint8  `json:"created" xml:"created"`
 }
 
 //JobAd save method
@@ -463,9 +475,10 @@ func (ad *JobAd) getInterestedProfessionals() ([]Professional, error) {
 
 //JobInterest json struct
 type JobInterest struct {
-	ID             int `json:"id" xml:"id"`
-	ProfessionalID int `json:"professionalId" xml:"professionalId" `
-	JobID          int `json:"jobId" binding:"required" xml:"jobId"`
+	XMLName        xml.Name `xml:"jobInterest"`
+	ID             int      `json:"id" xml:"id"`
+	ProfessionalID int      `json:"professionalId" xml:"professionalId" `
+	JobID          int      `json:"jobId" binding:"required" xml:"jobId"`
 }
 
 //ArticleLike save method
@@ -476,11 +489,12 @@ func (interest *JobInterest) save() error {
 
 //JobComment json struct
 type JobComment struct {
-	ID             int     `json:"id" xml:"id"`
-	ProfessionalID int     `json:"professionalId" xml:"professionalId"`
-	JobID          int     `json:"jobId" binding:"required" xml:"jobId"`
-	Comment        string  `json:"comment" binding:"required" xml:"comment"`
-	Created        []uint8 `json:"created" xml:"created"`
+	XMLName        xml.Name `xml:"jobComment"`
+	ID             int      `json:"id" xml:"id"`
+	ProfessionalID int      `json:"professionalId" xml:"professionalId"`
+	JobID          int      `json:"jobId" binding:"required" xml:"jobId"`
+	Comment        string   `json:"comment" binding:"required" xml:"comment"`
+	Created        []uint8  `json:"created" xml:"created"`
 }
 
 //ArticleComment save method
