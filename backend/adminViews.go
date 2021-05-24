@@ -152,6 +152,7 @@ func xmlUsers(c *gin.Context) {
 				return
 			}
 			xmlFile.WriteString(xml.Header)
+			xmlFile.WriteString("<root>")
 			encoder := xml.NewEncoder(xmlFile)
 			encoder.Indent("", "\t")
 			err = encoder.Encode(&data)
@@ -160,6 +161,8 @@ func xmlUsers(c *gin.Context) {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 				return
 			}
+			xmlFile.WriteString("</root>")
+			xmlFile.Close()
 			//Return the file url
 			fileURL := mediaURL + "admin/" + "users.xml"
 			c.JSON(http.StatusOK, gin.H{"users": fileURL})

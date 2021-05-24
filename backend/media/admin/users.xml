@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<userDetailInfo>
+<root><userDetailInfo>
 	<professional>
 		<id>16</id>
 		<firstName>Orestis</firstName>
@@ -126,162 +126,6 @@
 		<comment>En i dulia mou i ppala re stefane!</comment>
 		<created>2021-05-14 15:30:58</created>
 	</jobComment>
-</userDetailInfo>
-<userDetailInfo>
-	<professional>
-		<id>17</id>
-		<firstName>Stefanos</firstName>
-		<lastName>Savva</lastName>
-		<email>stefanos@email.com</email>
-		<password>377e58fc5fd96aca7ebb30cbdf412890</password>
-		<phoneNumber>99458961</phoneNumber>
-		<photo>stefanos@email.com/profilePhoto/pdf.jpg</photo>
-	</professional>
-	<skill>
-		<id>4</id>
-		<professionalId>17</professionalId>
-		<name>Database design</name>
-	</skill>
-	<skill>
-		<id>5</id>
-		<professionalId>17</professionalId>
-		<name>Networking</name>
-	</skill>
-	<article>
-		<id>4</id>
-		<uploaderId>17</uploaderId>
-		<title>Second Article</title>
-		<content>Second Article content</content>
-		<file>http://localhost:8080/v1/LinkedIn/media/stefanos@email.com/Second Article/2021-29-04 12:08:23.486 EEST/pdf.jpg</file>
-		<created>2021-04-29 12:08:23</created>
-	</article>
-	<article>
-		<id>5</id>
-		<uploaderId>17</uploaderId>
-		<title>Learn Django APIs</title>
-		<content>Just some content</content>
-		<file></file>
-		<created>2021-04-29 12:08:51</created>
-	</article>
-	<article>
-		<id>6</id>
-		<uploaderId>16</uploaderId>
-		<title>Test Article</title>
-		<content>An article with a pdf attachment</content>
-		<file>http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/Test Article/2021-30-04 19:00:41.772 EEST/git.pdf</file>
-		<created>2021-04-30 19:00:41</created>
-	</article>
-	<article>
-		<id>3</id>
-		<uploaderId>16</uploaderId>
-		<title>First Article</title>
-		<content>First Article Content</content>
-		<file>http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/First Article/2021-29-04 12:07:36.007 EEST/folder.jpg</file>
-		<created>2021-04-29 12:07:36</created>
-	</article>
-	<article>
-		<id>7</id>
-		<uploaderId>19</uploaderId>
-		<title>Carlo&#39;s article title</title>
-		<content>Carlo&#39;s article content</content>
-		<file>http://localhost:8080/v1/LinkedIn/media/</file>
-		<created>2021-05-12 22:25:01</created>
-	</article>
-	<articleComment>
-		<id>12</id>
-		<professionalId>17</professionalId>
-		<articleId>6</articleId>
-		<comment>Very helpful</comment>
-		<created>2021-05-02 16:30:40</created>
-	</articleComment>
-	<articleComment>
-		<id>13</id>
-		<professionalId>17</professionalId>
-		<articleId>6</articleId>
-		<comment>Very helpful</comment>
-		<created>2021-05-02 16:30:44</created>
-	</articleComment>
-	<articleComment>
-		<id>14</id>
-		<professionalId>17</professionalId>
-		<articleId>6</articleId>
-		<comment>Very helpful pdf</comment>
-		<created>2021-05-02 16:31:55</created>
-	</articleComment>
-	<articleComment>
-		<id>15</id>
-		<professionalId>17</professionalId>
-		<articleId>6</articleId>
-		<comment>Ullo malakies</comment>
-		<created>2021-05-03 11:26:23</created>
-	</articleComment>
-	<articleComment>
-		<id>16</id>
-		<professionalId>17</professionalId>
-		<articleId>3</articleId>
-		<comment>Ullo malakies</comment>
-		<created>2021-05-03 11:26:42</created>
-	</articleComment>
-	<articleComment>
-		<id>17</id>
-		<professionalId>17</professionalId>
-		<articleId>3</articleId>
-		<comment>Gamo to spiti sou</comment>
-		<created>2021-05-03 11:26:54</created>
-	</articleComment>
-	<professional>
-		<id>16</id>
-		<firstName>Orestis</firstName>
-		<lastName>Stefanou</lastName>
-		<email>orestis@hotmail.com</email>
-		<password></password>
-		<phoneNumber></phoneNumber>
-		<photo>http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/profilePhoto/python.jpg</photo>
-	</professional>
-	<professional>
-		<id>20</id>
-		<firstName>Jason</firstName>
-		<lastName>Stefanou</lastName>
-		<email>jason@email.com</email>
-		<password></password>
-		<phoneNumber></phoneNumber>
-		<photo>http://localhost:8080/v1/LinkedIn/media/jason@email.com/profilePhoto/joker.jpg</photo>
-	</professional>
-	<jobAd>
-		<id>3</id>
-		<uploaderId>17</uploaderId>
-		<title>Kreopolis</title>
-		<jobDescription>Na kseris na ppaliazis</jobDescription>
-		<file></file>
-		<created>2021-05-14 15:29:58</created>
-	</jobAd>
-	<jobComment>
-		<id>1</id>
-		<professionalId>17</professionalId>
-		<jobId>2</jobId>
-		<comment>Endiaferome file</comment>
-		<created>2021-05-14 12:23:27</created>
-	</jobComment>
-</userDetailInfo>
-<userDetailInfo>
-	<professional>
-		<id>18</id>
-		<firstName>Kostis</firstName>
-		<lastName>Kostaki</lastName>
-		<email>kostis@hotmail.com</email>
-		<password>25f9e794323b453885f5181f1b624d0b</password>
-		<phoneNumber>77777777</phoneNumber>
-		<photo></photo>
-	</professional>
-	<professional>
-		<id>16</id>
-		<firstName>Orestis</firstName>
-		<lastName>Stefanou</lastName>
-		<email>orestis@hotmail.com</email>
-		<password></password>
-		<phoneNumber></phoneNumber>
-		<photo>http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/profilePhoto/python.jpg</photo>
-	</professional>
 </userDetailInfo>
 <userDetailInfo>
 	<professional>
@@ -415,4 +259,4 @@
 		<file></file>
 		<created>2021-05-14 15:29:58</created>
 	</jobAd>
-</userDetailInfo>
+</userDetailInfo></root>

@@ -122,15 +122,15 @@ type UserResponse struct {
 //UserDetailInfo json struct
 type UserDetailInfo struct {
 	XMLName                xml.Name         `xml:"userDetailInfo"`
-	UserInfo               Professional     `json:"userInfo" `
+	UserInfo               Professional     `json:"userInfo"`
 	EducationInfo          []Education      `json:"education"`
-	ExperienceInfo         []Experience     `json:"experience"`
-	SkillsInfo             []Skill          `json:"skills"`
+	ExperienceInfo         []Experience     `json:"experience" `
+	SkillsInfo             []Skill          `json:"skills" `
 	ArticlesInfo           []Article        `json:"articles" `
 	ArticleLikes           []Article        `json:"articleLikes" `
-	ArticleComments        []ArticleComment `json:"articleComments"`
-	ConnectedProfessionals []Professional   `json:"connectedProfessionals"`
-	JobAds                 []JobAd          `json:"jobAds"`
+	ArticleComments        []ArticleComment `json:"articleComments" `
+	ConnectedProfessionals []Professional   `json:"connectedProfessionals" `
+	JobAds                 []JobAd          `json:"jobAds" `
 	JobInterests           []JobAd          `json:"jobInterests"`
 	JobComments            []JobComment     `json:"jobComments"`
 }
