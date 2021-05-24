@@ -751,6 +751,10 @@ func friendshipStatus(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 			return
 		}
+		if professionalID2 == professional.ID {
+			c.JSON(http.StatusOK, gin.H{"status": "selfProfile"})
+			return
+		}
 		status, err := dbclient.getFriendshipStatus(professional.ID, professionalID2)
 		if err != nil {
 			fmt.Println(err)

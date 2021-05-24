@@ -88,6 +88,7 @@ export default function Article(props) {
                   //Show the comment on the comment section
                   console.log(json);
                   setArticleComments([...articleComments,json.comment]);
+                  setComment({articleId:props.articleInfo.id,comment:""});
               }
         });       
   };
@@ -224,6 +225,7 @@ export default function Article(props) {
                 label="Comment"
                 type="text"
                 id="content"
+                value={comment['comment']}
                 onChange={handleChange}
                 autoComplete="content"
               />

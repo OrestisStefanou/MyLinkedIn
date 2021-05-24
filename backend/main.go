@@ -1,7 +1,9 @@
 package main
 
 import (
+	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -13,6 +15,9 @@ import (
 func main() {
 	dbclient.initialize()
 	defer dbclient.db.Close()
+	//Log file
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
 	router := gin.Default()
 
 	//Session middleware

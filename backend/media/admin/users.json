@@ -94,6 +94,18 @@
     "content": "Just some content",
     "file": "http://localhost:8080/v1/LinkedIn/media/",
     "created": "MjAyMS0wNC0yOSAxMjowODo1MQ=="
+   },
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 8,
+    "uploaderId": 20,
+    "title": "Jason's article",
+    "content": "Jason's article content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/jason@email.com/Jason's article/2021-24-05 12:05:15.523 EEST/linkedIn.png",
+    "created": "MjAyMS0wNS0yNCAxMjowNToxNQ=="
    }
   ],
   "articleComments": [
@@ -107,9 +119,33 @@
     "articleId": 5,
     "comment": "Ullo malakies",
     "created": "MjAyMS0wNS0wMiAxMTo0NjowMQ=="
+   },
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 20,
+    "professionalId": 16,
+    "articleId": 8,
+    "comment": "Ise kathigitis re",
+    "created": "MjAyMS0wNS0yNCAxMjoxODoxNA=="
    }
   ],
   "connectedProfessionals": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 20,
+    "firstName": "Jason",
+    "lastName": "Stefanou",
+    "email": "jason@email.com",
+    "password": "",
+    "phoneNumber": "",
+    "photo": "http://localhost:8080/v1/LinkedIn/media/jason@email.com/profilePhoto/joker.jpg"
+   },
    {
     "XMLName": {
      "Space": "",
@@ -178,5 +214,201 @@
     "created": "MjAyMS0wNS0xNCAxNTozMDo1OA=="
    }
   ]
+ },
+ {
+  "XMLName": {
+   "Space": "",
+   "Local": ""
+  },
+  "userInfo": {
+   "XMLName": {
+    "Space": "",
+    "Local": ""
+   },
+   "id": 20,
+   "firstName": "Jason",
+   "lastName": "Stefanou",
+   "email": "jason@email.com",
+   "password": "25f9e794323b453885f5181f1b624d0b",
+   "phoneNumber": "99256578",
+   "photo": "jason@email.com/profilePhoto/joker.jpg"
+  },
+  "education": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 34,
+    "professionalId": 20,
+    "degreeName": "High School Diploma",
+    "schoolName": "Likio Agiou Neophytou",
+    "startDate": "2019-09-10",
+    "finishDate": "2021-05-31"
+   }
+  ],
+  "experience": null,
+  "skills": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 6,
+    "professionalId": 20,
+    "name": "Python"
+   },
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 7,
+    "professionalId": 20,
+    "name": "C++"
+   },
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 8,
+    "professionalId": 20,
+    "name": "Physics"
+   }
+  ],
+  "articles": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 8,
+    "uploaderId": 20,
+    "title": "Jason's article",
+    "content": "Jason's article content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/jason@email.com/Jason's article/2021-24-05 12:05:15.523 EEST/linkedIn.png",
+    "created": "MjAyMS0wNS0yNCAxMjowNToxNQ=="
+   },
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 9,
+    "uploaderId": 20,
+    "title": "Jason's  second article",
+    "content": "Jason's second article content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/jason@email.com/Jason's  second article/2021-24-05 12:08:24.943 EEST/joker.jpg",
+    "created": "MjAyMS0wNS0yNCAxMjowODoyNA=="
+   }
+  ],
+  "articleLikes": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 6,
+    "uploaderId": 16,
+    "title": "Test Article",
+    "content": "An article with a pdf attachment",
+    "file": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/Test Article/2021-30-04 19:00:41.772 EEST/git.pdf",
+    "created": "MjAyMS0wNC0zMCAxOTowMDo0MQ=="
+   },
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 5,
+    "uploaderId": 17,
+    "title": "Learn Django APIs",
+    "content": "Just some content",
+    "file": "http://localhost:8080/v1/LinkedIn/media/",
+    "created": "MjAyMS0wNC0yOSAxMjowODo1MQ=="
+   }
+  ],
+  "articleComments": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 18,
+    "professionalId": 20,
+    "articleId": 6,
+    "comment": "Jason approves!",
+    "created": "MjAyMS0wNS0yNCAxMTo1NDoyOA=="
+   },
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 19,
+    "professionalId": 20,
+    "articleId": 5,
+    "comment": "Jason approves!",
+    "created": "MjAyMS0wNS0yNCAxMTo1OToyNQ=="
+   }
+  ],
+  "connectedProfessionals": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 16,
+    "firstName": "Orestis",
+    "lastName": "Stefanou",
+    "email": "orestis@hotmail.com",
+    "password": "",
+    "phoneNumber": "",
+    "photo": "http://localhost:8080/v1/LinkedIn/media/orestis@hotmail.com/profilePhoto/python.jpg"
+   },
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 17,
+    "firstName": "Stefanos",
+    "lastName": "Savva",
+    "email": "stefanos@email.com",
+    "password": "",
+    "phoneNumber": "",
+    "photo": "http://localhost:8080/v1/LinkedIn/media/stefanos@email.com/profilePhoto/pdf.jpg"
+   }
+  ],
+  "jobAds": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 4,
+    "uploaderId": 20,
+    "title": "Jason's job",
+    "jobDescription": "Jason's job description",
+    "file": "",
+    "created": "MjAyMS0wNS0yNCAxMjoxMjo1Ng=="
+   }
+  ],
+  "jobInterests": [
+   {
+    "XMLName": {
+     "Space": "",
+     "Local": ""
+    },
+    "id": 3,
+    "uploaderId": 17,
+    "title": "Kreopolis",
+    "jobDescription": "Na kseris na ppaliazis",
+    "file": "",
+    "created": "MjAyMS0wNS0xNCAxNToyOTo1OA=="
+   }
+  ],
+  "jobComments": null
  }
 ]

@@ -122,6 +122,7 @@ export default function ArticleForm() {
                 name="title"
                 autoComplete="articleTitle"
                 onChange={handleChange}
+                value={articleInfo['title']}
                 autoFocus
               />
             </Grid>
@@ -138,6 +139,7 @@ export default function ArticleForm() {
                 type="text"
                 id="content"
                 autoComplete="content"
+                value={articleInfo['content']}
                 onChange={handleChange}
               />
             </Grid>
